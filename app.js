@@ -1,13 +1,18 @@
+//Back-end dependencies
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const logger = require('morgan');
 const mysql = require('mysql');
 const view_engine = require('ejs');
 
+//Routes desclarations
+
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
 
 var app = express();
 
