@@ -11,6 +11,19 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+//DB SQL Connection
+let conection = mysql.createConnection({
+  host: "localhost",
+  database: "flavorwell_db",
+  user: "root",
+  password: "",
+});
+
+conection.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected! to database");
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
