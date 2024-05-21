@@ -1,0 +1,35 @@
+*{
+    font-family: 'Poppins';;
+}
+
+.started_fullscreen{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    background-color: var(--Xhantous);
+    color: var(--WhiteBaseColor);
+}
+
+.started_img{
+    width: 400px;
+    height: 400px;
+    rotate: 6.90deg;
+}
+
+.started_header{
+    width: 85%;
+}
+
+.started_button{
+    color: var(--WhiteBaseColor);
+    background-color: var(--ChiliRed);
+    border-style: none;
+}
+
+.started_button:focus{
+    border-style: none;
+}

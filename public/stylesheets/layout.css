@@ -16,12 +16,6 @@
     box-sizing: border-box;
 }
 
-.display-flex-center{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .poppins-thin {
     font-family: "Poppins", sans-serif;
     font-weight: 100;

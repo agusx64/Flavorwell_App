@@ -1,0 +1,10 @@
+.DOMloading_Page{
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    flex-direction: column;
+    background-color: var(--WhiteBaseColor);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

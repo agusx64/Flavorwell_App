@@ -10,9 +10,8 @@ const mysql = require('mysql');
 const view_engine = require('ejs');
 
 //Routes desclarations
-
 var indexRouter = require('./routes/index');
-
+var startedRouter = require('./routes/started');
 
 var app = express();
 
@@ -39,8 +38,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Declaracion de directorios provenientes de Routes
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/started', startedRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
