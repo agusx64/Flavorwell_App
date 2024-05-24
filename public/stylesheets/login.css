@@ -1,0 +1,101 @@
+*{
+    font-family: 'Poppins';
+}
+
+.login_screen{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: var(--WhiteBaseColor);
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+}
+
+header{
+    width: 100%;
+    height: auto;
+    padding-top: 30px;
+    padding-left: 8%;
+    padding-right: 8%;
+}
+
+h1 {
+    color: var(--ChiliRed);
+    font-size: 48px;
+}
+
+p{
+    color: var(--Xhantous);
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.login_img{
+    width: 304px;
+    height: 304px;
+    rotate: 4.9deg;
+    margin-top: 20px;
+}
+
+.form_container{
+    width: 100%;
+    height: auto;
+    padding-left: 8%;
+    padding-right: 8%;
+}
+
+.div_input{
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.label_text{
+    color: var(--ChiliRed);
+    font-size: 15px;
+    margin-bottom: 8px;
+    align-self: flex-start;
+}
+
+.inputs{
+    background-color: var(--WhiteBaseColor);
+    border-color: var(--Xhantous);
+    border-style: solid;
+    width: 98%;
+    height: 50px;
+    border-width: 3px;
+    border-radius: 10px;
+    padding-left: 15px;
+    color: var(--ChiliRed);
+}
+.inputs::placeholder{
+    color: var(--Xhantous);
+}
+
+.div_buttons{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.login_button{
+    width: 98%;
+    height: 45px;
+    background-color: var(--ChiliRed);
+    color: var(--WhiteBaseColor);
+    border-radius: 10px;
+    border-style: none;
+    margin-top: 20px;
+    font-size: 15px;
+}
+
+.a_signUp{
+    color: var(--ChiliRed);
+    text-decoration: underline;
+    margin-top: 20px;
+}

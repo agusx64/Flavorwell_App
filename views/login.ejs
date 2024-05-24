@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/stylesheets/login.css">
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+
+
+    <title>Log In</title>
+</head>
+<body>
+    
+    <div class="login_screen">
+
+        <header>
+            <h1 class="poppins-semibold">Welcome</h1>
+            <p>Your favorite dishes at your <br>fingertips</p>
+        </header>
+
+        <img class="login_img" src="/images/_UI_img/login_img.png" alt="">
+
+        <form name="user_data" action="/user_data" method="post" class="form_container" id="form_login">
+
+            <div class="div_input">
+                <label class="label_text poppins-semibold" for="username_input">Email</label>
+                <input name="username_input" id="username_input" class="inputs" type="text" placeholder="Enter your email address">
+            </div>
+
+            <div class="div_input">
+                <label class="label_text poppins-semibold" for="username_password">Password</label>
+                <input name="username_password" id="username_password" class="inputs" type="password" placeholder="Type a secure password">
+            </div>
+
+            <div class="div_buttons">
+                <a  class="a_signUp" id="register_UI">Sign Up</a>
+                <button id="loginButton" type="submit" class="login_button poppins-semibold">Log In</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="/javascripts/login_UI.js"></script>
+</body>
+</html>

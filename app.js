@@ -12,6 +12,7 @@ const view_engine = require('ejs');
 //Routes desclarations
 var indexRouter = require('./routes/index');
 var startedRouter = require('./routes/started');
+var loginRouter = require('./routes/login');
 
 var app = express();
 
@@ -34,13 +35,14 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Declaracion de directorios provenientes de Routes
 app.use('/', indexRouter);
-app.use('/started', startedRouter);
+app.use('/', startedRouter);
+app.use('/', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

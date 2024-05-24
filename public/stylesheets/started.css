@@ -15,8 +15,8 @@
 }
 
 .started_img{
-    width: 400px;
-    height: 400px;
+    width: 430px;
+    height: 430px;
     rotate: 6.90deg;
 }
 
@@ -28,8 +28,23 @@
     color: var(--WhiteBaseColor);
     background-color: var(--ChiliRed);
     border-style: none;
+    height: 67px;
+    width: 182px;
+    border-radius: 18px;
+    font-size: 20px;
+    margin-top: 40px;
 }
 
 .started_button:focus{
-    border-style: none;
+    border-style: none; 
+}
+
+.started_main_text{
+    font-size: 64px;
+    line-height: 70px;
+}
+
+.started_secondary_text{
+    font-size: 24px;
+    margin-top: 20px;
 }
