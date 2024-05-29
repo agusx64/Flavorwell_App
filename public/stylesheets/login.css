@@ -75,6 +75,10 @@ p{
 .inputs::placeholder{
     color: var(--Xhantous);
 }
+.inputs:focus{
+    outline-color: var(--Xhantous);
+    color: var(--ChiliRed);
+}
 
 .div_buttons{
     display: flex;
@@ -92,6 +96,12 @@ p{
     border-style: none;
     margin-top: 20px;
     font-size: 15px;
+}
+
+.login_button:disabled{
+
+    background-color: var(--ChiliRedDisabled);
+
 }
 
 .a_signUp{

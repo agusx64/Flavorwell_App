@@ -13,21 +13,9 @@ const view_engine = require('ejs');
 var indexRouter = require('./routes/index');
 var startedRouter = require('./routes/started');
 var loginRouter = require('./routes/login');
+var signupRouter = require('./routes/signup');
 
 var app = express();
-
-//DB SQL Connection
-let conection = mysql.createConnection({
-  host: "localhost",
-  database: "flavorwell_db",
-  user: "root",
-  password: "",
-});
-
-conection.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected! to database");
-});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -43,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/', startedRouter);
 app.use('/', loginRouter);
+app.use('/', signupRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

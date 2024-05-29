@@ -5,8 +5,24 @@ var router = express.Router();
 //Lateinit variables
 let username;
 
-// Ruta para la pantalla de carga
-router.post('/user_data', function(req, res) {
+
+//DB SQL Connection
+let conection = mysql.createConnection({
+
+    host: "localhost",
+    database: "flavorwell_db",
+    user: "root",
+    password: "",
+
+});
+conection.connect(function(err) {
+
+    if (err) throw err;
+    console.log("Connected! to database");
+
+});
+
+router.post('/user_data', function(req, res){
 
     const user_data = req.body;
     console.log(user_data);
@@ -14,57 +30,46 @@ router.post('/user_data', function(req, res) {
     let getMail = user_data.username_input;
     let getPassword = user_data.username_password;
 
-    let DBQuery = "SELECT username, email, password FROM users WHERE email = '" + getMail + "' AND username_password = '" + getPassword + "' ";
-    
-    connection.query(DBQuery, function (err, result) {
+    let DBQuery = "SELECT * FROM users WHERE email = ? AND password = ? ";
 
-        if (err) {
+    conection.query(DBQuery, [getMail, getPassword], function (err, result) {
 
-            throw err;
+        try {
 
-        } else {
+            if(result.length > 0){
 
-            try {
+                if(result[0].email == "admin" && result[0].password == "admin") {
 
-                if (getMail, getPassword != "" || null){
+                    res.render('admin_dashboard');
 
-                    if (result.length > 0) {
+                } else if (result[0].email != "admin" && result[0].password != "admin") {
 
-                        username = result[0].username;
-                        if (result[0].email == "admin" && result[0].password == "admin"){
-
-                            res.redirect('/admin_dashboard');
-
-                        } else {
-
-                            res.redirect('/user_dashboard', { username });
-                            console.log("Welcome '"+username+'", to user dashboard');
-
-                        }
-
-                    } else {
-
-                        console.log('Invalid username or password, please try again');
-
-                    }
-
-                } else {
-
-                    console.log('Some data inputs are void, please try again');
+                    username = result[0].username;
+                    console.log(username);
+                    res.render('user_dashboard');
 
                 }
 
-            } catch (err){
+            } else {
 
-                console.log(err);
+                res.render('invalid_credentials');
 
             }
-            
+
+        } catch (err){
+
+            res.send("Internal server error: " + err.message);
+
         }
 
-    })
+    });
 
-    // res.redirect('/signup');
 });
+
+router.get('/sign_up', function(req, res){
+
+    res.render('sign_up');
+
+})
 
 module.exports = router;

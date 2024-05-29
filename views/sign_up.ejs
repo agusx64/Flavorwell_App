@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/stylesheets/signup.css">
+    <link rel="stylesheet" href="/stylesheets/login.css">
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+
+    <title>Sign Up</title>
+</head>
+<body>
+    
+    <div class="container">
+
+        <header>
+            <h2 class="poppins-regular">Welcome to</h2>
+            <h1>Flavorwell</h1>
+        </header>
+
+        <div class="img_container">
+            <img class="logo_img" src="/images/_UI_img/logo_img.png" alt="img_UI">
+        </div>
+
+        <form name="register_user" action="/register_data" method="post" class="form_container" id="register_user">
+
+            <div class="div_input">
+                <label class="label_text poppins-semibold" for="username_mail">Email</label>
+                <input name="username_mail" id="username_mail" class="inputs" type="text" placeholder="Enter your email address">
+            </div>
+
+            <div class="div_input">
+                <label class="label_text poppins-semibold" for="username_input">Username</label>
+                <input name="username_input" id="username_input" class="inputs" type="text" placeholder="Enter your username">
+            </div>
+
+            <div class="div_input">
+                <label class="label_text poppins-semibold" for="username_password">Password</label>
+                <input name="username_password" id="username_password" class="inputs" type="password" placeholder="Type a secure password">
+            </div>
+
+            <div class="div_buttons">
+                <button id="loginButton" type="submit" class="login_button poppins-semibold" disabled>Log In</button>
+            </div>
+
+        </form>
+
+    </div>
+
+    <script src="/javascripts/signup_UI.js"></script>
+</body>
+</html>
