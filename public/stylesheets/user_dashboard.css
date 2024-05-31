@@ -1,0 +1,148 @@
+*{
+    font-family: 'Poppins';
+}
+
+.header_dashboard{
+    height: 10%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10%;
+    padding-left: 8%;
+    padding-right: 8%;
+    padding-bottom: 8%;
+}
+
+.flv_div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
+}
+
+.logo_small{
+    width: 50px;
+}
+
+.header_text{
+    font-size: 25px;
+    color: var(--ChiliRed);
+    margin-top: 7px;
+}
+
+.profile_header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.username_header{
+    font-size: 10px;
+    color: var(--ChiliRed);
+}
+
+.svg_profile{
+    width: 40px;
+    height: 40px;
+    fill: var(--Xhantous);
+}
+
+.label_carousel{
+    padding-left: 8%;
+    padding-right: 8%;
+}
+
+.label_carousel_new{
+    font-size: 13px;
+    color: var(--Xhantous);
+}
+
+.flavorwell_carousel{
+    padding-left: 8%;
+    padding-right: 8%;
+}
+
+.flv_img_carousel{
+    height: 130px;
+    object-fit: cover;
+    opacity: 0.7;
+    border-radius: 10px;
+    position: relative;
+}
+
+.carousel-item{
+    background-color: rgba(0, 0, 0);
+    border-radius: 13px;
+}
+
+.recipe_name{
+    color: var(--WhiteBaseColor);
+    position: relative;
+    right: 30px;
+    top: 55px;
+    text-align: start;
+}
+
+.flv_icon_carousel{
+    position: relative;
+    fill: var(--WhiteBaseColor);
+    left: 130px;
+    bottom: 40px;
+    width: 30px;
+    height: 30px;
+}
+
+.label_carousel_search{
+    margin-top: 15px;
+    color: var(--ChiliRed);
+    font-size: 13px;
+}
+
+.input_section{
+    padding-left: 8%;
+    padding-right: 8%;
+}
+
+.search_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+}
+
+.icon_search{
+    background-color: var(--Xhantous);
+    height: 40px;
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.input_search{
+    width: 85%;
+    height: 40px;
+    border-style: solid;
+    border-color: var(--Xhantous);
+    border-width: 3px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 12px;
+}
+.input_search:focus{
+    outline-style: none;
+    font-size: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: var(--ChiliRed);
+}
+.input_search::placeholder{
+    color: var(--Xhantous);
+}

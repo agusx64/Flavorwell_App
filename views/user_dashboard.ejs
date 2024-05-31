@@ -3,9 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <link rel="stylesheet" href="/stylesheets/user_dashboard.css">
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Dashboard</title>
 </head>
 <body>
-    <h1>Dashboard user</h1>
+
+    <!-- Header container -->
+    <header class="header_dashboard">
+        <div class="flv_div">
+            <img class="logo_small" src="/images/_UI_img/logo_small.png" alt="">
+            <h1 class="header_text poppins-semibold">Flavorwell</h1>
+        </div>
+        <div class="profile_header">
+            <svg class="svg_profile" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
+        </div>
+    </header>
+
+    <div class="label_carousel">
+        <p class="label_carousel_new poppins-bold">Explore new recipes</p>
+    </div>
+
+    <div class="flavorwell_carousel">
+        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+
+                <!-- Borrar los cuatro elementos y crear vista de partir de la base de datos -->
+                <div class="carousel-item active">
+                    <img src="/images/_img_recipe/rusian_salad.jpg" class="d-block w-100 flv_img_carousel" alt="...">
+                    <div class="carousel-caption">
+                        <h1 class="recipe_name poppins-semibold">Rusian Salad</h1>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="flv_icon_carousel" viewBox="0 -960 960 960"><path d="M200-160q-50 0-85-35t-35-85v-200h561q5-34 27-59.5t54-36.5l185-62 25 76-185 62q-12 4-19.5 14.5T720-462v182q0 50-35 85t-85 35H200Zm-23-400q14-36 4.5-64T149-680q-33-40-43.5-75.5T102-840h78q-8 38-2.5 62t28.5 52q38 46 48.5 81.5t.5 84.5h-78Zm160 0q14-36 5-64t-32-56q-33-40-44-75.5t-4-84.5h78q-8 38-2.5 62t28.5 52q38 46 48.5 81.5t.5 84.5h-78Zm160 0q14-36 5-64t-32-56q-33-40-44-75.5t-4-84.5h78q-8 38-2.5 62t28.5 52q38 46 48.5 81.5t.5 84.5h-78Z"/></svg>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <img src="/images/_img_recipe/fruits_juice.jpg" class="d-block w-100 flv_img_carousel" alt="...">
+                    <div class="carousel-caption">
+                        <h1 class="recipe_name poppins-semibold">Fruit Juice</h1>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="flv_icon_carousel" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-160q-50 0-85-35t-35-85v-200h561q5-34 27-59.5t54-36.5l185-62 25 76-185 62q-12 4-19.5 14.5T720-462v182q0 50-35 85t-85 35H200Zm-23-400q14-36 4.5-64T149-680q-33-40-43.5-75.5T102-840h78q-8 38-2.5 62t28.5 52q38 46 48.5 81.5t.5 84.5h-78Zm160 0q14-36 5-64t-32-56q-33-40-44-75.5t-4-84.5h78q-8 38-2.5 62t28.5 52q38 46 48.5 81.5t.5 84.5h-78Zm160 0q14-36 5-64t-32-56q-33-40-44-75.5t-4-84.5h78q-8 38-2.5 62t28.5 52q38 46 48.5 81.5t.5 84.5h-78Z"/></svg>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <img src="/images/_img_recipe/fried_fish.jpg" class="d-block w-100 flv_img_carousel" alt="...">
+                    <div class="carousel-caption">
+                        <h1 class="recipe_name poppins-semibold">Fried Fish</h1>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="flv_icon_carousel" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-160q-50 0-85-35t-35-85v-200h561q5-34 27-59.5t54-36.5l185-62 25 76-185 62q-12 4-19.5 14.5T720-462v182q0 50-35 85t-85 35H200Zm-23-400q14-36 4.5-64T149-680q-33-40-43.5-75.5T102-840h78q-8 38-2.5 62t28.5 52q38 46 48.5 81.5t.5 84.5h-78Zm160 0q14-36 5-64t-32-56q-33-40-44-75.5t-4-84.5h78q-8 38-2.5 62t28.5 52q38 46 48.5 81.5t.5 84.5h-78Zm160 0q14-36 5-64t-32-56q-33-40-44-75.5t-4-84.5h78q-8 38-2.5 62t28.5 52q38 46 48.5 81.5t.5 84.5h-78Z"/></svg>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="label_carousel">
+        <p class="label_carousel_search poppins-bold">Do you search something ?</p>
+    </div>
+
+    <section class="input_section">
+        <div class="search_container">
+            <div class="icon_search">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
+            </div>
+            <input type="search" name="" id="" placeholder="Search recipes" class="input_search">
+        </div>
+    </section>
+
+    <div class="label_carousel">
+        <p class="label_carousel_search poppins-bold">Food categories</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
