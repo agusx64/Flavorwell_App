@@ -1,0 +1,40 @@
+.sucessful_screen{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+img{
+    width: 103%;
+    rotate: 8deg;
+    margin-top: 20%;
+}
+
+.regular_text{
+    color: var(--Xhantous);
+    margin-top: 10px;
+}
+
+h1{
+    font-size: 90px;
+    color: var(--ChiliRed);
+}
+
+.signup_text{
+    color: var(--ChiliRed);
+}
+
+button{
+    background-color: var(--Celadon);
+    width: 85%;
+    height: 45px;
+    border-radius: 10px;
+    border-style: none;
+    color: var(--DarkGreen);
+    margin-top: 16%;
+    font-size: 15px;
+}

@@ -99,9 +99,7 @@ p{
 }
 
 .login_button:disabled{
-
     background-color: var(--ChiliRedDisabled);
-
 }
 
 .a_signUp{
