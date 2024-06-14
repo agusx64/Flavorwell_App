@@ -28,3 +28,6 @@
           
           Default-Styles:
             display-flex-center
+
+          Boostrap:
+            Version: 5
