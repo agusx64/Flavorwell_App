@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/stylesheets/recipe_register.css">
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+    
+    <title>Up & Share</title>
+</head>
+<body>
+    
+    <div class="screen_recipe_register">
+    
+        <!-- Template for another UI -->
+        <header class="header_menu">
+            <div class="svg_icon return">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
+                </svg>
+            </div>
+            <h2 class="header_text poppins-semibold">Recipe register</h2>
+            <div class="svg_icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path
+                        d="M440-160H260q-91 0-155.5-63T40-377q0-78 47-139t123-78q25-92 100-149t170-57q117 0 198.5 81.5T760-520q69 8 114.5 59.5T920-340q0 75-52.5 127.5T740-160H520v-286l64 62 56-56-160-160-160 160 56 56 64-62v286Z" />
+                </svg>
+            </div>
+        </header>
+    
+        <section class="title_text_container">
+            <h1 class="title poppins-semibold">Up & Share</h1>
+            <h3 class="desc_text poppins-medium">Share your own recipes with the community of flavorwell</h3>
+        </section>
+
+        <form class="form_post_recipe_register" action="/up_recipe" method="post">
+
+            <span class="label_text_form poppins-semibold">Choose a category for your dish</span>
+
+            <div class="custom-select-wrapper">
+                <div class="custom-select">
+                    <div class="custom-select-trigger">
+                        <span class="poppins-semibold text_trigger">Select a category</span>
+                        <div class="arrow"></div>
+                    </div>
+                    <div class="custom-options">
+                        <span class="custom-option poppins-medium" data-value="opcion1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="option_icon breakfast" viewBox="0 -960 960 960"><path d="M240-120q-33 0-56.5-23.5T160-200v-342q-37-22-58.5-58.5T80-680q0-66 47-113t113-47h480q66 0 113 47t47 113q0 43-21.5 79.5T800-542v342q0 33-23.5 56.5T720-120H240Zm212-172q12 11 28.5 11t27.5-11l120-120q12-12 12-28.5T628-468L508-588q-11-12-27.5-12T452-588L332-468q-11 11-11 27.5t11 28.5l120 120Zm28-84-64-64 64-64 64 64-64 64Z"/></svg>
+                            Breakfast
+                        </span>
+                        <span class="custom-option poppins-medium" data-value="opcion2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="option_icon dessert" viewBox="0 -960 960 960"><path d="M160-80q-17 0-28.5-11.5T120-120v-160q0-33 23.5-56.5T200-360h560q33 0 56.5 23.5T840-280v160q0 17-11.5 28.5T800-80H160Zm40-360v-120q0-33 23.5-56.5T280-640h160v-58q-18-12-29-29t-11-41q0-15 6-29.5t18-26.5l56-56 56 56q12 12 18 26.5t6 29.5q0 24-11 41t-29 29v58h160q33 0 56.5 23.5T760-560v120H200Z"/></svg>
+                            Desserts
+                        </span>
+                        <span class="custom-option poppins-medium" data-value="opcion3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="option_icon dish" viewBox="0 -960 960 960"><path d="M200-160q-50 0-85-35t-35-85v-200h561q5-34 27-59.5t54-36.5l185-62 25 76-185 62q-12 4-19.5 14.5T720-462v182q0 50-35 85t-85 35H200Zm-23-400q14-36 4.5-64T149-680q-33-40-43.5-75.5T102-840h78q-8 38-2.5 62t28.5 52q38 46 48.5 81.5t.5 84.5h-78Zm160 0q14-36 5-64t-32-56q-33-40-44-75.5t-4-84.5h78q-8 38-2.5 62t28.5 52q38 46 48.5 81.5t.5 84.5h-78Zm160 0q14-36 5-64t-32-56q-33-40-44-75.5t-4-84.5h78q-8 38-2.5 62t28.5 52q38 46 48.5 81.5t.5 84.5h-78Z"/></svg>
+                            Dish
+                        </span>
+                        <span class="custom-option poppins-medium" data-value="opcion3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="option_icon vegan" viewBox="0 -960 960 960"><path d="M450-80q-33 0-66.5-7.5T315-109q12-121 70-226t149-185q-110 56-190.5 148T231-162q-4-3-7.5-6.5L216-176q-47-47-71.5-105T120-402q0-68 27-130t75-110q81-81 210-105.5t362-4.5q18 239-6 364.5T684-182q-49 49-109.5 75.5T450-80Z"/></svg>
+                            Vegan
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <select id="real-select" style="display:none;">
+                <option value="opcion1">Opción 1</option>
+                <option value="opcion2">Opción 2</option>
+                <option value="opcion3">Opción 3</option>
+            </select>
+
+            <span class="label_text_form poppins-semibold">Choose a category for your dish</span>
+
+            <input type="text" class="input_text" placeholder="Example: Chesse fingers">
+
+            <span class="label_text_form poppins-semibold">Technical information</span>
+
+            <section class="technical_inputs">
+                <div class="technical_input">
+                    <span class="label_text poppins-semibold">Aprox. Energy:</span>
+                    <input type="text" class="input_text technical" placeholder="500 cal.">
+                </div>
+                <div class="technical_input">
+                    <span class="label_text poppins-semibold">Time for make:</span>
+                    <input type="text" class="input_text technical" placeholder="30 minutes">
+                </div>
+                <div class="technical_input">
+                    <span class="label_text poppins-semibold">Items of the recipe:</span>
+                    <input type="text" class="input_text technical" placeholder="Example: 4">
+                </div>
+            </section>
+
+            <span class="label_text_form poppins-semibold">Recipe description</span>
+
+            <textarea name="recipe_description" maxlength="200" id="recipe_description" cols="30" rows="10" class="input_text description_recipe" placeholder="Type a description (max. 150 words)"></textarea>
+
+            <span class="label_text_form poppins-semibold">Type a instructions of the recipe</span>
+
+            <textarea name="recipe_instructions" maxlength="500" id="recipe_instructions" cols="30" rows="10" class="input_text description_recipe" placeholder="Type a description (max. 150 words)"></textarea>
+
+        </form>
+    
+    </div>
+
+    <script src="/javascripts/recipe_register_UI.js"></script>
+</body>
+</html>

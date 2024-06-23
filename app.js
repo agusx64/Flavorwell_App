@@ -8,12 +8,13 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 const mysql = require('mysql');
 const view_engine = require('ejs');
+const multer = require('multer');
+const fs = require('fs');
 
 //Routes desclarations
-var indexRouter = require('./routes/index');
-var startedRouter = require('./routes/started');
-var loginRouter = require('./routes/login');
-var signupRouter = require('./routes/signup');
+var gets = require('./routes/gets');
+var posts = require('./routes/posts');
+var apis = require('./routes/apis');
 
 var app = express();
 
@@ -28,10 +29,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Declaracion de directorios provenientes de Routes
-app.use('/', indexRouter);
-app.use('/', startedRouter);
-app.use('/', loginRouter);
-app.use('/', signupRouter);
+app.use('/', gets);
+app.use('/', posts);
+app.use('/', apis);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
