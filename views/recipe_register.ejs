@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="/stylesheets/recipe_register.css">
     <link rel="stylesheet" href="/stylesheets/layout.css">
     
@@ -34,9 +35,9 @@
             <h3 class="desc_text poppins-medium">Share your own recipes with the community of flavorwell</h3>
         </section>
 
-        <form class="form_post_recipe_register" action="/up_recipe" method="post">
+        <section class="form_post_recipe_register">
 
-            <span class="label_text_form poppins-semibold">Choose a category for your dish</span>
+            <label for="category_dish" class="label_text_form poppins-semibold">Choose a category for your dish</label>
 
             <div class="custom-select-wrapper">
                 <div class="custom-select">
@@ -64,45 +65,54 @@
                     </div>
                 </div>
             </div>
-            <select id="real-select" style="display:none;">
-                <option value="opcion1">Opción 1</option>
-                <option value="opcion2">Opción 2</option>
-                <option value="opcion3">Opción 3</option>
+            <select name="category_dish" id="real-select" style="display:none;">
+                <option value="Breakfast"></option>
+                <option value="Desserts"></option>
+                <option value="Dish"></option>
+                <option value="Vegan"></option>
             </select>
 
-            <span class="label_text_form poppins-semibold">Choose a category for your dish</span>
+            <label for="name_recipe" class="label_text_form poppins-semibold">Type the name of the recipe</label>
 
-            <input type="text" class="input_text" placeholder="Example: Chesse fingers">
+            <input name="name_recipe" type="text" class="input_text" placeholder="Example: Chesse fingers">
 
             <span class="label_text_form poppins-semibold">Technical information</span>
 
             <section class="technical_inputs">
                 <div class="technical_input">
-                    <span class="label_text poppins-semibold">Aprox. Energy:</span>
-                    <input type="text" class="input_text technical" placeholder="500 cal.">
+                    <label for="energy" class="label_text poppins-semibold">Aprox. Energy:</label>
+                    <input type="text" name="energy" class="input_text technical" placeholder="500 cal.">
                 </div>
                 <div class="technical_input">
-                    <span class="label_text poppins-semibold">Time for make:</span>
-                    <input type="text" class="input_text technical" placeholder="30 minutes">
+                    <label for="time" class="label_text poppins-semibold">Time for make:</label>
+                    <input type="text" name="time" class="input_text technical" placeholder="30 minutes">
                 </div>
                 <div class="technical_input">
-                    <span class="label_text poppins-semibold">Items of the recipe:</span>
-                    <input type="text" class="input_text technical" placeholder="Example: 4">
+                    <label for="items" class="label_text poppins-semibold">Items of the recipe:</label>
+                    <input type="text" name="items" class="input_text technical" placeholder="Example: 4">
                 </div>
             </section>
 
-            <span class="label_text_form poppins-semibold">Recipe description</span>
+            <label for="recipe_description" class="label_text_form poppins-semibold">Recipe description</label>
 
             <textarea name="recipe_description" maxlength="200" id="recipe_description" cols="30" rows="10" class="input_text description_recipe" placeholder="Type a description (max. 150 words)"></textarea>
 
-            <span class="label_text_form poppins-semibold">Type a instructions of the recipe</span>
+            <label for="recipe_instructions" class="label_text_form poppins-semibold">Type a instructions of the recipe</label>
 
             <textarea name="recipe_instructions" maxlength="500" id="recipe_instructions" cols="30" rows="10" class="input_text description_recipe" placeholder="Type a description (max. 150 words)"></textarea>
 
-        </form>
+            <div class="mb-3">
+                <label for="formFile" class="form-label label_text_form poppins-semibold">Default file input example</label>
+                <input name="recipe_image" accept=".jpg, .jpeg, .png" class="form-control form_control_file" type="file" id="formFile" disabled>
+            </div>
+
+            <button class="post_button_recipe poppins-semibold" id="get-value" disabled>Share your dish now</button>
+
+        </section>
     
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="/javascripts/recipe_register_UI.js"></script>
 </body>
 </html>

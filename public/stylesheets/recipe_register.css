@@ -216,3 +216,37 @@
     word-wrap: break-word;
     font-size: 12px;
 }
+
+.form_control_file{
+    color: var(--ChiliRed);
+    font-size: 12px;
+    border-radius: 10px;
+}
+
+.form_control_file::file-selector-button{
+    background-color: var(--ChiliRed);
+    color: var(--WhiteBaseColor);
+    height: 40px;
+}
+
+.mb-3{
+    height: 40px;
+}
+
+.post_button_recipe{
+    margin-top: 40px;
+    width: 100%;
+    height: 45px;
+    background-color: var(--ChiliRed);
+    color: var(--WhiteBaseColor);
+    border-radius: 10px;
+    border-style: none;
+    font-size: 15px;
+}
+.post_button_recipe:disabled{
+    background-color: var(--ChiliRedDisabled);
+}
+
+body{
+    padding-bottom: 90px;
+}

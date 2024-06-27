@@ -124,18 +124,18 @@ router.post('/register_data', function(req, res) {
 });
 
 //--------------------------Recipe register POST -----------------
-router.post('/recipe_register', upload.single('image'), function(req, res) {
+router.post('/up_recipe', upload.single('image'), function(req, res) {
 
     const recipe_data = req.body;
     console.log(recipe_data);
 
-    //ID about element type submint
-    let imgRecipe = recipe_data.img_recipe;
-    //Replace the inverted slash for '/'
-    const imagePath = `/${image.path.replace(/\\/g, '/')}`;
+    // //ID about element type submint
+    // let imgRecipe = recipe_data.img_recipe;
+    // //Replace the inverted slash for '/'
+    // const imagePath = `/${image.path.replace(/\\/g, '/')}`;
 
-    //Save the information in the DB
-    let DBQuery;
+    // //Save the information in the DB
+    // let DBQuery;
 
 });
 
