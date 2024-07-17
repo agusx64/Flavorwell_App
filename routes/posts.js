@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var express = require('express');
 var multer = require('multer');
+var path = require('path');
 var fs = require('fs');
 var router = express.Router();
 
@@ -27,26 +28,17 @@ conection.connect(function(err) {
 //----------------Multer configuration----------------------------
 
 const storage = multer.diskStorage({
-
     destination: (req, file, cb) => {
-
         const dir = 'uploads/recipes';
-
-        //Make directory if it doesn't exist
-        fs.mkdirSync(dir, {recursive: true});
+        fs.mkdirSync(dir, { recursive: true });
         cb(null, dir);
-
     },
-
     filename: (req, file, cb) => {
-
         cb(null, Date.now() + path.extname(file.originalname));
-
     }
-
 });
 
-const upload = multer({storage: storage});
+const upload = multer({ storage: storage });
 
 //----------------POST for authentication-------------------------
 router.post('/user_data', function(req, res){
@@ -124,20 +116,63 @@ router.post('/register_data', function(req, res) {
 });
 
 //--------------------------Recipe register POST -----------------
-router.post('/up_recipe', upload.single('image'), function(req, res) {
+router.post('/up_recipe', upload.single('recipe_image'), function(req, res) {
 
-    const recipe_data = req.body;
-    console.log(recipe_data);
 
-    // //ID about element type submint
-    // let imgRecipe = recipe_data.img_recipe;
-    // //Replace the inverted slash for '/'
-    // const imagePath = `/${image.path.replace(/\\/g, '/')}`;
+    const { category, name_recipe, energy, time, recipe_description, recipe_instructions } = req.body;
+    const imgRoute = req.file;
+    
+    if (!imgRoute) {
 
-    // //Save the information in the DB
-    // let DBQuery;
+        return res.status(400).send({ error: "No se ha subido ninguna imagen." });
 
+    }
+
+    const imagePath = `/uploads/recipes/${imgRoute.filename}`;
+
+    let tableName;
+
+    switch (category.toLowerCase()) {
+
+        case 'breakfast':
+
+            tableName = 'breakfast';
+            break;
+
+        case 'desserts':
+
+            tableName = 'desserts';
+            break;
+
+        case 'dish':
+
+            tableName = 'strong_dish';
+            break;
+
+        case 'vegan':
+
+            tableName = 'vegan';
+            break;
+
+        default:
+            return res.status(400).send({ error: "Categoría no válida." });
+    }
+
+    const DBQuery = `INSERT INTO ${tableName} (name, energy, time_make, description, instruction, img_path) VALUES (?, ?, ?, ?, ?, ?)`;
+
+    conection.query(DBQuery, [name_recipe, energy, time, recipe_description, recipe_instructions, imagePath], function(err, result) {
+
+        if (err) {
+
+            return res.status(500).send({ error: "Error al insertar la receta en la base de datos." });
+
+        } else {
+
+            return res.status(200).send({ success: "Receta registrada con éxito." });
+            //
+
+        }
+    });
 });
-
 
 module.exports = router;

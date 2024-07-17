@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Validar formulario al cargar y al escribir en los campos
     validateForm();
 
     [nameRecipe, energy, time, items, recipeDescription, recipeInstructions].forEach(field => {
@@ -62,33 +61,33 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     getSelectedValueButton.addEventListener('click', () => {
-        const formData = {
-            category: text_category,
-            name_recipe: nameRecipe.value,
-            energy: energy.value,
-            time: time.value,
-            items: items.value,
-            recipe_description: recipeDescription.value,
-            recipe_instructions: recipeInstructions.value,
-            image_recipe: imgRecipe.value
-        };
 
-        console.log("Datos del formulario:", formData);
+
+        const formData = new FormData();
+        formData.append('category', text_category);
+        formData.append('name_recipe', nameRecipe.value);
+        formData.append('energy', energy.value);
+        formData.append('time', time.value);
+        formData.append('items', items.value);
+        formData.append('recipe_description', recipeDescription.value);
+        formData.append('recipe_instructions', recipeInstructions.value);
+        formData.append('recipe_image', imgRecipe.files[0]);
 
         fetch('/up_recipe', {
             method: 'POST',
-            body: JSON.stringify(formData),
-            headers: {
-                'Content-type': 'application/json'
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                console.log(`HTTP error! status: ${response.status}`);
             }
+            return response.json();
         })
-        .then(response => response.json())
         .then(data => {
-            console.log(data);
+            console.log("Respuesta del servidor:", data);
         })
-        .catch(err => {
-            console.error(err);
+        .catch(error => {
+            console.log("Error al procesar la solicitud:", error);
         });
-        
     });
 });
