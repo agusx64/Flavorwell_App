@@ -47,9 +47,43 @@ router.get('/drinks_book', function (req, res) {
 });
 
 router.get('/breakfast_book', function (req, res) {
-    
+
+});
+
+router.get('/start', function (req, res) {
+
+    res.render('user_dashboard');
+
+});
+
+router.get('/ai', function (req, res) {
+
+    res.render('recipe_generator');
+
+});
+
+router.get('/add', function (req, res) {
+
+    res.render('recipe_register');
+
+});
+
+router.get('/profile', function (req, res) {
+
+    res.render('user_profile');
+
+});
+
+router.get('/settings', function (req, res) {
+
+    res.render('settings');
+
 });
 
 //-----------------------------------------------------------------------------
+
+//------------------------Random recipe selector(user_dashboard)---------------
+
+
 
 module.exports = router;

@@ -3,19 +3,26 @@
 }
 
 body{
-    padding-bottom: 80px;
+    padding-bottom: 90px;
+    padding-top: 37%;
 }
 
 .header_dashboard{
-    height: 10%;
+    height: 15%;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-top: 10%;
-    padding-left: 8%;
-    padding-right: 8%;
+    padding-left: 4%;
+    padding-right: 4%;
     padding-bottom: 8%;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    background-color: var(--Xhantous);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .flv_div{
@@ -31,7 +38,7 @@ body{
 
 .header_text{
     font-size: 25px;
-    color: var(--ChiliRed);
+    color: var(--WhiteBaseColor);
     margin-top: 7px;
 }
 
@@ -50,12 +57,12 @@ body{
 .svg_profile{
     width: 40px;
     height: 40px;
-    fill: var(--Xhantous);
+    fill: var(--WhiteBaseColor);
 }
 
 .label_carousel{
-    padding-left: 8%;
-    padding-right: 8%;
+    padding-left: 4%;
+    padding-right: 4%;
 }
 
 .label_carousel_new{
@@ -64,12 +71,12 @@ body{
 }
 
 .flavorwell_carousel{
-    padding-left: 8%;
-    padding-right: 8%;
+    padding-left: 4%;
+    padding-right: 4%;
 }
 
 .flv_img_carousel{
-    height: 130px;
+    height: 190px;
     object-fit: cover;
     opacity: 0.7;
     border-radius: 10px;
@@ -85,7 +92,7 @@ body{
     color: var(--WhiteBaseColor);
     position: relative;
     right: 30px;
-    top: 55px;
+    top: 30px;
     text-align: start;
 }
 
@@ -105,8 +112,8 @@ body{
 }
 
 .input_section{
-    padding-left: 8%;
-    padding-right: 8%;
+    padding-left: 4%;
+    padding-right: 4%;
 }
 
 .search_container{
@@ -153,15 +160,17 @@ body{
 
 .category_buttons{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    padding-left: 4%;
+    padding-right: 4%;
     align-items: center;
     width: 100%;
     height: auto;
 }
 
 .cat_button{
-    height: 60px;
-    width: 60px;
+    height: 74px;
+    width: 74px;
     background-color: var(--BlackBaseColor);
     border-radius: 10px;
     border-style: none;
@@ -188,8 +197,8 @@ body{
 .recommended_food{
     width: 100%;
     height: auto;
-    padding-left: 8%;
-    padding-right: 8%;
+    padding-left: 4%;
+    padding-right: 4%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -197,7 +206,7 @@ body{
 
 .day_food{
     width: 47%;
-    height: 155px;
+    height: 185px;
     background-color: black;
     margin-bottom: 20px;
     border-radius: 10px;
@@ -241,7 +250,7 @@ body{
     justify-content: center;
     align-items: center;
     position: relative;
-    top: -85px;
+    top: -100px;
     right: -38%;
 }
 

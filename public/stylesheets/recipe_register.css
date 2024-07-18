@@ -13,13 +13,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-left: 7%;
-    padding-right: 7%;
+    padding-left: 4%;
+    padding-right: 4%;
     padding-top: 12%;
+    position: fixed;
+    top: 0;
+    background-color: var(--Xhantous);
+    padding-bottom: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    z-index: 3;
 }
 
 .svg_icon{
-    fill: var(--ChiliRed);
+    fill: var(--WhiteBaseColor);
     width: 40px;
     height: 40px;
 }
@@ -30,7 +37,7 @@
 }
 
 .header_text{
-    color: var(--ChiliRed);
+    color: var(--WhiteBaseColor);
     text-align: center;
 }
 
@@ -39,8 +46,8 @@
     justify-content: center;
     align-items: start;
     flex-direction: column;
-    padding-left: 7%;
-    padding-right: 7%;
+    padding-left: 4%;
+    padding-right: 4%;
     margin-top: 8%;
 }
 
@@ -56,8 +63,8 @@
 }
 
 .form_post_recipe_register{
-    padding-left: 7%;
-    padding-right: 7%;
+    padding-left: 4%;
+    padding-right: 4%;
     width: 100%;
     height: auto;
     margin-top: 5%;
