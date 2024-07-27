@@ -256,7 +256,8 @@ body{
 
 .recipe_day_name{
     color: var(--WhiteBaseColor);
-    font-size: 12px;
+    font-size: 13px;
+    text-align: center;
 }
 
 .dish_name{
@@ -265,4 +266,5 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 5px;
 }

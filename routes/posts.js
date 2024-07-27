@@ -21,7 +21,7 @@ let conection = mysql.createConnection({
 conection.connect(function(err) {
 
     if (err) throw err;
-    console.log("Connected! to database");
+    console.log("Connected! to database from post module");
 
 });
 
