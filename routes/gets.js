@@ -36,17 +36,25 @@ router.get('/recipe_register', function(req, res) {
 //---------------------Gorup of gets from user dashboard ----------------------
 router.get('/vegan_book', function (req, res) {
 
+    res.render('vegan_book');
+
 });
 
 router.get('/desserts_book', function (req, res) {
 
+    res.render('desserts_book');
+
 });
 
-router.get('/drinks_book', function (req, res) {
+router.get('/strong_book', function (req, res) {
+
+    res.render('strong_book');
 
 });
 
 router.get('/breakfast_book', function (req, res) {
+
+    res.render('breakfast_book');
 
 });
 

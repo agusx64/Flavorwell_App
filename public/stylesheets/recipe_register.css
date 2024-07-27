@@ -34,6 +34,8 @@
 .return{
     width: 30px;
     height: 30px;
+    background-color: transparent;
+    border-style: none;
 }
 
 .header_text{
@@ -256,4 +258,5 @@
 
 body{
     padding-bottom: 90px;
+    padding-top: 25%;
 }
