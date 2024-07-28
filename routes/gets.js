@@ -115,9 +115,46 @@ router.get('/settings', function (req, res) {
 
 });
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//------------------------Random recipe selector(user_dashboard)---------------
+//------------------------New recipes selector (user_dashboard)-----------------
+router.get('/new_food', async function (req, res) {
+
+    const queries = [
+
+        `(SELECT name, img_path FROM breakfast ORDER BY created_at DESC LIMIT 1)
+        UNION ALL
+        (SELECT name, img_path FROM desserts ORDER BY created_at DESC LIMIT 1)
+        UNION ALL
+        (SELECT name, img_path FROM strong_dish ORDER BY created_at DESC LIMIT 1)
+        UNION ALL
+        (SELECT name, img_path FROM vegan ORDER BY created_at DESC LIMIT 1);`
+        
+    ];
+
+    try {
+
+        let finalResults = [];
+        for (const query of queries) {
+
+            const [results] = await connection.execute(query);
+            console.log(results);
+            finalResults.push(results);
+
+        }
+
+        res.json(finalResults);
+
+    } catch (error) {
+
+        console.error('Error executing queries:', error);
+        res.status(500).send('Error executing recent rows');
+
+    }
+
+});
+
+//------------------------Random recipe selector (user_dashboard)---------------
 router.get('/day_food', async function (req, res) {
 
     const queries = [

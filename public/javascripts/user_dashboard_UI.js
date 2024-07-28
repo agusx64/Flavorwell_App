@@ -1,14 +1,71 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    getDayFood();
+    fetchGetDayFood();
+    fetchNewRecipes();
 
 });
 
 function fetchNewRecipes() {
 
-    
+    fetch('/new_food')
 
-}
+    .then(response => response.json())
+    .then(data => {
+
+        console.log(data);
+
+        if (Array.isArray(data) && data.length > 0) {
+
+            const newRecipes = data[data.length - 1];
+
+            if(Array.isArray(newRecipes)) {
+
+                //Elements
+                const imgCarouselBreakfast = document.getElementById('new_breakfast_img_recipe');
+                const imgCarouselDessert = document.getElementById('new_dessert_img_recipe');
+                const imgCarouselStrongDish = document.getElementById('new_strong_dish_img_recipe');
+                const imgCarouselVegan = document.getElementById('new_vegan_img_recipe');
+
+                const nameCarouselBreakfast = document.getElementById('new_breakfast_name_recipe');
+                const nameCarouselDessert = document.getElementById('new_dessert_name_recipe');
+                const nameCarouselStrongDish = document.getElementById('new_strong_dish_name_recipe');
+                const nameCarouselVegan = document.getElementById('new_vegan_name_recipe');
+
+                if(newRecipes.length >= 4) {
+
+                    imgCarouselBreakfast.src = newRecipes[0].img_path;
+                    nameCarouselBreakfast.textContent = newRecipes[0].name;
+
+                    imgCarouselDessert.src = newRecipes[1].img_path;
+                    nameCarouselDessert.textContent = newRecipes[1].name;
+
+                    imgCarouselStrongDish.src = newRecipes[2].img_path;
+                    nameCarouselStrongDish.textContent = newRecipes[2].name;
+
+                    imgCarouselVegan.src = newRecipes[3].img_path;
+                    nameCarouselVegan.textContent = newRecipes[3].name;
+
+                } else {
+
+                    console.error('No hay suficientes recetas para mostrar.');
+
+                }
+
+            } else {
+
+                console.error('El último conjunto de resultados no es un array de recetas.');
+
+            }
+
+        } else {
+
+            console.error('No se recibieron datos válidos del servidor.');
+
+        }
+
+    })
+
+};
 
 function fetchGetDayFood() {
 
@@ -74,9 +131,9 @@ function fetchGetDayFood() {
 
         console.error('Hubo un problema con la solicitud:', error);
 
-    });
+    })
 
-}
+};
 
 let veganButton = document.getElementById('vegan_button');
 let dessertsButton = document.getElementById('desserts_button');
