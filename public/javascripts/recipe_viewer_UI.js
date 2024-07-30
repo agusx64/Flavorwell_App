@@ -4,6 +4,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(queryString);
     const data = urlParams.get('data');
 
+    const likeButton = document.getElementById('like_button');
+    const dislikeButton = document.getElementById('dislike_button');
+
+    likeButton.addEventListener('click', () => {
+
+        likeButton.style.fill = 'var(--ChiliRed)'
+
+    });
+
+    dislikeButton.addEventListener('click', () => {
+
+        dislikeButton.style.fill = 'var(--ChiliRed)'
+
+    });
+
     if (data) {
 
         try {

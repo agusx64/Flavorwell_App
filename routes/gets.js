@@ -199,4 +199,31 @@ router.get('/day_food', async function (req, res) {
     }
 });
 
+//------------------------Send JSON to recipe viewer-----------------------------
+router.get('/recipe_viewer', (req, res) => {
+
+    let data = req.query.data;
+
+    if (data) {
+
+        try {
+
+            let parsedData = JSON.parse(decodeURIComponent(data));
+            res.render('recipe_viewer', { data: parsedData });
+
+        } catch (error) {
+
+            console.error('Error parsing data:', error);
+            res.status(400).send('Invalid JSON data');
+
+        }
+
+    } else {
+
+        res.status(400).send('No data received');
+
+    }
+
+});
+
 module.exports = router;

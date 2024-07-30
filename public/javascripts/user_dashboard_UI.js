@@ -3,48 +3,102 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchGetDayFood();
     fetchNewRecipes();
     dynamicGetRender();
+    dynamicGetRecentRecipe();
 
 });
 
-function dynamicGetRender() {
-    const cardElement = document.querySelectorAll('.day_food');
+function dynamicGetRecentRecipe() {
 
-    cardElement.forEach((element) => {
-        element.addEventListener('click', async function() {
-            // Obtener el texto del h2 dentro del cardElement
-            const dishName = this.querySelector('h2').textContent;
+    const bootstrapComponents = document.querySelectorAll('.carousel-item');
 
-            // Objeto JSON para el nombre del plato
+    bootstrapComponents.forEach((component) => {
+
+        component.addEventListener('click', async function() {
+
+            const dishName = this.querySelector('h1').textContent;
             const dishJSON = { dish: dishName };
 
             try {
-                // Enviar la solicitud al servidor
+
                 const response = await fetch('/sended_text', {
+
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+
+                        'content-type': 'application/json',
+
                     },
                     body: JSON.stringify(dishJSON)
+
                 });
 
-                // Verificar si la respuesta es correcta
-                if (!response.ok) {
+                if(!response.ok) {
+
                     throw new Error(`HTTP error! status: ${response.status}`);
+
                 }
 
-                // Obtener los datos de la respuesta
                 const data = await response.json();
+                window.location.href = `/recipe_viewer?data=${encodeURIComponent(JSON.stringify(data))}`;
 
-                // Redirigir a la página y enviar los datos en la URL
+            } catch(error) {
+
+                console.error(error);
+
+            }
+
+        })
+
+    })
+
+}
+
+function dynamicGetRender() {
+
+    const cardElement = document.querySelectorAll('.day_food');
+
+    cardElement.forEach((element) => {
+
+        element.addEventListener('click', async function() {
+
+            const dishName = this.querySelector('h2').textContent;
+
+            const dishJSON = { dish: dishName };
+
+            try {
+
+                const response = await fetch('/sended_text', {
+
+                    method: 'POST',
+                    headers: {
+
+                        'Content-Type': 'application/json'
+
+                    },
+                    body: JSON.stringify(dishJSON)
+
+                });
+
+                if (!response.ok) {
+
+                    throw new Error(`HTTP error! status: ${response.status}`);
+
+                }
+
+                const data = await response.json();
                 window.location.href = `/recipe_viewer?data=${encodeURIComponent(JSON.stringify(data))}`;
 
             } catch (error) {
-                console.error(error);
-            }
-        });
-    });
-}
 
+                console.error(error);
+
+            }
+
+        });
+
+    });
+
+}
 
 function fetchNewRecipes() {
 

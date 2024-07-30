@@ -1,0 +1,151 @@
+*{
+    font-family: 'Poppins';
+}
+
+body{
+    padding-bottom: 90px;
+    padding-top: 35%;
+}
+
+.header_menu{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 4%;
+    padding-right: 4%;
+    padding-top: 12%;
+    position: fixed;
+    top: 0;
+    background-color: var(--Xhantous);
+    padding-bottom: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    z-index: 3;
+}
+
+.svg_icon{
+    fill: var(--WhiteBaseColor);
+    width: 40px;
+    height: 40px;
+}
+
+.return{
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border-style: none;
+}
+
+.header_text{
+    color: var(--WhiteBaseColor);
+    text-align: center;
+}
+
+.screen_container{
+    width: 100%;
+    height: auto;
+    padding-left: 4%;
+    padding-right: 4%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.autor_text_container{
+    display: flex;
+    justify-content: center;
+    margin-top: 7px;
+}
+
+.autor_p{
+    margin-left: 5px;
+}
+
+.recipe_autor{
+    color: var(--ChiliRed);
+}
+
+.principal_text{
+    color: var(--ChiliRed);
+}
+
+.img_recipe{
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.text_description{
+    color: var(--ChiliRed);
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.description_p{
+    text-align: center;
+    font-size: 13px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.information{
+    width: 100%;
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: var(--Xhantous) solid;
+    border-radius: 10px;
+    padding-left: 18px;
+    padding-right: 18px;
+    margin-top: 15px;
+}
+
+.specifications{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text_aligner{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    margin-left: 5px;
+}
+
+.style_info{
+    color: var(--ChiliRed);
+    font-size: 12px;
+}
+
+.icon_nutrimental_information{
+    fill: var(--Xhantous);
+    width: 28px;
+    height: 28px;
+    margin-right: 3px;
+}
+
+.like_section{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    margin-top: 15px;
+}
+
+.like_button_class{
+    fill: var(--ChiliRedDisabled);
+    width: 28px;
+    height: 28px;
+}
+
+.like_number{
+    color: var(--ChiliRed);
+}
