@@ -2,8 +2,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
     fetchGetDayFood();
     fetchNewRecipes();
+    dynamicGetRender();
 
 });
+
+function dynamicGetRender() {
+    const cardElement = document.querySelectorAll('.day_food');
+
+    cardElement.forEach((element) => {
+        element.addEventListener('click', async function() {
+            // Obtener el texto del h2 dentro del cardElement
+            const dishName = this.querySelector('h2').textContent;
+
+            // Objeto JSON para el nombre del plato
+            const dishJSON = { dish: dishName };
+
+            try {
+                // Enviar la solicitud al servidor
+                const response = await fetch('/sended_text', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dishJSON)
+                });
+
+                // Verificar si la respuesta es correcta
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // Obtener los datos de la respuesta
+                const data = await response.json();
+
+                // Redirigir a la página y enviar los datos en la URL
+                window.location.href = `/recipe_viewer?data=${encodeURIComponent(JSON.stringify(data))}`;
+
+            } catch (error) {
+                console.error(error);
+            }
+        });
+    });
+}
+
 
 function fetchNewRecipes() {
 
@@ -11,8 +52,6 @@ function fetchNewRecipes() {
 
     .then(response => response.json())
     .then(data => {
-
-        console.log(data);
 
         if (Array.isArray(data) && data.length > 0) {
 
@@ -73,8 +112,6 @@ function fetchGetDayFood() {
 
     .then(response => response.json())
     .then(data => {
-
-        console.log(data);
 
         if (Array.isArray(data) && data.length > 0) {
 
@@ -145,3 +182,7 @@ veganButton.addEventListener('click', function() { window.location.href = '/vega
 dessertsButton.addEventListener('click', function() { window.location.href = '/desserts_book'; });
 drinksButton.addEventListener('click', function() { window.location.href = '/strong_book'; });
 breakfastButton.addEventListener('click', function() { window.location.href = '/breakfast_book'; });
+
+let recommendedFoodButtons = document.querySelectorAll('.day_food');
+let recipeDayNames = document.querySelectorAll('.recipe_day_name');
+

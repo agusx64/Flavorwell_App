@@ -84,7 +84,6 @@ router.post('/user_data', function(req, res){
     });
 
 });
-//----------------------------------------------------------------
 
 //--------------------------POST for registration-----------------
 router.post('/register_data', function(req, res) {
@@ -174,5 +173,77 @@ router.post('/up_recipe', upload.single('recipe_image'), function(req, res) {
         }
     });
 });
+
+//--------------------------Dynamic query URI encripter --------------
+// Ruta para manejar la solicitud POST
+router.post('/sended_text', async (req, res) => {
+
+    const dish = req.body;
+    let nameQuery = dish.dish;
+    console.log('Received dish name:', nameQuery);
+
+    try {
+
+        let recipeSearcher = `
+        
+            (SELECT * FROM breakfast WHERE name = ?)
+            UNION ALL 
+            (SELECT * FROM desserts WHERE name = ?)
+            UNION ALL
+            (SELECT * FROM vegan WHERE name = ?)
+            UNION ALL
+            (SELECT * FROM strong_dish WHERE name = ?)
+
+        `
+        conection.query(recipeSearcher, [nameQuery, nameQuery, nameQuery, nameQuery], function(err, results) {
+
+            if (err) {
+
+                throw err;
+
+            }
+            else {
+
+                res.json(results);
+
+            }
+        })
+
+    } catch (error) {
+
+        console.error('Database query error:', error);
+        res.status(500).send('Error querying the database');
+
+    }
+    
+});
+
+router.get('/recipe_viewer', (req, res) => {
+
+    let data = req.query.data;
+
+    if (data) {
+
+        try {
+
+            let parsedData = JSON.parse(decodeURIComponent(data));
+            res.render('recipe_viewer', { data: parsedData });
+
+        } catch (error) {
+
+            console.error('Error parsing data:', error);
+            res.status(400).send('Invalid JSON data');
+
+        }
+
+    } else {
+
+        res.status(400).send('No data received');
+
+    }
+
+});
+
+
 
 module.exports = router;
