@@ -33,37 +33,37 @@
     <!-- Content -->
     <div class="screen_container">
 
-        <h1 class="principal_text poppins-semibold" id="head_text">Vegan Hamburger</h1>
+        <h1 class="principal_text poppins-semibold" id="head_text"></h1>
         <div class="autor_text_container">
             <span class="recipe_autor poppins-semibold">By:</span>
-            <p class="autor_p">Agustin Mora</p>
+            <p class="autor_p" id="recipe_author"></p>
         </div>
 
         <img src="/uploads/recipes/1719552144440.jpeg" alt="Reference image about recipe" class="img_recipe" id="img_recipe_viewer">
 
         <h1 class="text_description poppins-semibold">Description</h1>
-        <p class="description_p" id="description_text_p">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto modi quo sequi repellendus totam! Quod, neque. Cupiditate aut omnis consequuntur. Soluta doloribus fugiat, totam repellendus velit eum deserunt ipsa nesciunt!</p>
+        <p class="description_p" id="description_text_p"></p>
 
         <div class="information">
             <div class="specifications">
                 <svg class="icon_nutrimental_information" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M560-564v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-600q-38 0-73 9.5T560-564Zm0 220v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-380q-38 0-73 9t-67 27Zm0-110v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-490q-38 0-73 9.5T560-454Zm-40 176q44-21 88.5-31.5T700-320q36 0 70.5 6t69.5 18v-396q-33-14-68.5-21t-71.5-7q-47 0-93 12t-87 36v394Zm-40 118q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q47-23 96.5-35.5T260-800q58 0 113.5 15T480-740q51-30 106.5-45T700-800q52 0 101.5 12.5T898-752q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59Z"/></svg>
                 <div class="text_aligner">
-                    <span class="poppins-semibold style_info">Ingredients:</span>
-                    <span class="style_info">x</spans>
+                    <span class="poppins-semibold style_info">ID:</span>
+                    <span class="style_info" id="text_ingredients"></span>
                 </div>               
             </div>
             <div class="specifications">
                 <svg class="icon_nutrimental_information" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M480-80q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-440q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-800q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-440q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-80Zm112-192 56-56-128-128v-184h-80v216l152 152ZM224-866l56 56-170 170-56-56 170-170Zm512 0 170 170-56 56-170-170 56-56Z"/></svg>                
                 <div class="text_aligner">
                     <span class="poppins-semibold style_info">Time:</span>
-                    <span class="style_info">x</spans>
+                    <span class="style_info" id="text_time"></spans>
                 </div>
             </div>
             <div class="specifications">
                 <svg class="icon_nutrimental_information" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="m320-80 40-280H160l360-520h80l-40 320h240L400-80h-80Z"/></svg>
                 <div class="text_aligner">
                     <span class="poppins-semibold style_info">Energy:</span>
-                    <span class="style_info">x</spans>
+                    <span class="style_info" id="text_energy"></spans>
                 </div>
             </div>
 
@@ -82,7 +82,48 @@
             </div>
         </section>
 
-        <h1 class="text_description poppins-semibold">Ingredients</h1>
+        <h1 class="text_description poppins-semibold ingredients_title">Ingredients</h1>
+
+        <!-- This is a dynamic component -->
+        <div class="ingredients_component">
+            <div class="ingrdient_img">
+                <img src="" alt="">
+            </div>
+            <div class="text_ingredient">
+                <span class="name_ingredient poppins-semibold">Steak</span>
+            </div>
+        </div>
+
+        <div class="ingredients_component">
+            <div class="ingrdient_img">
+                <img src="" alt="">
+            </div>
+            <div class="text_ingredient">
+                <span class="name_ingredient poppins-semibold">Steak</span>
+            </div>
+        </div>
+
+        <div class="ingredients_component">
+            <div class="ingrdient_img">
+                <img src="" alt="">
+            </div>
+            <div class="text_ingredient">
+                <span class="name_ingredient poppins-semibold">Steak</span>
+            </div>
+        </div>
+
+        <div class="ingredients_component">
+            <div class="ingrdient_img">
+                <img src="" alt="">
+            </div>
+            <div class="text_ingredient">
+                <span class="name_ingredient poppins-semibold">Steak</span>
+            </div>
+        </div>
+
+        <h1 class="text_description poppins-semibold ingredients_title">Instructions</h1>
+
+        <p class="instructions_text" id="recipe_instructions"></p>
 
     </div>
 

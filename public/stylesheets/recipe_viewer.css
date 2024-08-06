@@ -69,6 +69,7 @@ body{
 
 .principal_text{
     color: var(--ChiliRed);
+    text-align: center;
 }
 
 .img_recipe{
@@ -148,4 +149,47 @@ body{
 
 .like_number{
     color: var(--ChiliRed);
+}
+
+.ingredients_title{
+    margin-bottom: 25px;
+}
+
+.ingredients_component{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    height: 70px;
+    background-color: var(--GreyLight);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+}
+
+.ingrdient_img{
+    width: 70px;
+    height: 70px;
+    background-color: var(--GreySimple);
+    border-radius: 10px;
+}
+
+.text_ingredient{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 90%;
+    height: auto;
+    padding-right: 40px;
+}
+
+.name_ingredient{
+    color: var(--ChiliRed);
+}
+.quantity_ingredient{
+    color: var(--BlackBaseColor);
+}
+
+.instructions_text{
+    text-align: justify;
 }
