@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const recipeDescription = document.querySelector('textarea[name="recipe_description"]');
     const recipeInstructions = document.querySelector('textarea[name="recipe_instructions"]');
     const imgRecipe = document.querySelector('input[name="recipe_image"]');
+    const authorName = document.getElementById('name_author');
 
     let text_category;
 
@@ -45,7 +46,8 @@ document.addEventListener("DOMContentLoaded", function() {
             time.value.trim() !== '' &&
             items.value.trim() !== '' &&
             recipeDescription.value.trim() !== '' &&
-            recipeInstructions.value.trim() !== '') {
+            recipeInstructions.value.trim() !== '' &&
+            authorName.value.trim() !== '') {
             getSelectedValueButton.disabled = false;
             imgRecipe.disabled = false;
         } else {
@@ -56,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     validateForm();
 
-    [nameRecipe, energy, time, items, recipeDescription, recipeInstructions].forEach(field => {
+    [nameRecipe, energy, time, items, recipeDescription, recipeInstructions, authorName].forEach(field => {
         field.addEventListener('input', validateForm);
     });
 
@@ -71,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
         formData.append('items', items.value);
         formData.append('recipe_description', recipeDescription.value);
         formData.append('recipe_instructions', recipeInstructions.value);
+        formData.append('author', authorName.value);
         formData.append('recipe_image', imgRecipe.files[0]);
 
         fetch('/up_recipe', {
@@ -90,4 +93,4 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("Error al procesar la solicitud:", error);
         });
     });
-});
+}); 

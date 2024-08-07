@@ -118,7 +118,7 @@ router.post('/register_data', function(req, res) {
 router.post('/up_recipe', upload.single('recipe_image'), function(req, res) {
 
 
-    const { category, name_recipe, energy, time, recipe_description, recipe_instructions } = req.body;
+    const { category, name_recipe, energy, time, recipe_description, recipe_instructions, author } = req.body;
     const imgRoute = req.file;
     
     if (!imgRoute) {
@@ -157,9 +157,9 @@ router.post('/up_recipe', upload.single('recipe_image'), function(req, res) {
             return res.status(400).send({ error: "Categoría no válida." });
     }
 
-    const DBQuery = `INSERT INTO ${tableName} (name, energy, time_make, description, instruction, img_path) VALUES (?, ?, ?, ?, ?, ?)`;
+    const DBQuery = `INSERT INTO ${tableName} (name, energy, time_make, description, instruction, img_path, author) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
-    conection.query(DBQuery, [name_recipe, energy, time, recipe_description, recipe_instructions, imagePath], function(err, result) {
+    conection.query(DBQuery, [name_recipe, energy, time, recipe_description, recipe_instructions, imagePath, author], function(err, result) {
 
         if (err) {
 
@@ -168,8 +168,7 @@ router.post('/up_recipe', upload.single('recipe_image'), function(req, res) {
         } else {
 
             return res.status(200).send({ success: "Receta registrada con éxito." });
-            //
-
+            
         }
     });
 });
