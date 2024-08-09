@@ -115,6 +115,12 @@ router.get('/settings', function (req, res) {
 
 });
 
+router.get('/select', function (req, res) {
+
+    res.render('select_vegetables');
+
+});
+
 //------------------------------------------------------------------------------
 
 //------------------------New recipes selector (user_dashboard)-----------------

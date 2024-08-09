@@ -157,7 +157,8 @@ router.post('/up_recipe', upload.single('recipe_image'), function(req, res) {
             return res.status(400).send({ error: "Categoría no válida." });
     }
 
-    const DBQuery = `INSERT INTO ${tableName} (name, energy, time_make, description, instruction, img_path, author) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    const DBQuery = `INSERT INTO ${tableName} (name, energy, time_make, description, instruction, img_path, author) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
     conection.query(DBQuery, [name_recipe, energy, time, recipe_description, recipe_instructions, imagePath, author], function(err, result) {
 

@@ -1,0 +1,124 @@
+body{
+    padding-bottom: 90px;
+    padding-top: 35%;
+}
+
+.screen_container{
+    padding-left: 4%;
+    padding-right: 4%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.label_scroll_category{
+    color: var(--ChiliRed);
+}
+
+.selector_dynamic_bar{
+    margin-top: 20px;
+    width: 100%;
+    height: 50px;
+    border: var(--ChiliRed) solid 3px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.selected_text{
+    font-size: 13px;
+    color: var(--ChiliRed);
+}
+
+.vgt{
+    color: var(--WhiteBaseColor);
+}
+
+.selected_onBar{
+    background-color: var(--ChiliRed);
+    width: 25%;
+    height: 100%;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.selected_buttons{
+    width: 25%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.matrix_ingredients_component{
+    margin-top: 45px;
+    background-color: var(--WhiteBaseColor);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+}
+
+.ingredient_button{
+    background-color: var(--GreyLight);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90px;
+    height: 90px;
+    border-radius: 20px;
+    margin: 15px;
+    border-style: none;
+}
+
+.button_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+
+.name_ingredient{
+    color: var(--ChiliRed);
+    font-size: 12px;
+}
+
+.ingredient_img_style{
+    width: 52%;
+    height: 52%;
+}
+
+.next_category_button{
+    background-color: var(--ChiliRed);
+    width: 90%;
+    height: 50px;
+    border-radius: 10px;
+    border-style: none;
+    color: var(--WhiteBaseColor);
+    margin-top: 50px;
+    align-self: center;
+}
+
+.select_dot{
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    background-color: var(--ChiliRed);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    right: -40px;
+    top: -125px;
+}
+
+.check{
+    fill: var(--WhiteBaseColor);
+    width: 20px;
+    height: 20px;
+}

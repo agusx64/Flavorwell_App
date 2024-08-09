@@ -18,19 +18,25 @@ document.addEventListener("DOMContentLoaded", function() {
     let text_category;
 
     if (!realSelect) {
+
         console.error('Elemento con ID "real-select" no encontrado.');
         return;
+        
     }
 
     selectTrigger.addEventListener('click', () => {
+
         customOptions.classList.toggle('open');
+
     });
 
     customOptionsItems.forEach(option => {
         option.addEventListener('click', () => {
+
             text_category = option.textContent.trim();
             selectTrigger.querySelector('span').textContent = text_category;
             customOptions.classList.remove('open');
+
         });
     });
 
@@ -48,11 +54,15 @@ document.addEventListener("DOMContentLoaded", function() {
             recipeDescription.value.trim() !== '' &&
             recipeInstructions.value.trim() !== '' &&
             authorName.value.trim() !== '') {
+
             getSelectedValueButton.disabled = false;
             imgRecipe.disabled = false;
+
         } else {
+
             getSelectedValueButton.disabled = true;
             imgRecipe.disabled = true;
+
         }
     }
 
@@ -77,20 +87,33 @@ document.addEventListener("DOMContentLoaded", function() {
         formData.append('recipe_image', imgRecipe.files[0]);
 
         fetch('/up_recipe', {
+
             method: 'POST',
             body: formData
+
         })
         .then(response => {
             if (!response.ok) {
+
                 console.log(`HTTP error! status: ${response.status}`);
+
             }
+
             return response.json();
+
         })
         .then(data => {
+
             console.log("Respuesta del servidor:", data);
+
         })
         .catch(error => {
+
             console.log("Error al procesar la solicitud:", error);
+
         });
+
+        window.location.href = '/select'
+
     });
 }); 
