@@ -121,6 +121,24 @@ router.get('/select', function (req, res) {
 
 });
 
+router.get('/select_protein', function (req, res) {
+
+    res.render('select_protein');
+
+});
+
+router.get('/select_garrison', function (req, res) {
+
+    res.render('select_garrison');
+
+});
+
+router.get('/select_extra', function (req, res){
+
+    res.render('select_extra');
+
+});
+
 //------------------------------------------------------------------------------
 
 //------------------------New recipes selector (user_dashboard)-----------------

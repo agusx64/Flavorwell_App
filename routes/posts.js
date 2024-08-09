@@ -218,4 +218,27 @@ router.post('/sended_text', async (req, res) => {
     
 });
 
+//-------------------------Ingredients recolector ----------------------------------------
+router.post('/load_vegetables', function(req, res) {
+
+    const vegetables_ingredients = req.body;
+    console.log(vegetables_ingredients);
+
+});
+
+router.post('/load_protein', function(req, res){
+
+    const protein_ingredients = req.body;
+    console.log(protein_ingredients);
+
+})
+
+router.post('/load_garrison', function(req, res){
+
+    const garrison_ingredients = req.body;
+    console.log(garrison_ingredients);
+
+});
+
+
 module.exports = router;

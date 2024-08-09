@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     submitButton.addEventListener('click', () => {
 
         // Envía los ingredientes seleccionados al servidor
-        fetch('/load_vegetables', {
+        fetch('/load_garrison', {
 
             method: 'POST',
             headers: {
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         });
 
-        window.location.href = '/select_protein';
+        window.location.href = '/select_extra';
 
     });
 
