@@ -8,6 +8,22 @@ var router = express.Router();
 //Lateinit variables
 let username;
 
+let vegetable_ingredient_1;
+let vegetable_ingredient_2;
+let vegetable_ingredient_3;
+
+let protein_ingredient_1;
+let protein_ingredient_2;
+let protein_ingredient_3;
+
+let garrison_ingredient_1;
+let garrison_ingredient_2;
+let garrison_ingredient_3;
+
+let extra_ingredient_1;
+let extra_ingredient_2;
+let extra_ingredient_3;
+
 
 //DB SQL Connection
 let conection = mysql.createConnection({
@@ -222,21 +238,128 @@ router.post('/sended_text', async (req, res) => {
 router.post('/load_vegetables', function(req, res) {
 
     const vegetables_ingredients = req.body;
-    console.log(vegetables_ingredients);
+
+    vegetable_ingredient_1 = vegetables_ingredients[0]
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+    
+    vegetable_ingredient_2 = vegetables_ingredients[1]
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+
+    vegetable_ingredient_3 = vegetables_ingredients[2]
+    .toLowerCase()
+    .replace(/\s+/g, '_');
 
 });
 
 router.post('/load_protein', function(req, res){
 
     const protein_ingredients = req.body;
-    console.log(protein_ingredients);
 
-})
+    protein_ingredient_1 = protein_ingredients[0]
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+    
+    protein_ingredient_2 = protein_ingredients[1]
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+
+    protein_ingredient_3 = protein_ingredients[2]
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+
+});
 
 router.post('/load_garrison', function(req, res){
 
     const garrison_ingredients = req.body;
-    console.log(garrison_ingredients);
+
+    garrison_ingredient_1 = garrison_ingredients[0]
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+    
+    garrison_ingredient_2 = garrison_ingredients[1]
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+
+    garrison_ingredient_3 = garrison_ingredients[2]
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+    
+
+});
+
+router.post('/load_extra', function(req, res){
+
+    const extra_ingredients = req.body;
+
+    extra_ingredient_1 = extra_ingredients[0]
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+    
+    extra_ingredient_2 = extra_ingredients[1]
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+    
+    extra_ingredient_3 = extra_ingredients[2]
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+
+});
+
+router.get('/send_ingredients', function(req, res) {
+
+    let ingredients_list = [];
+    
+    ingredients_list.push(vegetable_ingredient_1);
+    ingredients_list.push(vegetable_ingredient_2);
+    ingredients_list.push(vegetable_ingredient_3);
+
+    ingredients_list.push(protein_ingredient_1);
+    ingredients_list.push(protein_ingredient_2);
+    ingredients_list.push(protein_ingredient_3);
+
+    ingredients_list.push(garrison_ingredient_1);
+    ingredients_list.push(garrison_ingredient_2);
+    ingredients_list.push(garrison_ingredient_3);
+
+    ingredients_list.push(extra_ingredient_1);
+    ingredients_list.push(extra_ingredient_2);
+    ingredients_list.push(extra_ingredient_3);
+
+    let ingredients_query = `(SELECT * FROM ingredients_list WHERE name = ?)
+                            UNION ALL
+                            (SELECT * FROM ingredients_list WHERE name = ?)
+                            UNION ALL
+                            (SELECT * FROM ingredients_list WHERE name = ?)
+                            UNION ALL
+                            (SELECT * FROM ingredients_list WHERE name = ?)
+                            UNION ALL
+                            (SELECT * FROM ingredients_list WHERE name = ?)
+                            UNION ALL
+                            (SELECT * FROM ingredients_list WHERE name = ?)
+                            UNION ALL
+                            (SELECT * FROM ingredients_list WHERE name = ?)
+                            UNION ALL
+                            (SELECT * FROM ingredients_list WHERE name = ?)
+                            UNION ALL
+                            (SELECT * FROM ingredients_list WHERE name = ?)`
+    
+    conection.query(ingredients_query, ingredients_list, function(err, results) {
+
+        if (err) {
+
+            throw err
+
+        } else {
+
+            res.json(results);
+            console.log(results);
+
+        }
+
+    });
 
 });
 

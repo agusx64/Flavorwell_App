@@ -139,6 +139,12 @@ router.get('/select_extra', function (req, res){
 
 });
 
+router.get('/render_success', function(req, res){
+
+    res.render('recipe_register_sucess');
+
+});
+
 //------------------------------------------------------------------------------
 
 //------------------------New recipes selector (user_dashboard)-----------------
