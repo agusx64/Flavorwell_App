@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    const maxSelections = 3;
+    const maxSelections = 1;
     let selectedCount = 0;
     const selectedIngredients = [];
 

@@ -9,20 +9,15 @@ var router = express.Router();
 let username;
 
 let vegetable_ingredient_1;
-let vegetable_ingredient_2;
-let vegetable_ingredient_3;
-
 let protein_ingredient_1;
-let protein_ingredient_2;
-let protein_ingredient_3;
-
 let garrison_ingredient_1;
-let garrison_ingredient_2;
-let garrison_ingredient_3;
-
 let extra_ingredient_1;
-let extra_ingredient_2;
-let extra_ingredient_3;
+
+let post_table_vegetable;
+let post_table_protein;
+let post_table_garrison;
+let post_table_extra;
+let tableName;
 
 
 //DB SQL Connection
@@ -145,28 +140,42 @@ router.post('/up_recipe', upload.single('recipe_image'), function(req, res) {
 
     const imagePath = `/uploads/recipes/${imgRoute.filename}`;
 
-    let tableName;
-
     switch (category.toLowerCase()) {
 
         case 'breakfast':
 
             tableName = 'breakfast';
+            post_table_vegetable = 'breakfast';
+            post_table_protein = 'breakfast';
+            post_table_garrison = 'breakfast';
+            post_table_extra = 'breakfast';
             break;
 
         case 'desserts':
 
             tableName = 'desserts';
+            post_table_vegetable = 'desserts';
+            post_table_protein = 'desserts';
+            post_table_garrison = 'desserts';
+            post_table_extra = 'desserts';
             break;
 
         case 'dish':
 
             tableName = 'strong_dish';
+            post_table_vegetable  = 'strong_dish'
+            post_table_protein = 'strong_dish'
+            post_table_garrison = 'strong_dish'
+            post_table_extra = 'strong_dish'
             break;
 
         case 'vegan':
 
             tableName = 'vegan';
+            post_table_vegetable = 'vegan';
+            post_table_protein = 'vegan';
+            post_table_garrison = 'vegan';
+            post_table_extra = 'vegan';
             break;
 
         default:
@@ -187,7 +196,9 @@ router.post('/up_recipe', upload.single('recipe_image'), function(req, res) {
             return res.status(200).send({ success: "Receta registrada con éxito." });
             
         }
+
     });
+
 });
 
 //--------------------------Dynamic query URI encripter --------------
@@ -242,14 +253,28 @@ router.post('/load_vegetables', function(req, res) {
     vegetable_ingredient_1 = vegetables_ingredients[0]
     .toLowerCase()
     .replace(/\s+/g, '_');
-    
-    vegetable_ingredient_2 = vegetables_ingredients[1]
-    .toLowerCase()
-    .replace(/\s+/g, '_');
 
-    vegetable_ingredient_3 = vegetables_ingredients[2]
-    .toLowerCase()
-    .replace(/\s+/g, '_');
+    let DBquery = `UPDATE ${post_table_vegetable}
+                    SET vegan_ingredient = ?
+                    WHERE id = (
+                    SELECT id
+                    FROM ${post_table_vegetable}
+                    ORDER BY created_at DESC
+                    LIMIT 1);`;
+    
+    conection.query(DBquery, [vegetable_ingredient_1], function(err, result) {
+
+        if (err) {
+
+            throw err;
+
+        } else {
+
+            console.log(result);
+
+        }
+
+    });
 
 });
 
@@ -260,14 +285,28 @@ router.post('/load_protein', function(req, res){
     protein_ingredient_1 = protein_ingredients[0]
     .toLowerCase()
     .replace(/\s+/g, '_');
-    
-    protein_ingredient_2 = protein_ingredients[1]
-    .toLowerCase()
-    .replace(/\s+/g, '_');
 
-    protein_ingredient_3 = protein_ingredients[2]
-    .toLowerCase()
-    .replace(/\s+/g, '_');
+        let DBquery = `UPDATE ${post_table_protein}
+                    SET protein_ingredient = ?
+                    WHERE id = (
+                    SELECT id
+                    FROM ${post_table_protein}
+                    ORDER BY created_at DESC
+                    LIMIT 1);`;
+    
+    conection.query(DBquery, [protein_ingredient_1], function(err, result) {
+
+        if (err) {
+
+            throw err;
+
+        } else {
+
+            console.log(result);
+
+        }
+
+    });
 
 });
 
@@ -278,14 +317,28 @@ router.post('/load_garrison', function(req, res){
     garrison_ingredient_1 = garrison_ingredients[0]
     .toLowerCase()
     .replace(/\s+/g, '_');
-    
-    garrison_ingredient_2 = garrison_ingredients[1]
-    .toLowerCase()
-    .replace(/\s+/g, '_');
 
-    garrison_ingredient_3 = garrison_ingredients[2]
-    .toLowerCase()
-    .replace(/\s+/g, '_');
+        let DBquery = `UPDATE ${post_table_garrison}
+                    SET garrison_ingredient = ?
+                    WHERE id = (
+                    SELECT id
+                    FROM ${post_table_garrison}
+                    ORDER BY created_at DESC
+                    LIMIT 1);`;
+    
+    conection.query(DBquery, [garrison_ingredient_1], function(err, result) {
+
+        if (err) {
+
+            throw err;
+
+        } else {
+
+            console.log(result);
+
+        }
+
+    });
     
 
 });
@@ -297,65 +350,24 @@ router.post('/load_extra', function(req, res){
     extra_ingredient_1 = extra_ingredients[0]
     .toLowerCase()
     .replace(/\s+/g, '_');
+
+        let DBquery = `UPDATE ${post_table_extra}
+                    SET extra_ingredient = ?
+                    WHERE id = (
+                    SELECT id
+                    FROM ${post_table_extra}
+                    ORDER BY created_at DESC
+                    LIMIT 1);`;
     
-    extra_ingredient_2 = extra_ingredients[1]
-    .toLowerCase()
-    .replace(/\s+/g, '_');
-    
-    extra_ingredient_3 = extra_ingredients[2]
-    .toLowerCase()
-    .replace(/\s+/g, '_');
-
-});
-
-router.get('/send_ingredients', function(req, res) {
-
-    let ingredients_list = [];
-    
-    ingredients_list.push(vegetable_ingredient_1);
-    ingredients_list.push(vegetable_ingredient_2);
-    ingredients_list.push(vegetable_ingredient_3);
-
-    ingredients_list.push(protein_ingredient_1);
-    ingredients_list.push(protein_ingredient_2);
-    ingredients_list.push(protein_ingredient_3);
-
-    ingredients_list.push(garrison_ingredient_1);
-    ingredients_list.push(garrison_ingredient_2);
-    ingredients_list.push(garrison_ingredient_3);
-
-    ingredients_list.push(extra_ingredient_1);
-    ingredients_list.push(extra_ingredient_2);
-    ingredients_list.push(extra_ingredient_3);
-
-    let ingredients_query = `(SELECT * FROM ingredients_list WHERE name = ?)
-                            UNION ALL
-                            (SELECT * FROM ingredients_list WHERE name = ?)
-                            UNION ALL
-                            (SELECT * FROM ingredients_list WHERE name = ?)
-                            UNION ALL
-                            (SELECT * FROM ingredients_list WHERE name = ?)
-                            UNION ALL
-                            (SELECT * FROM ingredients_list WHERE name = ?)
-                            UNION ALL
-                            (SELECT * FROM ingredients_list WHERE name = ?)
-                            UNION ALL
-                            (SELECT * FROM ingredients_list WHERE name = ?)
-                            UNION ALL
-                            (SELECT * FROM ingredients_list WHERE name = ?)
-                            UNION ALL
-                            (SELECT * FROM ingredients_list WHERE name = ?)`
-    
-    conection.query(ingredients_query, ingredients_list, function(err, results) {
+    conection.query(DBquery, [extra_ingredient_1], function(err, result) {
 
         if (err) {
 
-            throw err
+            throw err;
 
         } else {
 
-            res.json(results);
-            console.log(results);
+            console.log(result);
 
         }
 
@@ -363,5 +375,38 @@ router.get('/send_ingredients', function(req, res) {
 
 });
 
+router.post('/ingredient_list', function(req, res) {
+
+    const jSON_Ingredients = req.body;
+    
+    let vegan_Ingredient = jSON_Ingredients.vegan_ingredient;
+    let protein_Ingredient = jSON_Ingredients.protein_ingredient;
+    let garrison_Ingredient = jSON_Ingredients.garrison_ingredient;
+    let extra_Ingredient = jSON_Ingredients.extra_ingredient;
+
+    let DBQuery = ` (SELECT * FROM ingredients_list WHERE name = ?)
+                    UNION ALL
+                    (SELECT * FROM ingredients_list WHERE name = ?)
+                    UNION ALL
+                    (SELECT * FROM ingredients_list WHERE name = ?)
+                    UNION ALL
+                    (SELECT * FROM ingredients_list WHERE name = ?)`;
+    
+    conection.query(DBQuery, [vegan_Ingredient, protein_Ingredient, garrison_Ingredient, extra_Ingredient], function(err, results) {
+
+        if (err) {
+
+            throw err;
+
+        } else {
+
+            console.log(results);
+            res.json(results);
+
+        }
+
+    })
+
+});
 
 module.exports = router;

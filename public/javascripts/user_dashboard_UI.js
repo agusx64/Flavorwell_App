@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-function dynamicGetRecentRecipe() {
+function dynamicGetRecentRecipe() { 
 
     const bootstrapComponents = document.querySelectorAll('.carousel-item');
 

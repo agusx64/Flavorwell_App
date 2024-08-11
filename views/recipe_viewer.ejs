@@ -21,7 +21,7 @@
                 <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
             </svg>
         </button>
-        <h2 class="header_text poppins-semibold">Recipe register</h2>
+        <h2 class="header_text poppins-semibold">Recipe viewer</h2>
         <div class="svg_icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                 <path d="M440-160H260q-91 0-155.5-63T40-377q0-78 47-139t123-78q25-92 100-149t170-57q117 0 198.5 81.5T760-520q69 8 114.5 59.5T920-340q0 75-52.5 127.5T740-160H520v-286l64 62 56-56-160-160-160 160 56 56 64-62v286Z" />
@@ -69,55 +69,42 @@
 
         </div>
 
-        <h1 class="text_description poppins-semibold">¿Do you like this recipe?</h1>
-
-        <section class="like_section">
-            <div class="div_like_container">
-                <svg class="like_button_class" id="like_button" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#e8eaed"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
-                <p class="like_number">550</p>
-            </div>
-            <div class="div_like_container">
-                <svg class="like_button_class" id="dislike_button" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#e8eaed"><path d="M24 24H0V0h24v24z" fill="none"/><path d="M22 4h-2c-.55 0-1 .45-1 1v9c0 .55.45 1 1 1h2V4zM2.17 11.12c-.11.25-.17.52-.17.8V13c0 1.1.9 2 2 2h5.5l-.92 4.65c-.05.22-.02.46.08.66.23.45.52.86.88 1.22L10 22l6.41-6.41c.38-.38.59-.89.59-1.42V6.34C17 5.05 15.95 4 14.66 4h-8.1c-.71 0-1.36.37-1.72.97l-2.67 6.15z"/></svg>
-                <p class="like_number">200</p>
-            </div>
-        </section>
-
-        <h1 class="text_description poppins-semibold ingredients_title">Ingredients</h1>
+        <h1 class="text_description poppins-semibold ingredients_title">Base ingredients</h1>
 
         <!-- This is a dynamic component -->
-        <div class="ingredients_component">
-            <div class="ingrdient_img">
-                <img src="" alt="">
+        <div class="ingredients_component vegan">
+            <div class="ingrdient_img vegan">
+                <img src="" alt="" id="vegan" class="style_image_component">
             </div>
             <div class="text_ingredient">
-                <span class="name_ingredient poppins-semibold">Steak</span>
+                <span class="name_ingredient poppins-semibold" id="vegan_ingredient"></span>
             </div>
         </div>
 
-        <div class="ingredients_component">
-            <div class="ingrdient_img">
-                <img src="" alt="">
+        <div class="ingredients_component protein">
+            <div class="ingrdient_img protein">
+                <img src="" alt="" id="protein" class="style_image_component">
             </div>
             <div class="text_ingredient">
-                <span class="name_ingredient poppins-semibold">Steak</span>
+                <span class="name_ingredient poppins-semibold" id="protein_ingredient"></span>
             </div>
         </div>
 
-        <div class="ingredients_component">
-            <div class="ingrdient_img">
-                <img src="" alt="">
+        <div class="ingredients_component garrison">
+            <div class="ingrdient_img garrison">
+                <img src="" alt="" id="garrison" class="style_image_component">
             </div>
             <div class="text_ingredient">
-                <span class="name_ingredient poppins-semibold">Steak</span>
+                <span class="name_ingredient poppins-semibold" id="garrison_ingredient"></span>
             </div>
         </div>
 
-        <div class="ingredients_component">
-            <div class="ingrdient_img">
-                <img src="" alt="">
+        <div class="ingredients_component extra">
+            <div class="ingrdient_img extra">
+                <img src="" alt="" id="extra" class="style_image_component">
             </div>
             <div class="text_ingredient">
-                <span class="name_ingredient poppins-semibold">Steak</span>
+                <span class="name_ingredient poppins-semibold" id="extra_ingredient"></span>
             </div>
         </div>
 

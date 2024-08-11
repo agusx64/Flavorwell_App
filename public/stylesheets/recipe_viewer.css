@@ -158,6 +158,7 @@ body{
 .ingredients_component{
     margin-top: 10px;
     margin-bottom: 10px;
+    padding-left: 10px;
     width: 100%;
     height: 70px;
     background-color: var(--GreyLight);
@@ -172,6 +173,9 @@ body{
     height: 70px;
     background-color: var(--GreySimple);
     border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .text_ingredient{
@@ -192,4 +196,33 @@ body{
 
 .instructions_text{
     text-align: justify;
+}
+
+.style_image_component{
+    width: 70%;
+}
+
+.vegan{
+    background-color: var(--Celadon);
+}
+#vegan_ingredient{
+    color: var(--DarkGreen);
+}
+
+.protein{
+    background-color: var(--ChiliRedDisabled);
+}
+#protein_ingredient{
+    color: var(--WhiteBaseColor);
+}
+
+.garrison{
+    background-color: var(--Garrison);
+}
+
+.extra{
+    background-color: var(--LightBlue);
+}
+#extra_ingredient{
+    color: var(--WhiteBaseColor);
 }
