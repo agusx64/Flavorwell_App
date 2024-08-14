@@ -64,6 +64,51 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 //----------------POST for authentication-------------------------
+router.post('/user_data', function(req, res){
+
+    const user_data = req.body;
+    console.log(user_data);
+
+    let getMail = user_data.username_input;
+    let getPassword = user_data.username_password;
+
+    let DBQuery = "SELECT * FROM users WHERE email = ? AND password = ? ";
+
+    conection.query(DBQuery, [getMail, getPassword], function (err, result) {
+
+        try {
+
+            if(result.length > 0){
+
+                if(result[0].email == "admin" && result[0].password == "admin") {
+
+                    res.render('admin_dashboard');
+
+                } else if (result[0].email != "admin" && result[0].password != "admin") {
+
+                    username = result[0].username;
+                    console.log(username);
+                    res.render('user_dashboard');
+
+                }
+
+            } else {
+
+                res.render('invalid_credentials');
+
+            }
+
+        } catch (err){
+
+            res.send("Internal server error: " + err.message);
+
+        }
+
+    });
+
+});
+
+//-------------------API + POST endpoints------------------------
 router.post('/send_prompt', upload.none(), function (req, res) {
 
     const { category, name_recipe, energy, time, author } = req.body;

@@ -256,4 +256,48 @@ router.get('/recipe_viewer', (req, res) => {
 
 });
 
+router.get('/breakfast_list', async function(req, res) {
+    try {
+        const DBquery = 'SELECT * FROM breakfast';
+        const [rows, fields] = await connection.execute(DBquery);
+        res.json(rows);
+    } catch (err) {
+        console.error('Error en la consulta a la base de datos:', err);
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+    }
+});
+
+router.get('/desserts_list', async function(req, res) {
+    try {
+        const DBquery = 'SELECT * FROM desserts';   
+        const [rows, fields] = await connection.execute(DBquery);
+        res.json(rows);
+    } catch (err) {
+        console.error('Error en la consulta a la base de datos:', err);
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+    }
+});
+
+router.get('/strong_dish_list', async function(req, res) {
+    try {
+        const DBquery = 'SELECT * FROM strong_dish';   
+        const [rows, fields] = await connection.execute(DBquery);
+        res.json(rows);
+    } catch (err) {
+        console.error('Error en la consulta a la base de datos:', err);
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+    }
+});
+
+router.get('/vegan_list', async function(req, res) {
+    try {
+        const DBquery = 'SELECT * FROM vegan';   
+        const [rows, fields] = await connection.execute(DBquery);
+        res.json(rows);
+    } catch (err) {
+        console.error('Error en la consulta a la base de datos:', err);
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+    }
+});
+
 module.exports = router;
