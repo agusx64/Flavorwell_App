@@ -3,6 +3,12 @@ var express = require('express');
 var multer = require('multer');
 var path = require('path');
 var fs = require('fs');
+const e = require('express');
+const axios = require('axios');
+require('dotenv').config();
+const OpenAI = require('openai');
+const openAI_Config = require('openai').Configuration;
+const openAI_API = require('openai').OpenAIAPI;
 var router = express.Router();
 
 //Lateinit variables
@@ -18,7 +24,7 @@ let post_table_protein;
 let post_table_garrison;
 let post_table_extra;
 let tableName;
-
+let translatePrompt;
 
 //DB SQL Connection
 let conection = mysql.createConnection({
@@ -39,61 +45,204 @@ conection.connect(function(err) {
 //----------------Multer configuration----------------------------
 
 const storage = multer.diskStorage({
+
     destination: (req, file, cb) => {
+
         const dir = 'uploads/recipes';
         fs.mkdirSync(dir, { recursive: true });
         cb(null, dir);
+
     },
     filename: (req, file, cb) => {
+
         cb(null, Date.now() + path.extname(file.originalname));
+
     }
+    
 });
 
 const upload = multer({ storage: storage });
 
 //----------------POST for authentication-------------------------
-router.post('/user_data', function(req, res){
+router.post('/send_prompt', upload.none(), function (req, res) {
 
-    const user_data = req.body;
-    console.log(user_data);
+    const { category, name_recipe, energy, time, author } = req.body;
+    let translatePrompt;
 
-    let getMail = user_data.username_input;
-    let getPassword = user_data.username_password;
+    // Traducción de la categoría a un formato adecuado para el prompt
+    switch (category) {
+        case 'Breakfast':
+            translatePrompt = "desayuno";
+            break;
+        case 'Desserts':
+            translatePrompt = "postre";
+            break;
+        case 'Vegan':
+            translatePrompt = "vegana";
+            break;
+        case 'Strong_dish':
+            translatePrompt = "plato fuerte";
+            break;
+        default:
+            translatePrompt = "de cualquier categoria";
+            break;
+    }
 
-    let DBQuery = "SELECT * FROM users WHERE email = ? AND password = ? ";
+    const generate_img_prompt = `Genera una imagen de un ${name_recipe}`;
+    const recipe_prompt = `Genera una receta de ${name_recipe} que sea ${translatePrompt}, que tenga un aproximado de ${energy} calorías, y que se pueda preparar en un tiempo de ${time}. Dame los pasos para poder prepararla.`;
 
-    conection.query(DBQuery, [getMail, getPassword], function (err, result) {
+    console.log(recipe_prompt);
+    console.log(generate_img_prompt);
 
-        try {
+    // Llama a las funciones con el mecanismo de reintentos
+    retryRequest(() => getRecipeInstructions(recipe_prompt));
+    retryRequest(() => generateImageRecipe(generate_img_prompt));
 
-            if(result.length > 0){
+    // Función para realizar solicitudes con reintentos
+    async function retryRequest(fn, retries = 2) {
 
-                if(result[0].email == "admin" && result[0].password == "admin") {
+        for (let i = 0; i < retries; i++) {
 
-                    res.render('admin_dashboard');
+            try {
 
-                } else if (result[0].email != "admin" && result[0].password != "admin") {
+                await fn();
+                return;  // Si la solicitud tiene éxito, salimos de la función
 
-                    username = result[0].username;
-                    console.log(username);
-                    res.render('user_dashboard');
+            } catch (error) {
+
+                const statusCode = error.response ? error.response.status : null;
+                
+                if (statusCode === 429) {
+
+                    // Manejo específico para el código 429: Too Many Requests
+                    const retryAfter = error.response.headers['retry-after'] 
+                        ? parseInt(error.response.headers['retry-after']) * 1000 
+                        : (i + 1) * 1000;  // Si no se proporciona "retry-after", espera más tiempo entre intentos
+                    console.error(`Error 429: Too many requests. Retrying in ${retryAfter} ms...`);
+                    await new Promise(resolve => setTimeout(resolve, retryAfter));
+
+                } else {
+
+                    console.error(`Error en el intento ${i + 1}:`, error.message);
 
                 }
 
-            } else {
+                if (i === retries - 1) {
 
-                res.render('invalid_credentials');
+                    throw error;  // Si es el último intento, volvemos a lanzar el error
+
+                }
 
             }
 
-        } catch (err){
+        }
 
-            res.send("Internal server error: " + err.message);
+    }
+
+    // Función para obtener las instrucciones de la receta
+    async function getRecipeInstructions(userMessage) {
+
+        const maxAttempts = 1;
+        let attempt = 0;
+    
+        while (attempt < maxAttempts) {
+
+            attempt++;
+
+            try {
+
+                const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+
+                    model: 'gpt-3.5-turbo',
+                    messages: [
+                        {
+
+                            role: 'system',
+                            content: `Responde en formato JSON con las propiedades "name_recipe", "energy", "time_make", "description", "instruction".`
+
+                        },{ 
+                            role: 'user', 
+                            content: userMessage 
+                        }
+                    ],
+                }, {
+
+                    headers: {
+
+                        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+                        'Content-Type': 'application/json'
+
+                    }
+
+                });
+    
+                console.log(response.data.choices[0].message.content);
+                return;
+
+            } catch (error) {
+
+                console.error(`Error en el intento ${attempt}: ${error.message}`);
+
+                if (attempt >= maxAttempts) {
+
+                    throw new Error('Error al obtener instrucciones de receta después de varios intentos');
+
+                }
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+            }
 
         }
 
-    });
+    }
 
+    // Función para generar la imagen de la receta
+    async function generateImageRecipe(prompt) {
+
+        const maxAttempts = 1;
+        let attempt = 0;
+    
+        while (attempt < maxAttempts) {
+
+            attempt++;
+            try {
+
+                const response = await axios.post('https://api.openai.com/v1/images/generations', {
+                    prompt: prompt,
+                    n: 1,
+                    size: '1024x1024'
+
+                }, {
+
+                    headers: {
+
+                        'authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+                        'content-type': 'application/json'
+
+                    }
+
+                });
+    
+                console.log(response.data.data[0].url);
+                return;
+
+            } catch (error) {
+
+                console.error(`Error en el intento ${attempt}: ${error.message}`);
+
+                if (attempt >= maxAttempts) {
+
+                    throw new Error('Error al generar imagen de receta después de varios intentos');
+
+                }
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+            }
+
+        }
+
+    }
+    
 });
 
 //--------------------------POST for registration-----------------
@@ -124,6 +273,43 @@ router.post('/register_data', function(req, res) {
     });
 
 });
+
+//--------------------------POST recipe generator + API --------------------------------
+router.post('/send_prompt', upload.none(), async (req, res) => {
+
+    const { category, name_recipe, energy, time, author } = req.body;
+    let translatePrompt;
+
+    // Traducción de la categoría a un formato adecuado para el prompt
+    switch (category) {
+        case 'Breakfast':
+            translatePrompt = "desayuno";
+            break;
+        case 'Desserts':
+            translatePrompt = "postre";
+            break;
+        case 'Vegan':
+            translatePrompt = "vegana";
+            break;
+        case 'Strong_dish':
+            translatePrompt = "plato fuerte";
+            break;
+        default:
+            translatePrompt = "de cualquier categoria";
+            break;
+    }
+    const promptSystem = `Responde en formato JSON con las propiedades "name_recipe", "energy", "time_make", "description", "instruction".`
+    const generate_img_prompt = `Genera una imagen de un ${name_recipe}`;
+    const recipe_prompt = `Genera una receta de ${name_recipe} que sea ${translatePrompt}, que tenga un aproximado de ${energy} calorías, y que se pueda preparar en un tiempo de ${time}. Dame los pasos para poder prepararla.`;
+
+    console.log(recipe_prompt);
+    console.log(generate_img_prompt);
+    console.log(promptSystem);
+
+    
+
+});
+
 
 //--------------------------Recipe register POST -----------------
 router.post('/up_recipe', upload.single('recipe_image'), function(req, res) {
@@ -195,6 +381,48 @@ router.post('/up_recipe', upload.single('recipe_image'), function(req, res) {
 
             return res.status(200).send({ success: "Receta registrada con éxito." });
             
+        }
+
+    });
+
+});
+
+//--------------------------UPDATE profile image------------------------
+router.post('/update_profile', upload.single('image'), function(req, res) {
+
+    const imgRouteProfile = req.file;
+    let username_searcher = username;
+
+    console.log(imgRouteProfile);
+    
+    if (!imgRouteProfile) {
+
+        return res.status(400).send({ error: "No se ha subido ninguna imagen." });
+
+    }
+
+    const imagePath = `/uploads/recipes/${imgRouteProfile.filename}`;
+    console.log(imagePath);
+
+    let DBQuery = `UPDATE users
+                    SET img_profile_path = ?
+                    WHERE username = (
+                    SELECT username 
+                    FROM users
+                    WHERE username = ?
+                    LIMIT 1
+                );`
+
+    conection.query(DBQuery, [imagePath, username_searcher], function(err, result) {
+
+        if (err) {
+
+            throw err;
+
+        } else {
+
+            return res.status(200).send({ success: "Tabla users actualizada con éxito." });            
+
         }
 
     });
@@ -408,5 +636,28 @@ router.post('/ingredient_list', function(req, res) {
     })
 
 });
+
+router.get('/username_information', function(req, res){
+
+    DBQuery = 'SELECT email,username,created_at,img_profile_path FROM users WHERE username = ?;'
+
+    let username_query = username
+
+    conection.query(DBQuery, [username_query], function(err, results){
+
+        if(err){
+
+            throw err;
+
+        } else {
+
+            console.log(results);
+            res.json(results);
+
+        }
+
+    });
+
+})
 
 module.exports = router;

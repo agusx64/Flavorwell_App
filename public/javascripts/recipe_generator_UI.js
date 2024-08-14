@@ -10,9 +10,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const energy = document.querySelector('input[name="energy"]');
     const time = document.querySelector('input[name="time"]');
     const items = document.querySelector('input[name="items"]');
-    const recipeDescription = document.querySelector('textarea[name="recipe_description"]');
-    const recipeInstructions = document.querySelector('textarea[name="recipe_instructions"]');
-    const imgRecipe = document.querySelector('input[name="recipe_image"]');
     const authorName = document.getElementById('name_author');
 
     let text_category;
@@ -51,70 +48,55 @@ document.addEventListener("DOMContentLoaded", function() {
             energy.value.trim() !== '' &&
             time.value.trim() !== '' &&
             items.value.trim() !== '' &&
-            recipeDescription.value.trim() !== '' &&
-            recipeInstructions.value.trim() !== '' &&
             authorName.value.trim() !== '') {
 
             getSelectedValueButton.disabled = false;
-            imgRecipe.disabled = false;
 
         } else {
 
             getSelectedValueButton.disabled = true;
-            imgRecipe.disabled = true;
 
         }
     }
 
     validateForm();
 
-    [nameRecipe, energy, time, items, recipeDescription, recipeInstructions, authorName].forEach(field => {
+    [nameRecipe, energy, time, items, authorName].forEach(field => {
         field.addEventListener('input', validateForm);
     });
 
     getSelectedValueButton.addEventListener('click', () => {
-
-
+        getSelectedValueButton.disabled = true; // Deshabilitar el botón para evitar múltiples clics
+    
         const formData = new FormData();
         formData.append('category', text_category);
         formData.append('name_recipe', nameRecipe.value);
         formData.append('energy', energy.value);
         formData.append('time', time.value);
         formData.append('items', items.value);
-        formData.append('recipe_description', recipeDescription.value);
-        formData.append('recipe_instructions', recipeInstructions.value);
         formData.append('author', authorName.value);
-        formData.append('recipe_image', imgRecipe.files[0]);
-
-        fetch('/up_recipe', {
-
+    
+        fetch('/send_prompt', {
             method: 'POST',
             body: formData
-
         })
         .then(response => {
             if (!response.ok) {
-
                 console.log(`HTTP error! status: ${response.status}`);
-
             }
-
             return response.json();
-
         })
         .then(data => {
-
             console.log("Respuesta del servidor:", data);
-
         })
         .catch(error => {
-
             console.log("Error al procesar la solicitud:", error);
-
+        })
+        .finally(() => {
+            getSelectedValueButton.disabled = false; // Vuelve a habilitar el botón
         });
-
-        window.location.href = '/select'
-
-    });
+    
+        // window.location.href = '/generate_process'
+    });    
     
 }); 
