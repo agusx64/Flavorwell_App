@@ -1,4 +1,4 @@
-var mysql = require('mysql');
+var mysql = require('mysql2');
 var express = require('express');
 var multer = require('multer');
 var path = require('path');
@@ -7,8 +7,6 @@ const e = require('express');
 const axios = require('axios');
 require('dotenv').config();
 const OpenAI = require('openai');
-const openAI_Config = require('openai').Configuration;
-const openAI_API = require('openai').OpenAIAPI;
 var router = express.Router();
 
 //Lateinit variables
@@ -29,10 +27,11 @@ let translatePrompt;
 //DB SQL Connection
 let conection = mysql.createConnection({
 
-    host: "localhost",
-    database: "flavorwell_db",
-    user: "root",
-    password: "",
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 
 });
 conection.connect(function(err) {
@@ -41,8 +40,6 @@ conection.connect(function(err) {
     console.log("Connected! to database from post module");
 
 });
-
-//----------------Multer configuration----------------------------
 
 const storage = multer.diskStorage({
 
@@ -109,186 +106,186 @@ router.post('/user_data', function(req, res){
 });
 
 //-------------------API + POST endpoints------------------------
-router.post('/send_prompt', upload.none(), function (req, res) {
+// router.post('/send_prompt', upload.none(), function (req, res) {
 
-    const { category, name_recipe, energy, time, author } = req.body;
-    let translatePrompt;
+//     const { category, name_recipe, energy, time, author } = req.body;
+//     let translatePrompt;
 
-    // Traducción de la categoría a un formato adecuado para el prompt
-    switch (category) {
-        case 'Breakfast':
-            translatePrompt = "desayuno";
-            break;
-        case 'Desserts':
-            translatePrompt = "postre";
-            break;
-        case 'Vegan':
-            translatePrompt = "vegana";
-            break;
-        case 'Strong_dish':
-            translatePrompt = "plato fuerte";
-            break;
-        default:
-            translatePrompt = "de cualquier categoria";
-            break;
-    }
+//     // Traducción de la categoría a un formato adecuado para el prompt
+//     switch (category) {
+//         case 'Breakfast':
+//             translatePrompt = "desayuno";
+//             break;
+//         case 'Desserts':
+//             translatePrompt = "postre";
+//             break;
+//         case 'Vegan':
+//             translatePrompt = "vegana";
+//             break;
+//         case 'Strong_dish':
+//             translatePrompt = "plato fuerte";
+//             break;
+//         default:
+//             translatePrompt = "de cualquier categoria";
+//             break;
+//     }
 
-    const generate_img_prompt = `Genera una imagen de un ${name_recipe}`;
-    const recipe_prompt = `Genera una receta de ${name_recipe} que sea ${translatePrompt}, que tenga un aproximado de ${energy} calorías, y que se pueda preparar en un tiempo de ${time}. Dame los pasos para poder prepararla.`;
+//     const generate_img_prompt = `Genera una imagen de un ${name_recipe}`;
+//     const recipe_prompt = `Genera una receta de ${name_recipe} que sea ${translatePrompt}, que tenga un aproximado de ${energy} calorías, y que se pueda preparar en un tiempo de ${time}. Dame los pasos para poder prepararla.`;
 
-    console.log(recipe_prompt);
-    console.log(generate_img_prompt);
+//     console.log(recipe_prompt);
+//     console.log(generate_img_prompt);
 
-    // Llama a las funciones con el mecanismo de reintentos
-    retryRequest(() => getRecipeInstructions(recipe_prompt));
-    retryRequest(() => generateImageRecipe(generate_img_prompt));
+//     // Llama a las funciones con el mecanismo de reintentos
+//     retryRequest(() => getRecipeInstructions(recipe_prompt));
+//     retryRequest(() => generateImageRecipe(generate_img_prompt));
 
-    // Función para realizar solicitudes con reintentos
-    async function retryRequest(fn, retries = 2) {
+//     // Función para realizar solicitudes con reintentos
+//     async function retryRequest(fn, retries = 2) {
 
-        for (let i = 0; i < retries; i++) {
+//         for (let i = 0; i < retries; i++) {
 
-            try {
+//             try {
 
-                await fn();
-                return;  // Si la solicitud tiene éxito, salimos de la función
+//                 await fn();
+//                 return;  // Si la solicitud tiene éxito, salimos de la función
 
-            } catch (error) {
+//             } catch (error) {
 
-                const statusCode = error.response ? error.response.status : null;
+//                 const statusCode = error.response ? error.response.status : null;
                 
-                if (statusCode === 429) {
+//                 if (statusCode === 429) {
 
-                    // Manejo específico para el código 429: Too Many Requests
-                    const retryAfter = error.response.headers['retry-after'] 
-                        ? parseInt(error.response.headers['retry-after']) * 1000 
-                        : (i + 1) * 1000;  // Si no se proporciona "retry-after", espera más tiempo entre intentos
-                    console.error(`Error 429: Too many requests. Retrying in ${retryAfter} ms...`);
-                    await new Promise(resolve => setTimeout(resolve, retryAfter));
+//                     // Manejo específico para el código 429: Too Many Requests
+//                     const retryAfter = error.response.headers['retry-after'] 
+//                         ? parseInt(error.response.headers['retry-after']) * 1000 
+//                         : (i + 1) * 1000;  // Si no se proporciona "retry-after", espera más tiempo entre intentos
+//                     console.error(`Error 429: Too many requests. Retrying in ${retryAfter} ms...`);
+//                     await new Promise(resolve => setTimeout(resolve, retryAfter));
 
-                } else {
+//                 } else {
 
-                    console.error(`Error en el intento ${i + 1}:`, error.message);
+//                     console.error(`Error en el intento ${i + 1}:`, error.message);
 
-                }
+//                 }
 
-                if (i === retries - 1) {
+//                 if (i === retries - 1) {
 
-                    throw error;  // Si es el último intento, volvemos a lanzar el error
+//                     throw error;  // Si es el último intento, volvemos a lanzar el error
 
-                }
+//                 }
 
-            }
+//             }
 
-        }
+//         }
 
-    }
+//     }
 
-    // Función para obtener las instrucciones de la receta
-    async function getRecipeInstructions(userMessage) {
+//     // Función para obtener las instrucciones de la receta
+//     async function getRecipeInstructions(userMessage) {
 
-        const maxAttempts = 1;
-        let attempt = 0;
+//         const maxAttempts = 1;
+//         let attempt = 0;
     
-        while (attempt < maxAttempts) {
+//         while (attempt < maxAttempts) {
 
-            attempt++;
+//             attempt++;
 
-            try {
+//             try {
 
-                const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+//                 const response = await axios.post('https://api.openai.com/v1/chat/completions', {
 
-                    model: 'gpt-3.5-turbo',
-                    messages: [
-                        {
+//                     model: 'gpt-3.5-turbo',
+//                     messages: [
+//                         {
 
-                            role: 'system',
-                            content: `Responde en formato JSON con las propiedades "name_recipe", "energy", "time_make", "description", "instruction".`
+//                             role: 'system',
+//                             content: `Responde en formato JSON con las propiedades "name_recipe", "energy", "time_make", "description", "instruction".`
 
-                        },{ 
-                            role: 'user', 
-                            content: userMessage 
-                        }
-                    ],
-                }, {
+//                         },{ 
+//                             role: 'user', 
+//                             content: userMessage 
+//                         }
+//                     ],
+//                 }, {
 
-                    headers: {
+//                     headers: {
 
-                        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-                        'Content-Type': 'application/json'
+//                         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+//                         'Content-Type': 'application/json'
 
-                    }
+//                     }
 
-                });
+//                 });
     
-                console.log(response.data.choices[0].message.content);
-                return;
+//                 console.log(response.data.choices[0].message.content);
+//                 return;
 
-            } catch (error) {
+//             } catch (error) {
 
-                console.error(`Error en el intento ${attempt}: ${error.message}`);
+//                 console.error(`Error en el intento ${attempt}: ${error.message}`);
 
-                if (attempt >= maxAttempts) {
+//                 if (attempt >= maxAttempts) {
 
-                    throw new Error('Error al obtener instrucciones de receta después de varios intentos');
+//                     throw new Error('Error al obtener instrucciones de receta después de varios intentos');
 
-                }
-                await new Promise(resolve => setTimeout(resolve, 1000));
+//                 }
+//                 await new Promise(resolve => setTimeout(resolve, 1000));
 
-            }
+//             }
 
-        }
+//         }
 
-    }
+//     }
 
-    // Función para generar la imagen de la receta
-    async function generateImageRecipe(prompt) {
+//     // Función para generar la imagen de la receta
+//     async function generateImageRecipe(prompt) {
 
-        const maxAttempts = 1;
-        let attempt = 0;
+//         const maxAttempts = 1;
+//         let attempt = 0;
     
-        while (attempt < maxAttempts) {
+//         while (attempt < maxAttempts) {
 
-            attempt++;
-            try {
+//             attempt++;
+//             try {
 
-                const response = await axios.post('https://api.openai.com/v1/images/generations', {
-                    prompt: prompt,
-                    n: 1,
-                    size: '1024x1024'
+//                 const response = await axios.post('https://api.openai.com/v1/images/generations', {
+//                     prompt: prompt,
+//                     n: 1,
+//                     size: '1024x1024'
 
-                }, {
+//                 }, {
 
-                    headers: {
+//                     headers: {
 
-                        'authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-                        'content-type': 'application/json'
+//                         'authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+//                         'content-type': 'application/json'
 
-                    }
+//                     }
 
-                });
+//                 });
     
-                console.log(response.data.data[0].url);
-                return;
+//                 console.log(response.data.data[0].url);
+//                 return;
 
-            } catch (error) {
+//             } catch (error) {
 
-                console.error(`Error en el intento ${attempt}: ${error.message}`);
+//                 console.error(`Error en el intento ${attempt}: ${error.message}`);
 
-                if (attempt >= maxAttempts) {
+//                 if (attempt >= maxAttempts) {
 
-                    throw new Error('Error al generar imagen de receta después de varios intentos');
+//                     throw new Error('Error al generar imagen de receta después de varios intentos');
 
-                }
-                await new Promise(resolve => setTimeout(resolve, 1000));
+//                 }
+//                 await new Promise(resolve => setTimeout(resolve, 1000));
 
-            }
+//             }
 
-        }
+//         }
 
-    }
+//     }
     
-});
+// });
 
 //--------------------------POST for registration-----------------
 router.post('/register_data', function(req, res) {
@@ -320,40 +317,40 @@ router.post('/register_data', function(req, res) {
 });
 
 //--------------------------POST recipe generator + API --------------------------------
-router.post('/send_prompt', upload.none(), async (req, res) => {
+// router.post('/send_prompt', upload.none(), async (req, res) => {
 
-    const { category, name_recipe, energy, time, author } = req.body;
-    let translatePrompt;
+//     const { category, name_recipe, energy, time, author } = req.body;
+//     let translatePrompt;
 
-    // Traducción de la categoría a un formato adecuado para el prompt
-    switch (category) {
-        case 'Breakfast':
-            translatePrompt = "desayuno";
-            break;
-        case 'Desserts':
-            translatePrompt = "postre";
-            break;
-        case 'Vegan':
-            translatePrompt = "vegana";
-            break;
-        case 'Strong_dish':
-            translatePrompt = "plato fuerte";
-            break;
-        default:
-            translatePrompt = "de cualquier categoria";
-            break;
-    }
-    const promptSystem = `Responde en formato JSON con las propiedades "name_recipe", "energy", "time_make", "description", "instruction".`
-    const generate_img_prompt = `Genera una imagen de un ${name_recipe}`;
-    const recipe_prompt = `Genera una receta de ${name_recipe} que sea ${translatePrompt}, que tenga un aproximado de ${energy} calorías, y que se pueda preparar en un tiempo de ${time}. Dame los pasos para poder prepararla.`;
+//     // Traducción de la categoría a un formato adecuado para el prompt
+//     switch (category) {
+//         case 'Breakfast':
+//             translatePrompt = "desayuno";
+//             break;
+//         case 'Desserts':
+//             translatePrompt = "postre";
+//             break;
+//         case 'Vegan':
+//             translatePrompt = "vegana";
+//             break;
+//         case 'Strong_dish':
+//             translatePrompt = "plato fuerte";
+//             break;
+//         default:
+//             translatePrompt = "de cualquier categoria";
+//             break;
+//     }
+//     const promptSystem = `Responde en formato JSON con las propiedades "name_recipe", "energy", "time_make", "description", "instruction".`
+//     const generate_img_prompt = `Genera una imagen de un ${name_recipe}`;
+//     const recipe_prompt = `Genera una receta de ${name_recipe} que sea ${translatePrompt}, que tenga un aproximado de ${energy} calorías, y que se pueda preparar en un tiempo de ${time}. Dame los pasos para poder prepararla.`;
 
-    console.log(recipe_prompt);
-    console.log(generate_img_prompt);
-    console.log(promptSystem);
+//     console.log(recipe_prompt);
+//     console.log(generate_img_prompt);
+//     console.log(promptSystem);
 
     
 
-});
+// });
 
 
 //--------------------------Recipe register POST -----------------
@@ -432,14 +429,14 @@ router.post('/up_recipe', upload.single('recipe_image'), function(req, res) {
 
 });
 
+
 //--------------------------UPDATE profile image------------------------
 router.post('/update_profile', upload.single('image'), function(req, res) {
 
     const imgRouteProfile = req.file;
-    let username_searcher = username;
 
     console.log(imgRouteProfile);
-    
+
     if (!imgRouteProfile) {
 
         return res.status(400).send({ error: "No se ha subido ninguna imagen." });
@@ -449,30 +446,35 @@ router.post('/update_profile', upload.single('image'), function(req, res) {
     const imagePath = `/uploads/recipes/${imgRouteProfile.filename}`;
     console.log(imagePath);
 
-    let DBQuery = `UPDATE users
-                    SET img_profile_path = ?
-                    WHERE username = (
-                    SELECT username 
-                    FROM users
-                    WHERE username = ?
-                    LIMIT 1
-                );`
+    const DBQuery = `
+        UPDATE users
+        JOIN (
+            SELECT username
+            FROM users
+            WHERE username = ?
+            LIMIT 1
+        ) AS subquery ON users.username = subquery.username
+        SET users.img_profile_path = ?
+        WHERE users.username = ?;
+    `;
 
-    conection.query(DBQuery, [imagePath, username_searcher], function(err, result) {
+    conection.query(DBQuery, [username, imagePath, username], function(err, result) {
 
         if (err) {
 
-            throw err;
+            console.error('Error updating profile:', err);
+            return res.status(500).send({ error: "Error al actualizar el perfil." });
 
         } else {
 
-            return res.status(200).send({ success: "Tabla users actualizada con éxito." });            
+            return res.status(200).send({ success: "Tabla users actualizada con éxito." });
 
         }
 
     });
-
+    
 });
+
 
 //--------------------------Dynamic query URI encripter --------------
 // Ruta para manejar la solicitud POST
@@ -519,134 +521,129 @@ router.post('/sended_text', async (req, res) => {
 });
 
 //-------------------------Ingredients recolector ----------------------------------------
+// Cargar vegetales
 router.post('/load_vegetables', function(req, res) {
-
     const vegetables_ingredients = req.body;
 
-    vegetable_ingredient_1 = vegetables_ingredients[0]
-    .toLowerCase()
-    .replace(/\s+/g, '_');
+    let vegetable_ingredient_1 = vegetables_ingredients[0]
+        .toLowerCase()
+        .replace(/\s+/g, '_');
 
-    let DBquery = `UPDATE ${post_table_vegetable}
-                    SET vegan_ingredient = ?
-                    WHERE id = (
-                    SELECT id
-                    FROM ${post_table_vegetable}
-                    ORDER BY created_at DESC
-                    LIMIT 1);`;
-    
+    let DBquery = `
+        UPDATE ${post_table_vegetable}
+        SET vegan_ingredient = ?
+        WHERE id = (
+            SELECT id FROM (
+                SELECT id
+                FROM ${post_table_vegetable}
+                ORDER BY created_at DESC
+                LIMIT 1
+            ) AS temp
+        );
+    `;
+
     conection.query(DBquery, [vegetable_ingredient_1], function(err, result) {
-
         if (err) {
-
             throw err;
-
         } else {
-
             console.log(result);
-
+            res.status(200).send({ success: true });
         }
-
     });
-
 });
 
+// Cargar proteínas
 router.post('/load_protein', function(req, res){
-
     const protein_ingredients = req.body;
 
-    protein_ingredient_1 = protein_ingredients[0]
-    .toLowerCase()
-    .replace(/\s+/g, '_');
+    let protein_ingredient_1 = protein_ingredients[0]
+        .toLowerCase()
+        .replace(/\s+/g, '_');
 
-        let DBquery = `UPDATE ${post_table_protein}
-                    SET protein_ingredient = ?
-                    WHERE id = (
-                    SELECT id
-                    FROM ${post_table_protein}
-                    ORDER BY created_at DESC
-                    LIMIT 1);`;
-    
+    let DBquery = `
+        UPDATE ${post_table_protein}
+        SET protein_ingredient = ?
+        WHERE id = (
+            SELECT id FROM (
+                SELECT id
+                FROM ${post_table_protein}
+                ORDER BY created_at DESC
+                LIMIT 1
+            ) AS temp
+        );
+    `;
+
     conection.query(DBquery, [protein_ingredient_1], function(err, result) {
-
         if (err) {
-
             throw err;
-
         } else {
-
             console.log(result);
-
+            res.status(200).send({ success: true });
         }
-
     });
-
 });
 
 router.post('/load_garrison', function(req, res){
-
     const garrison_ingredients = req.body;
 
-    garrison_ingredient_1 = garrison_ingredients[0]
-    .toLowerCase()
-    .replace(/\s+/g, '_');
+    let garrison_ingredient_1 = garrison_ingredients[0]
+        .toLowerCase()
+        .replace(/\s+/g, '_');
 
-        let DBquery = `UPDATE ${post_table_garrison}
-                    SET garrison_ingredient = ?
-                    WHERE id = (
-                    SELECT id
-                    FROM ${post_table_garrison}
-                    ORDER BY created_at DESC
-                    LIMIT 1);`;
-    
+    let DBquery = `
+        UPDATE ${post_table_garrison}
+        SET garrison_ingredient = ?
+        WHERE id = (
+            SELECT id FROM (
+                SELECT id
+                FROM ${post_table_garrison}
+                ORDER BY created_at DESC
+                LIMIT 1
+            ) AS temp
+        );
+    `;
+
     conection.query(DBquery, [garrison_ingredient_1], function(err, result) {
-
         if (err) {
-
             throw err;
-
         } else {
-
             console.log(result);
-
+            res.status(200).send({ success: true });
         }
-
     });
-    
-
 });
 
+// Cargar ingredientes extra
 router.post('/load_extra', function(req, res){
-
     const extra_ingredients = req.body;
 
-    extra_ingredient_1 = extra_ingredients[0]
-    .toLowerCase()
-    .replace(/\s+/g, '_');
+    let extra_ingredient_1 = extra_ingredients[0]
+        .toLowerCase()
+        .replace(/\s+/g, '_');
 
-        let DBquery = `UPDATE ${post_table_extra}
-                    SET extra_ingredient = ?
-                    WHERE id = (
-                    SELECT id
-                    FROM ${post_table_extra}
-                    ORDER BY created_at DESC
-                    LIMIT 1);`;
-    
+    let DBquery = `
+        UPDATE ${post_table_extra}
+        SET extra_ingredient = ?
+        WHERE id = (
+            SELECT id FROM (
+                SELECT id
+                FROM ${post_table_extra}
+                ORDER BY created_at DESC
+                LIMIT 1
+            ) AS temp
+        );
+    `;
+
     conection.query(DBquery, [extra_ingredient_1], function(err, result) {
-
         if (err) {
-
             throw err;
-
         } else {
-
             console.log(result);
-
+            res.status(200).send({ success: true });
         }
-
     });
-
 });
+
 
 router.post('/ingredient_list', function(req, res) {
 
