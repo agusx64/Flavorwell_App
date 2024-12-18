@@ -21,7 +21,7 @@ async function connectToDatabase() {
     try {
 
         connection = await mysql.createConnection(connectionConfig);
-        console.log("Connected to database!");
+        console.log("Connected! from GET");
 
     } catch (err) {
 

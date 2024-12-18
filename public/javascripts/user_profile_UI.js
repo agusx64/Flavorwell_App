@@ -45,7 +45,15 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
 
-            console.log("Respuesta del servidor:", data);
+            if (data.success) {
+
+                window.location.href = '/start';
+
+            } else {
+
+                console.error("Ocurrio un error en el servidor", data.error);
+
+            }
 
         })
         .catch(error => {
@@ -53,8 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("Error al procesar la solicitud:", error);
 
         });
-
-        window.location.href = '/start'
 
     });
 

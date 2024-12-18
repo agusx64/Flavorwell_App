@@ -7,6 +7,7 @@ const e = require('express');
 const axios = require('axios');
 require('dotenv').config();
 const OpenAI = require('openai');
+const cloudinary = require('cloudinary').v2;
 var router = express.Router();
 
 //Lateinit variables
@@ -37,28 +38,21 @@ let conection = mysql.createConnection({
 conection.connect(function(err) {
 
     if (err) throw err;
-    console.log("Connected! to database from post module");
+    console.log("Connected! from POST");
 
 });
 
-const storage = multer.diskStorage({
+const storage = multer.memoryStorage();
+const upload = multer( { dest: '/uploads'} );
 
-    destination: (req, file, cb) => {
+//----------------Connection to cloudinary bucket-----------------
+cloudinary.config({
 
-        const dir = 'uploads/recipes';
-        fs.mkdirSync(dir, { recursive: true });
-        cb(null, dir);
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 
-    },
-    filename: (req, file, cb) => {
-
-        cb(null, Date.now() + path.extname(file.originalname));
-
-    }
-    
-});
-
-const upload = multer({ storage: storage });
+})
 
 //----------------POST for authentication-------------------------
 router.post('/user_data', function(req, res){
@@ -354,88 +348,108 @@ router.post('/register_data', function(req, res) {
 
 
 //--------------------------Recipe register POST -----------------
-router.post('/up_recipe', upload.single('recipe_image'), function(req, res) {
-
-
+router.post('/up_recipe', upload.single('recipe_image'), async function (req, res) {
     const { category, name_recipe, energy, time, recipe_description, recipe_instructions, author } = req.body;
-    const imgRoute = req.file;
+
+    // Validación de campos
+    if (!category || !name_recipe || !energy || !time || !recipe_description || !recipe_instructions || !author) {
+
+        return res.status(400).send({ success: false, error: "Faltan datos obligatorios en la solicitud." });
     
-    if (!imgRoute) {
-
-        return res.status(400).send({ error: "No se ha subido ninguna imagen." });
-
     }
 
-    const imagePath = `/uploads/recipes/${imgRoute.filename}`;
+    if (!req.file) {
+    
+        return res.status(400).send({ success: false, error: "No se ha proporcionado una imagen." });
+    
+    }
 
+    const imgRoute = req.file.path;
+    let imageURL;
+
+    // Subir imagen a Cloudinary
+    try {
+
+        const result = await cloudinary.uploader.upload(imgRoute, {
+
+            folder: 'imagenes recetas',
+        
+        });
+
+        imageURL = result.secure_url;
+    
+    } catch (error) {
+        
+        console.error("Error al subir la imagen a Cloudinary:", error);
+        return res.status(500).send({ success: false, error: "Error al subir la imagen a Cloudinary." });
+    
+    }
+
+    let tableName;
+
+    // Determinar la tabla según la categoría
     switch (category.toLowerCase()) {
-
+        
         case 'breakfast':
-
             tableName = 'breakfast';
-            post_table_vegetable = 'breakfast';
-            post_table_protein = 'breakfast';
-            post_table_garrison = 'breakfast';
             post_table_extra = 'breakfast';
+            post_table_garrison = 'breakfast';
+            post_table_protein = 'breakfast';
+            post_table_vegetable = 'breakfast';
             break;
-
         case 'desserts':
-
             tableName = 'desserts';
-            post_table_vegetable = 'desserts';
-            post_table_protein = 'desserts';
-            post_table_garrison = 'desserts';
             post_table_extra = 'desserts';
+            post_table_garrison = 'desserts';
+            post_table_protein = 'desserts';
+            post_table_vegetable = 'desserts';
             break;
-
         case 'dish':
-
             tableName = 'strong_dish';
-            post_table_vegetable  = 'strong_dish'
-            post_table_protein = 'strong_dish'
-            post_table_garrison = 'strong_dish'
-            post_table_extra = 'strong_dish'
+            post_table_extra = 'strong_dish';
+            post_table_garrison = 'strong_dish';
+            post_table_protein = 'strong_dish';
+            post_table_vegetable = 'strong_dish';
             break;
-
         case 'vegan':
-
             tableName = 'vegan';
-            post_table_vegetable = 'vegan';
-            post_table_protein = 'vegan';
-            post_table_garrison = 'vegan';
             post_table_extra = 'vegan';
+            post_table_garrison = 'vegan';
+            post_table_protein = 'vegan';
+            post_table_vegetable = 'vegan';
             break;
-
         default:
-            return res.status(400).send({ error: "Categoría no válida." });
-    }
 
-    const DBQuery = `INSERT INTO ${tableName} (name, energy, time_make, description, instruction, img_path, author) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?)`;
-
-    conection.query(DBQuery, [name_recipe, energy, time, recipe_description, recipe_instructions, imagePath, author], function(err, result) {
-
-        if (err) {
-
-            return res.status(500).send({ error: "Error al insertar la receta en la base de datos." });
-
-        } else {
-
-            return res.status(200).send({ success: "Receta registrada con éxito." });
-            
+            return res.status(400).send({ success: false, error: "Categoría no válida." });
+    
         }
 
+    const recipeQuery = `INSERT INTO ${tableName} (name, energy, time_make, description, instruction, img_path, author) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+    // Insertar la receta en la base de datos
+    conection.query(recipeQuery, [name_recipe, energy, time, recipe_description, recipe_instructions, imageURL, author], function (err, result) {
+        
+        if (err) {
+            
+            console.error("Error al ejecutar la consulta SQL:", err);
+            return res.status(500).send({ success: false, error: "Error al insertar la receta en la base de datos." });
+        
+        }
+
+        console.log("Resultado de la consulta:", result);
+        return res.status(200).send({ success: true, message: "Receta registrada con éxito." });
+    
     });
 
 });
 
 
+
 //--------------------------UPDATE profile image------------------------
-router.post('/update_profile', upload.single('image'), function(req, res) {
+router.post('/update_profile', upload.single('image'), async function(req, res) {
 
-    const imgRouteProfile = req.file;
-
-    console.log(imgRouteProfile);
+    const imgRouteProfile = req.file.path;
+    let urlProfile;
 
     if (!imgRouteProfile) {
 
@@ -443,8 +457,22 @@ router.post('/update_profile', upload.single('image'), function(req, res) {
 
     }
 
-    const imagePath = `/uploads/recipes/${imgRouteProfile.filename}`;
-    console.log(imagePath);
+    try {
+
+        const result  = await cloudinary.uploader.upload(imgRouteProfile, {
+
+            folder: 'imagenes perfiles'
+
+        })
+
+        urlProfile = result.secure_url;
+
+    } catch(error) {
+
+        console.error("Error al subir la imagen a Cloudinary:", error);
+        return res.status(500).send({ success: false, error: "Error al subir la imagen a Cloudinary." });
+
+    }
 
     const DBQuery = `
         UPDATE users
@@ -458,16 +486,16 @@ router.post('/update_profile', upload.single('image'), function(req, res) {
         WHERE users.username = ?;
     `;
 
-    conection.query(DBQuery, [username, imagePath, username], function(err, result) {
+    conection.query(DBQuery, [username, urlProfile, username], function(err, result) {
 
         if (err) {
 
             console.error('Error updating profile:', err);
-            return res.status(500).send({ error: "Error al actualizar el perfil." });
+            return res.status(500).send({ success: false, message: "Error al actualizar el perfil." });
 
         } else {
 
-            return res.status(200).send({ success: "Tabla users actualizada con éxito." });
+            return res.status(200).send({ success: true, message: "Image updated succesfully" });
 
         }
 
