@@ -1,0 +1,104 @@
+@media screen and (max-width: 767px) {
+
+    *{
+        font-family: 'Poppins';
+    }
+    
+    .gear{
+        color: var(--WhiteBaseColor);
+        font-size: 25px;
+    }
+
+    .svg_icon{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .settings_container{
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+    }
+
+    .profile_information{
+        width: 100%;
+        height: auto;
+        margin-top: 20vh;
+        /* background-color: aqua; */
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+    }
+
+    .circle_profile{
+        background-color: var(--GreyLight);
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+    }
+
+    .name_user{
+        margin-top: 2vh;
+        color: var(--ChiliRed);
+        font-weight: 600;
+    }
+
+    .email_user{
+        color: var(--GreySimple);
+    }
+
+    .edit_profile{
+        margin-top: 1vh;
+        background-color: var(--ChiliRed);
+        width: 15vh;
+        height: 6vh;
+        color: var(--WhiteBaseColor);
+        border-radius: 50px;
+        border-style: none;
+    }
+
+    .button_help_container{
+        width: 85%;
+        height: auto;
+        margin-top: 25px;
+    }
+
+    .container_option{
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: start;
+    }
+
+    .label_option{
+        color: var(--GreySimple);
+    }
+
+    .button_option{
+        background-color: var(--GreyLight);
+        color: var(--ChiliRed);
+        border-style: none;
+        height: 6vh;
+        width: 100%;
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+        border-radius: 15px;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        padding-left: 20px;
+    }
+
+    .label_text_button{
+        font-weight: 600;
+        margin-left: 15px;
+    }
+
+
+
+}
