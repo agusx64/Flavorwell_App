@@ -709,7 +709,7 @@ router.post('/ingredient_list', function(req, res) {
 
 router.get('/username_information', function(req, res){
 
-    DBQuery = 'SELECT email,username,created_at,img_profile_path FROM users WHERE username = ?;'
+    DBQuery = 'SELECT email,username,img_profile_path FROM users WHERE username = ?;'
 
     let username_query = username
 

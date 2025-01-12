@@ -20,13 +20,13 @@
         flex-direction: column;
         justify-content: start;
         align-items: center;
+        padding-top: 20vh;
+        padding-bottom: 10vh;
     }
 
     .profile_information{
         width: 100%;
         height: auto;
-        margin-top: 20vh;
-        /* background-color: aqua; */
         display: flex;
         flex-direction: column;
         justify-content: start;
@@ -37,6 +37,16 @@
         background-color: var(--GreyLight);
         width: 200px;
         height: 200px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .image_profile{
+        width: 188px;
+        height: 188px;
+        object-fit: cover;
         border-radius: 50%;
     }
 
@@ -61,7 +71,7 @@
     }
 
     .button_help_container{
-        width: 85%;
+        width: 90%;
         height: auto;
         margin-top: 25px;
     }
@@ -77,13 +87,14 @@
 
     .label_option{
         color: var(--GreySimple);
+        font-size: 13px;
     }
 
     .button_option{
         background-color: var(--GreyLight);
         color: var(--ChiliRed);
         border-style: none;
-        height: 6vh;
+        height: 7vh;
         width: 100%;
         margin-top: 1vh;
         margin-bottom: 1vh;
