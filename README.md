@@ -18,51 +18,37 @@ Bienvenido a **Flavorwell App**, una aplicación web movil de tipo red social, e
 ![Dashboard productos](https://res.cloudinary.com/dohogoidz/image/upload/v1739891891/Screenshot_20250218-091336_mzaumv.png)
 
 **Pantalla de inicio**
-![Dashboard members](https://res.cloudinary.com/dohogoidz/image/upload/v1739765297/Captura_de_pantalla_2025-02-16_220448_ic8lme.png)
+![Dashboard members](https://res.cloudinary.com/dohogoidz/image/upload/v1739891891/Screenshot_20250218-091345_s4hdf6.png)
 
 **Pantalla de inicio de sesion**
-![Dashboard clients](https://res.cloudinary.com/dohogoidz/image/upload/v1739765299/Captura_de_pantalla_2025-02-16_220718_rh934u.png)
+![Dashboard clients](https://res.cloudinary.com/dohogoidz/image/upload/v1739891895/Screenshot_20250218-091408_lsssil.png)
 
 **Dashboard principal**
-![Modal 1](https://res.cloudinary.com/dohogoidz/image/upload/v1739765299/Captura_de_pantalla_2025-02-16_220628_ppurq9.png)
+![Modal 1](https://res.cloudinary.com/dohogoidz/image/upload/v1739891896/Screenshot_20250218-091432_tqpp9s.png)
 
 **Vista de recetas**
-![Modal 2](https://res.cloudinary.com/dohogoidz/image/upload/v1739765299/Captura_de_pantalla_2025-02-16_220535_y3krd0.png)
+![Modal 2](https://res.cloudinary.com/dohogoidz/image/upload/v1739891890/Screenshot_20250218-091511_tz2vwb.png)
 
 **Lista de recetas**
-![Modal 3](https://res.cloudinary.com/dohogoidz/image/upload/v1739765299/Captura_de_pantalla_2025-02-16_220654_rpty5h.png)
+![Modal 3](https://res.cloudinary.com/dohogoidz/image/upload/v1739891890/Screenshot_20250218-091456_baqx8a.png)
 
 **Vista de ingredientes**
-![Modal 4](https://res.cloudinary.com/dohogoidz/image/upload/v1739765299/Captura_de_pantalla_2025-02-16_220555_dqxewo.png)
+![Modal 4](https://res.cloudinary.com/dohogoidz/image/upload/v1739891889/Screenshot_20250218-091518_uaixul.png)
 
 **Configuracion y perfil**
-![Modal 4](https://res.cloudinary.com/dohogoidz/image/upload/v1739765299/Captura_de_pantalla_2025-02-16_220555_dqxewo.png)
+![Modal 4](https://res.cloudinary.com/dohogoidz/image/upload/v1739891890/Screenshot_20250218-091533_u4f038.png)
 
 **Registro de recetas**
-![Modal 4](https://res.cloudinary.com/dohogoidz/image/upload/v1739765299/Captura_de_pantalla_2025-02-16_220555_dqxewo.png)
+![Modal 4](https://res.cloudinary.com/dohogoidz/image/upload/v1739891890/Screenshot_20250218-091549_nq0fzh.png)
 
 ---
 
-## 🚀 Instalación y configuración
+## 🚀 Visualizacion del proyecto
 
-1. **Clona el repositorio**
-   ```sh
-   git clone https://github.com/tuusuario/VidaFit.git
-   cd VidaFit
-   ```
-2. **Instala las dependencias**
-   ```sh
-   npm install
-   ```
-3. **Configura las variables de entorno** (Ejemplo: `.env`)
-   ```env
-   PORT=4000
-   DATABASE_URL=tu_base_de_datos
-   ```
-4. **Inicia la aplicación**
-   ```sh
-   npm start
-   ```
+Para visualizar la version preeliminar puedes visitar el siguiente link
+
+https://flavorwell-app.fly.dev
+
 
 ---
 
