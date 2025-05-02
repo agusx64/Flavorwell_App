@@ -59,7 +59,7 @@ https://flavorwell-app.fly.dev
 - **MySQL** (Hosteada en railway)
 - **Cloudinary** (Bucket de imagenes)
 - **Dotenv** (Configuración de variables de entorno)
-- **Bootstrap (Estilos predefinidos)
+- **Bootstrap** (Estilos predefinidos)
 
 ---
 
