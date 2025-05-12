@@ -6,13 +6,13 @@ var usernamePassword = document.getElementById('username_password');
 
 loginButton.addEventListener('click', function() {
 
-    window.location.href = '/user_data';
+    
 
 });
 
 signUpLink.addEventListener('click', function() {
 
-    window.location.href = '/sign_up';
+    
 
 });
 

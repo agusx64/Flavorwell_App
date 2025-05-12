@@ -2,7 +2,7 @@ window.onload = function() {
 
     setTimeout(function() {
 
-        window.location.href = '/started';
+        window.open('./html/started.html', '_self');
 
     }, 3000);
 };

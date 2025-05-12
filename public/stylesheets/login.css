@@ -11,39 +11,37 @@
     justify-content: start;
     align-items: center;
     flex-direction: column;
+    padding: 0% 8% 0% 8%;
 }
 
 header{
     width: 100%;
     height: auto;
-    padding-top: 30px;
-    padding-left: 8%;
-    padding-right: 8%;
+    padding-top: 4vh;
 }
 
 h1 {
     color: var(--ChiliRed);
-    font-size: 48px;
+    font-size: 13vw;
 }
 
 p{
     color: var(--Xhantous);
-    font-size: 18px;
+    font-size: 5vw;
     margin-top: 10px;
+    font-weight: 500;
 }
 
 .login_img{
-    width: 304px;
-    height: 304px;
+
+    width: 100%;
     rotate: 4.9deg;
-    margin-top: 20px;
+    margin-top: 1vh;
 }
 
 .form_container{
     width: 100%;
     height: auto;
-    padding-left: 8%;
-    padding-right: 8%;
 }
 
 .div_input{
@@ -56,8 +54,8 @@ p{
 
 .label_text{
     color: var(--ChiliRed);
-    font-size: 15px;
-    margin-bottom: 8px;
+    font-size: 3.5vw;
+    margin-bottom: 1vh;
     align-self: flex-start;
 }
 
@@ -68,12 +66,13 @@ p{
     width: 98%;
     height: 50px;
     border-width: 3px;
-    border-radius: 10px;
+    border-radius: 3vw;
     padding-left: 15px;
     color: var(--ChiliRed);
 }
 .inputs::placeholder{
     color: var(--Xhantous);
+    font-size: 4vw;
 }
 .inputs:focus{
     outline-color: var(--Xhantous);
@@ -95,7 +94,7 @@ p{
     border-radius: 10px;
     border-style: none;
     margin-top: 20px;
-    font-size: 15px;
+    font-size: 4vw;
 }
 
 .login_button:disabled{
@@ -106,4 +105,5 @@ p{
     color: var(--ChiliRed);
     text-decoration: underline;
     margin-top: 20px;
+    font-size: 4.5vw;
 }
