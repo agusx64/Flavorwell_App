@@ -1,11 +1,81 @@
 var loginButton = document.getElementById('loginButton');
-var usernameInput = document.getElementById('username_input');
-var usernameMail = document.getElementById('username_mail');
-var usernamePassword = document.getElementById('username_password');
+var usernameInput = document.getElementById('input_username');
+var usernameMail = document.getElementById('input_mail');
+var usernamePassword = document.getElementById('input_password');
+const modal = document.getElementById('successModal');
 
-loginButton.addEventListener('click', function() {
+var restHost = 'http://localhost:3000'
 
-    window.location.href = '/register_data';
+loginButton.addEventListener('click', function(event) {
+
+    event.preventDefault();
+    loginButton.textContent = 'Cargando...';
+    loginButton.disabled = true;
+
+    const userData = {
+
+        username: usernameInput.value,
+        mail: usernameMail.value,
+        pass: usernamePassword.value 
+        
+    }
+
+    console.log(userData);
+
+    fetch(restHost + '/users/register_user', {
+
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+
+    })
+    .then(response => {
+
+        if (!response.ok) {
+
+            throw new Error(`HTTP error! status: ${response.status}`)
+
+        }
+
+        return response.json();
+
+    })
+    .then(data => {
+
+        if (data.success) {
+
+            // Mostrar modal
+            modal.classList.remove('hidden');
+
+            // Acción del botón "Back to login"
+            document.getElementById('backToLoginBtn').addEventListener('click', () => {
+                window.open('/html/login.html', '_self'); // Cambia la URL según tu ruta de inicio de sesión
+            });
+
+        } else {
+
+            console.error("Error al registrar el usuario:", error);
+
+        }
+
+    })
+    .catch(error => {
+
+        console.error("Error al procesar la solicitud:", error);
+
+    })
+    .finally(() => {
+
+        loginButton.disabled = false;
+        loginButton.textContent = 'Sign Up';
+
+    })
+
+    usernameInput.value = '';
+    usernameMail.value = '';
+    usernamePassword.value = '';
 
 });
 

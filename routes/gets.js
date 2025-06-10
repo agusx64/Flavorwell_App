@@ -1,155 +1,81 @@
 var express = require('express');
 var mysql = require('mysql2/promise');
 require('dotenv').config();
+var cron = require('node-cron');
 var router = express.Router()
 
-// Database configuration
-const connectionConfig = {
 
+// Crear un pool de conexiones
+const connection = mysql.createPool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-
-};
-
-let connection;
-
-async function connectToDatabase() {
-
-    try {
-
-        connection = await mysql.createConnection(connectionConfig);
-        console.log("Connected! from GET");
-
-    } catch (err) {
-
-        console.error("Error connecting to database:", err);
-
-    }
-}
-
-connectToDatabase();
-
-
-// Ruta para la pantalla de carga
-router.get('/', function(req, res) {
-
-    res.render('index');
-
-});
-
-router.get('/sign_up', function(req, res){
-
-    res.render('sign_up');
-
-})
-
-router.get('/started', function(req, res) {
-
-    res.render('started');
-
-});
-
-router.get('/login', function(req, res) {
-
-    res.render('login');
-
-});
-
-router.get('/recipe_register', function(req, res) {
-
-    res.render('recipe_register');
-
-});
-
-//---------------------Gorup of gets from user dashboard ----------------------
-router.get('/vegan_book', function (req, res) {
-
-    res.render('vegan_book');
-
-});
-
-router.get('/desserts_book', function (req, res) {
-
-    res.render('desserts_book');
-
-});
-
-router.get('/strong_book', function (req, res) {
-
-    res.render('strong_book');
-
-});
-
-router.get('/breakfast_book', function (req, res) {
-
-    res.render('breakfast_book');
-
-});
-
-router.get('/start', function (req, res) {
-
-    res.render('user_dashboard');
-
-});
-
-router.get('/ai', function (req, res) {
-
-    res.render('recipe_generator');
-
-});
-
-router.get('/add', function (req, res) {
-
-    res.render('recipe_register');
-
-});
-
-router.get('/profile', function (req, res) {
-
-    res.render('user_profile');
-
-});
-
-router.get('/settings', function (req, res) {
-
-    res.render('settings');
-
-});
-
-router.get('/select', function (req, res) {
-
-    res.render('select_vegetables');
-
-});
-
-router.get('/select_protein', function (req, res) {
-
-    res.render('select_protein');
-
-});
-
-router.get('/select_garrison', function (req, res) {
-
-    res.render('select_garrison');
-
-});
-
-router.get('/select_extra', function (req, res){
-
-    res.render('select_extra');
-
-});
-
-router.get('/render_success', function(req, res){
-
-    res.render('recipe_register_sucess');
-
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
 //------------------------------------------------------------------------------
+
+// //------------------------ Verify email ----------------------------------------
+// router.get('/verify_email', async (req, res) => {
+
+//     const { token } = req.query;
+
+//     try {
+//         const [rows] = await connection.query(
+
+//             'SELECT * FROM users WHERE verification_token = ?', [token]
+
+//         );
+
+//         if (rows.length === 0) {
+
+//             return res.send('Token inválido o expirado.');
+
+//         }
+
+//         await connection.query(
+
+//             'UPDATE users SET verified = TRUE, verification_token = NULL WHERE verification_token = ?', [token]
+        
+//         );
+
+//         res.send('Correo verificado correctamente. ¡Ya puedes iniciar sesión!');
+//     } catch (error) {
+
+//         console.error('Error al verificar el correo:', error);
+//         res.status(500).send('Error interno.');
+
+//     }
+
+// });
+
+// cron.schedule('*/5 * * * *', async () => {
+
+//     try {
+
+//         const row = new Date();
+//         const [rows] = await connection.query(
+//             'DELETE FROM users WHERE verified = false AND expires_at <= ?', [row]
+//         );
+
+//         if (rows.affectedRows > 0) {
+
+//             console.log('Usuarios no verificados eliminados:', rows.affectedRows);
+
+//         }
+
+//     } catch (error) {
+
+//         console.error('Error en tarea de Node-Cron:', error);
+
+//     }
+
+// });
+
 
 //------------------------New recipes selector (user_dashboard)-----------------
 router.get('/new_food', async function (req, res) {

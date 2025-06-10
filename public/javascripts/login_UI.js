@@ -1,6 +1,4 @@
 var loginButton = document.getElementById('loginButton');
-var signUpLink = document.getElementById('register_UI');
-
 var usernameInput = document.getElementById('username_input');
 var usernamePassword = document.getElementById('username_password');
 
@@ -10,11 +8,7 @@ loginButton.addEventListener('click', function() {
 
 });
 
-signUpLink.addEventListener('click', function() {
 
-    
-
-});
 
 // Función para verificar los campos y habilitar/deshabilitar el botón
 function checkInputs() {

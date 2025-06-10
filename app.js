@@ -21,6 +21,9 @@ var gets = require('./routes/gets');
 var posts = require('./routes/posts');
 var apis = require('./routes/apis');
 
+// Routes modulations
+var users = require('./routes/users');
+
 var app = express();
 
 // View engine setup
@@ -38,6 +41,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/', gets);
 app.use('/', posts);
 app.use('/', apis);
+
+app.use('/users', users);
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {

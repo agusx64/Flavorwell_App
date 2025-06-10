@@ -3,11 +3,14 @@ var express = require('express');
 var multer = require('multer');
 var path = require('path');
 var fs = require('fs');
-const e = require('express');
 const axios = require('axios');
 require('dotenv').config();
 const OpenAI = require('openai');
 const cloudinary = require('cloudinary').v2;
+const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
+const { v4: uuidv4 } = require('uuid');
+const { connect } = require('http2');
 var router = express.Router();
 
 //Lateinit variables
@@ -24,6 +27,8 @@ let post_table_garrison;
 let post_table_extra;
 let tableName;
 let translatePrompt;
+
+const restHost = 'http://localhost:3000';
 
 //DB SQL Connection
 let conection = mysql.createConnection({
@@ -60,291 +65,8 @@ router.post('/user_data', function(req, res){
     const user_data = req.body;
     console.log(user_data);
 
-    let getMail = user_data.username_input;
-    let getPassword = user_data.username_password;
-
-    let DBQuery = "SELECT * FROM users WHERE email = ? AND password = ? ";
-
-    conection.query(DBQuery, [getMail, getPassword], function (err, result) {
-
-        try {
-
-            if(result.length > 0){
-
-                if(result[0].email == "admin" && result[0].password == "admin") {
-
-                    res.render('admin_dashboard');
-
-                } else if (result[0].email != "admin" && result[0].password != "admin") {
-
-                    username = result[0].username;
-                    console.log(username);
-                    res.render('user_dashboard');
-
-                }
-
-            } else {
-
-                res.render('invalid_credentials');
-
-            }
-
-        } catch (err){
-
-            res.send("Internal server error: " + err.message);
-
-        }
-
-    });
 
 });
-
-//-------------------API + POST endpoints------------------------
-// router.post('/send_prompt', upload.none(), function (req, res) {
-
-//     const { category, name_recipe, energy, time, author } = req.body;
-//     let translatePrompt;
-
-//     // Traducción de la categoría a un formato adecuado para el prompt
-//     switch (category) {
-//         case 'Breakfast':
-//             translatePrompt = "desayuno";
-//             break;
-//         case 'Desserts':
-//             translatePrompt = "postre";
-//             break;
-//         case 'Vegan':
-//             translatePrompt = "vegana";
-//             break;
-//         case 'Strong_dish':
-//             translatePrompt = "plato fuerte";
-//             break;
-//         default:
-//             translatePrompt = "de cualquier categoria";
-//             break;
-//     }
-
-//     const generate_img_prompt = `Genera una imagen de un ${name_recipe}`;
-//     const recipe_prompt = `Genera una receta de ${name_recipe} que sea ${translatePrompt}, que tenga un aproximado de ${energy} calorías, y que se pueda preparar en un tiempo de ${time}. Dame los pasos para poder prepararla.`;
-
-//     console.log(recipe_prompt);
-//     console.log(generate_img_prompt);
-
-//     // Llama a las funciones con el mecanismo de reintentos
-//     retryRequest(() => getRecipeInstructions(recipe_prompt));
-//     retryRequest(() => generateImageRecipe(generate_img_prompt));
-
-//     // Función para realizar solicitudes con reintentos
-//     async function retryRequest(fn, retries = 2) {
-
-//         for (let i = 0; i < retries; i++) {
-
-//             try {
-
-//                 await fn();
-//                 return;  // Si la solicitud tiene éxito, salimos de la función
-
-//             } catch (error) {
-
-//                 const statusCode = error.response ? error.response.status : null;
-                
-//                 if (statusCode === 429) {
-
-//                     // Manejo específico para el código 429: Too Many Requests
-//                     const retryAfter = error.response.headers['retry-after'] 
-//                         ? parseInt(error.response.headers['retry-after']) * 1000 
-//                         : (i + 1) * 1000;  // Si no se proporciona "retry-after", espera más tiempo entre intentos
-//                     console.error(`Error 429: Too many requests. Retrying in ${retryAfter} ms...`);
-//                     await new Promise(resolve => setTimeout(resolve, retryAfter));
-
-//                 } else {
-
-//                     console.error(`Error en el intento ${i + 1}:`, error.message);
-
-//                 }
-
-//                 if (i === retries - 1) {
-
-//                     throw error;  // Si es el último intento, volvemos a lanzar el error
-
-//                 }
-
-//             }
-
-//         }
-
-//     }
-
-//     // Función para obtener las instrucciones de la receta
-//     async function getRecipeInstructions(userMessage) {
-
-//         const maxAttempts = 1;
-//         let attempt = 0;
-    
-//         while (attempt < maxAttempts) {
-
-//             attempt++;
-
-//             try {
-
-//                 const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-
-//                     model: 'gpt-3.5-turbo',
-//                     messages: [
-//                         {
-
-//                             role: 'system',
-//                             content: `Responde en formato JSON con las propiedades "name_recipe", "energy", "time_make", "description", "instruction".`
-
-//                         },{ 
-//                             role: 'user', 
-//                             content: userMessage 
-//                         }
-//                     ],
-//                 }, {
-
-//                     headers: {
-
-//                         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-//                         'Content-Type': 'application/json'
-
-//                     }
-
-//                 });
-    
-//                 console.log(response.data.choices[0].message.content);
-//                 return;
-
-//             } catch (error) {
-
-//                 console.error(`Error en el intento ${attempt}: ${error.message}`);
-
-//                 if (attempt >= maxAttempts) {
-
-//                     throw new Error('Error al obtener instrucciones de receta después de varios intentos');
-
-//                 }
-//                 await new Promise(resolve => setTimeout(resolve, 1000));
-
-//             }
-
-//         }
-
-//     }
-
-//     // Función para generar la imagen de la receta
-//     async function generateImageRecipe(prompt) {
-
-//         const maxAttempts = 1;
-//         let attempt = 0;
-    
-//         while (attempt < maxAttempts) {
-
-//             attempt++;
-//             try {
-
-//                 const response = await axios.post('https://api.openai.com/v1/images/generations', {
-//                     prompt: prompt,
-//                     n: 1,
-//                     size: '1024x1024'
-
-//                 }, {
-
-//                     headers: {
-
-//                         'authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-//                         'content-type': 'application/json'
-
-//                     }
-
-//                 });
-    
-//                 console.log(response.data.data[0].url);
-//                 return;
-
-//             } catch (error) {
-
-//                 console.error(`Error en el intento ${attempt}: ${error.message}`);
-
-//                 if (attempt >= maxAttempts) {
-
-//                     throw new Error('Error al generar imagen de receta después de varios intentos');
-
-//                 }
-//                 await new Promise(resolve => setTimeout(resolve, 1000));
-
-//             }
-
-//         }
-
-//     }
-    
-// });
-
-//--------------------------POST for registration-----------------
-router.post('/register_data', function(req, res) {
-
-    const register_data = req.body
-    console.log(register_data);
-
-    getUsername = register_data.username_input;
-    getMailAddress = register_data.username_mail;
-    getPassword = register_data.username_password;
-
-    let DBQuery = "INSERT INTO users (username, email, password) VALUES (?,?,?)";
-
-    conection.query(DBQuery, [getUsername, getMailAddress, getPassword], function (err, result) {
-
-        if (err) {
-
-            throw err;
-
-        } else {
-
-            console.log(result);
-            res.render('success');
-
-        }
-
-    });
-
-});
-
-//--------------------------POST recipe generator + API --------------------------------
-// router.post('/send_prompt', upload.none(), async (req, res) => {
-
-//     const { category, name_recipe, energy, time, author } = req.body;
-//     let translatePrompt;
-
-//     // Traducción de la categoría a un formato adecuado para el prompt
-//     switch (category) {
-//         case 'Breakfast':
-//             translatePrompt = "desayuno";
-//             break;
-//         case 'Desserts':
-//             translatePrompt = "postre";
-//             break;
-//         case 'Vegan':
-//             translatePrompt = "vegana";
-//             break;
-//         case 'Strong_dish':
-//             translatePrompt = "plato fuerte";
-//             break;
-//         default:
-//             translatePrompt = "de cualquier categoria";
-//             break;
-//     }
-//     const promptSystem = `Responde en formato JSON con las propiedades "name_recipe", "energy", "time_make", "description", "instruction".`
-//     const generate_img_prompt = `Genera una imagen de un ${name_recipe}`;
-//     const recipe_prompt = `Genera una receta de ${name_recipe} que sea ${translatePrompt}, que tenga un aproximado de ${energy} calorías, y que se pueda preparar en un tiempo de ${time}. Dame los pasos para poder prepararla.`;
-
-//     console.log(recipe_prompt);
-//     console.log(generate_img_prompt);
-//     console.log(promptSystem);
-
-    
-
-// });
 
 
 //--------------------------Recipe register POST -----------------
