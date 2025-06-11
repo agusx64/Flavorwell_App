@@ -17,64 +17,7 @@ const connection = mysql.createPool({
     queueLimit: 0
 });
 
-//------------------------------------------------------------------------------
 
-// //------------------------ Verify email ----------------------------------------
-// router.get('/verify_email', async (req, res) => {
-
-//     const { token } = req.query;
-
-//     try {
-//         const [rows] = await connection.query(
-
-//             'SELECT * FROM users WHERE verification_token = ?', [token]
-
-//         );
-
-//         if (rows.length === 0) {
-
-//             return res.send('Token inválido o expirado.');
-
-//         }
-
-//         await connection.query(
-
-//             'UPDATE users SET verified = TRUE, verification_token = NULL WHERE verification_token = ?', [token]
-        
-//         );
-
-//         res.send('Correo verificado correctamente. ¡Ya puedes iniciar sesión!');
-//     } catch (error) {
-
-//         console.error('Error al verificar el correo:', error);
-//         res.status(500).send('Error interno.');
-
-//     }
-
-// });
-
-// cron.schedule('*/5 * * * *', async () => {
-
-//     try {
-
-//         const row = new Date();
-//         const [rows] = await connection.query(
-//             'DELETE FROM users WHERE verified = false AND expires_at <= ?', [row]
-//         );
-
-//         if (rows.affectedRows > 0) {
-
-//             console.log('Usuarios no verificados eliminados:', rows.affectedRows);
-
-//         }
-
-//     } catch (error) {
-
-//         console.error('Error en tarea de Node-Cron:', error);
-
-//     }
-
-// });
 
 
 //------------------------New recipes selector (user_dashboard)-----------------

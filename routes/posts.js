@@ -57,15 +57,6 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET
 
-})
-
-//----------------POST for authentication-------------------------
-router.post('/user_data', function(req, res){
-
-    const user_data = req.body;
-    console.log(user_data);
-
-
 });
 
 

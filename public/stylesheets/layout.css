@@ -190,3 +190,17 @@
     justify-content: space-evenly;
     align-items: center;
 }
+
+.reusable_button{
+    width: 98%;
+    height: 45px;
+    background-color: var(--ChiliRed);
+    color: var(--WhiteBaseColor);
+    border-radius: 10px;
+    border-style: none;
+    font-size: 4vw;
+}
+
+.reusable_button:disabled{
+    background-color: var(--ChiliRedDisabled);
+}

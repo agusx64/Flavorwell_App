@@ -14,7 +14,7 @@ header{
 }
 
 .div_buttons{
-    margin-top: 6vh;
+    margin-top: 6dvh;
 }
 
 h2{
@@ -88,3 +88,30 @@ h2{
 .hidden {
     display: none;
 }
+
+.password-warning {
+    font-size: 0.9rem;
+    margin-top: 2vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 4vh;
+}
+
+.password-warning.red {
+    color: #e63946;
+}
+
+.password-warning.yellow {
+    color: #f1c40f;
+}
+
+.password-warning.green {
+    color: #2ecc71;
+}
+
+.password-warning.grey {
+    color: #505050;
+}
+

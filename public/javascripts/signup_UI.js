@@ -1,16 +1,17 @@
-var loginButton = document.getElementById('loginButton');
+var signupButton = document.getElementById('signupButton');
 var usernameInput = document.getElementById('input_username');
 var usernameMail = document.getElementById('input_mail');
 var usernamePassword = document.getElementById('input_password');
 const modal = document.getElementById('successModal');
+const passwordWarning = document.getElementById('passwordWarning');
 
 var restHost = 'http://localhost:3000'
 
-loginButton.addEventListener('click', function(event) {
+signupButton.addEventListener('click', function(event) {
 
     event.preventDefault();
-    loginButton.textContent = 'Cargando...';
-    loginButton.disabled = true;
+    signupButton.textContent = 'Cargando...';
+    signupButton.disabled = true;
 
     const userData = {
 
@@ -19,8 +20,6 @@ loginButton.addEventListener('click', function(event) {
         pass: usernamePassword.value 
         
     }
-
-    console.log(userData);
 
     fetch(restHost + '/users/register_user', {
 
@@ -68,8 +67,8 @@ loginButton.addEventListener('click', function(event) {
     })
     .finally(() => {
 
-        loginButton.disabled = false;
-        loginButton.textContent = 'Sign Up';
+        signupButton.disabled = false;
+        signupButton.textContent = 'Sign Up';
 
     })
 
@@ -82,19 +81,59 @@ loginButton.addEventListener('click', function(event) {
 // Función para verificar los campos y habilitar/deshabilitar el botón
 function checkInputs() {
 
-    if (usernameInput.value.trim() !== '' && usernamePassword.value.trim() !== '' && usernameMail.value.trim() !== ''){
+    if (usernameInput.value.trim() !== '' && usernamePassword.value.trim() !== '' && usernameMail.value.trim() !== '') {
 
-        loginButton.disabled = false;
+        signupButton.disabled = false;
 
     } else {
 
-        loginButton.disabled = true;
+        signupButton.disabled = true;
 
     }
 
 }
 
-// Añadir evento de escucha a los campos de entrada
+function validatePasswordStrength(password) {
+
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const isStrong = password.length >= 8 && hasSpecialChar;
+
+    if (password.length === 0) {
+
+        passwordWarning.className = 'password-warning';
+        passwordWarning.innerHTML = `<i class="bi bi-info-circle-fill"></i> Type your password`;
+        passwordWarning.classList.add('password-warning', 'grey');
+        return;
+
+    }
+
+    if (password.length < 8) {
+
+        passwordWarning.innerHTML = `<i class="bi bi-x-circle-fill"></i> Password is too weak`;
+        passwordWarning.className = 'password-warning red';
+
+    } else if (!hasSpecialChar) {
+
+        passwordWarning.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Add at least one special character`;
+        passwordWarning.className = 'password-warning yellow';
+
+    } else {
+
+        passwordWarning.innerHTML = `<i class="bi bi-check-circle-fill"></i> Strong password`;
+        passwordWarning.className = 'password-warning green';
+        signupButton.disabled = false;
+
+    }
+
+}
+
+//Funciones de prevencion de errores de entrada
+
+usernamePassword.addEventListener('input', () => {
+    validatePasswordStrength(usernamePassword.value);
+    checkInputs();
+});
+
 usernameInput.addEventListener('input', checkInputs);
 usernamePassword.addEventListener('input', checkInputs);
 usernameMail.addEventListener('input', checkInputs);
