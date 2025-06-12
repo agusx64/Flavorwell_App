@@ -42,11 +42,11 @@
     align-items: center;
     padding-left: 4%;
     padding-right: 4%;
-    padding-top: 12%;
+    padding-top: 8%;
     position: fixed;
     top: 0;
     background-color: var(--Xhantous);
-    padding-bottom: 20px;
+    padding-bottom: 8%;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     z-index: 3;
@@ -54,8 +54,10 @@
 
 .svg_icon{
     fill: var(--WhiteBaseColor);
-    width: 40px;
-    height: 40px;
+    width: 3.5vh;
+    height: 3.5vh;
+    font-size: 3.5vh;
+    color: var(--WhiteBaseColor);
 }
 
 .return{
@@ -68,6 +70,7 @@
 .header_text{
     color: var(--WhiteBaseColor);
     text-align: center;
+    font-size: 2.5vh;
 }
 
 .poppins-thin {
