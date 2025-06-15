@@ -1,8 +1,8 @@
 const inputs = document.querySelectorAll('.input-code');
 
 // Inputs de la entrada de contraseña
-const usernamePassword = document.getElementById('input_password');
-const usernamePasswordConfirmation = document.getElementById('input_password_confirm');
+const usernameEmail = document.getElementById('input_email');
+const usernameNewPassword = document.getElementById('input_password');
 
 const passwordWarning = document.getElementById('passwordWarning');
 const restorePasswordButton = document.getElementById('restore_password_button');
@@ -12,6 +12,12 @@ const inputCodeNumber1 = document.getElementById('input_code_1');
 const inputCodeNumber2 = document.getElementById('input_code_2');
 const inputCodeNumber3 = document.getElementById('input_code_3');
 const inputCodeNumber4 = document.getElementById('input_code_4');
+
+// Modal contextual
+const modal = document.getElementById('successModal');
+
+// Direccion del Back-End
+var restHost = 'http://localhost:3000'
 
 restorePasswordButton.disabled = true;
 
@@ -52,8 +58,8 @@ function validatePasswordStrength(password) {
 // Función para verificar los campos y habilitar/deshabilitar el botón
 function checkInputs() {
 
-    if (usernamePassword.value.trim() !== '' && 
-        usernamePasswordConfirmation.value.trim() !== '' && 
+    if (usernameEmail.value.trim() !== '' && 
+        usernameNewPassword.value.trim() !== '' && 
         inputCodeNumber1.value.trim() !== '' && 
         inputCodeNumber2.value.trim() !== '' &&
         inputCodeNumber3.value.trim() !== '' &&
@@ -100,17 +106,94 @@ inputs.forEach((input, index) => {
 
 });
 
-//Funciones de prevencion de errores de entrada
-usernamePassword.addEventListener('input', () => {
+// Fetch de envio de datos al servidor
+restorePasswordButton.addEventListener('click', function(event){
 
-    validatePasswordStrength(usernamePassword.value);
+    event.preventDefault();
+    restorePasswordButton.textContent = 'Reestableciendo contraseña...'
+    restorePasswordButton.disabled = true;
+
+    let securityCode = `${inputCodeNumber1.value}${inputCodeNumber2.value}${inputCodeNumber3.value}${inputCodeNumber4.value}`
+
+    const userData = {
+
+        email: usernameEmail.value,
+        newPassword: usernameNewPassword.value,
+        securityCode: securityCode
+
+    };
+
+    fetch(restHost + '/users/set_new_password', {
+
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+
+    })
+    .then(response => {
+
+        if (!response.ok) {
+
+            throw new Error(`HTTP error! status: ${response.status}`)
+
+        }
+
+        return response.json();
+
+    })
+    .then(data => {
+
+        if (data.success) {
+
+            // Mostrar modal
+            modal.classList.remove('hidden');
+            document.getElementById('backToLogin').addEventListener('click', () => {
+
+                window.open('/html/login.html', '_self');
+
+            });
+
+        } else {
+
+            console.error("Error al cargar dashboard principal", error);
+
+        }
+
+    })
+    .catch(error => {
+
+        console.error("Error al procesar la solicitud:", error);
+
+    })
+    .finally(() => {
+
+        restorePasswordButton.disabled = false;
+        restorePasswordButton.textContent = 'Send email';
+
+    })
+
+    usernameEmail.value = '';
+    usernameNewPassword.value = '';
+    inputCodeNumber1.value = '';
+    inputCodeNumber2.value = '';
+    inputCodeNumber3.value = '';
+    inputCodeNumber4.value = '';
+
+})
+
+//Funciones de prevencion de errores de entrada
+usernameNewPassword.addEventListener('input', () => {
+
+    validatePasswordStrength(usernameNewPassword.value);
     checkInputs();
-    
+
 });
 
 // Comprobacion de entradas en inputs
-usernamePassword.addEventListener('input', checkInputs);
-usernamePasswordConfirmation.addEventListener('input', checkInputs);
+usernameEmail.addEventListener('input', checkInputs);
+usernameNewPassword.addEventListener('input', checkInputs);
 
 inputCodeNumber1.addEventListener('input', checkInputs);
 inputCodeNumber2.addEventListener('input', checkInputs);

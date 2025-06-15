@@ -251,45 +251,188 @@ router.post('/login_user', async function (req, res) {
 
 });
 
+// Enviar correo de recuperacion de contraseña con codigo de seguridad
+router.post('/request_password_reset', async (req, res) => {
+
+    // Intercepcion de datos
+    const { recoverInfo } = req.body;
+
+    try {
+
+        // Creación y ejecución de de instancia de consulta
+        const [rows] = await connection.query(
+
+            // Consulta SQL
+            'SELECT * FROM users WHERE email = ?',
+            // Parametros
+            [recoverInfo]
+
+        );
+
+        // Verificación de existencia de resultados
+        if(rows.length === 0) {
+
+            return res.status(404).json({ success: false, message: 'Correo o usuario no encontrado en la base de datos' });
+
+        }
+
+        // Creación de codigo de seguridad de 4 digitos
+        const resetCode = Math.floor(1000 + Math.random() * 9000).toString();
+        // Fecha de expiración del codigo de seguridad
+        const resetExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+        // Actualizacion de contraseña en el correo electronico encontrado, con ejecucion de instancia
+        await connection.query(
+
+            // Consulta SQL
+            'UPDATE users SET reset_code = ?, reset_expires_at = ? WHERE email = ?',
+            // Parametros de consulta SQL
+            [resetCode, resetExpires, recoverInfo]
+
+        );
+
+        // Creacion de transporte de correo electronico
+        const transporter = nodemailer.createTransport({
+
+            service: 'gmail',
+            auth: {
+
+                user: process.env.MAIL_HOST,
+                pass: process.env.MAIL_PASSWORD
+
+            }
+
+        });
+
+        // Envio de correo electronico al correo introducido por el cliente
+        await transporter.sendMail({
+
+            from: 'Flavorwell <agustin.mora.trinidad@gmail.com>',
+            to: recoverInfo,
+            subject: 'Recovery password code',
+            html: `<p>Your verification code is: <strong style="font-size: 20px">${resetCode}</strong></p>
+                    <p>This code will expire in 10 minutes</p>`
+
+        });
+
+        // Respuesta existosa del servidor al cliente
+        res.status(200).json({ success: true, message: `Codigo enviando a ${recoverInfo}`});
+
+    // Intercepción de errorres
+    } catch(error){
+
+        console.error('Error enviando codigo de verificacion', error);
+        res.status(500).json({ success: false, message: 'Error interno del servidor' });
+
+    }
+
+});
+
+router.post('/set_new_password', async (req, res) => {
+
+    const { email, newPassword, securityCode } = req.body;
+    try {
+
+        const [rows] = await connection.query(
+
+            'SELECT * FROM users WHERE email = ? AND reset_code =?',
+            [email, securityCode]
+
+        );
+
+        if(rows.length === 0) {
+
+            return res.status(400).json({ success: false, message: 'Correo electronico o codigo invalido' });
+
+        }
+
+        const user = rows[0];
+
+        if(new Date() > new Date(user.reset_expires_at)) {
+
+            return res.status(400).json({ success: false, message: 'El código ha expirado' });
+
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        await connection.query(
+
+            'UPDATE users SET password = ?, reset_code = NULL, reset_expires_at = NULL WHERE email = ?',
+            [hashedPassword, email]
+
+        );
+
+        res.status(200).json({ success: true, message: 'Contraseña actualizada correctamente' });
+    
+    } catch (error) {
+
+        console.error("Error al actualizar contraseña:", error);
+        res.status(500).json({ success: false, message: 'Error interno del servidor' });
+
+    }
+})
+
 
 
 //---------------------------------------------------------NODE CRON JOBS ---------------------------------------------------------------------------------
 
-// Eliminacion de usuarios no verificados
+// Eliminación de usuarios no verificados y limpieza de códigos de recuperación
 cron.schedule('*/10 * * * *', async () => {
-    
     try {
-
-        // Declaración de fecha actual
+        // Instanciar una fecha actual
         const now = new Date();
-        // Creación de consulta
-        const [rows] = await connection.query(
 
-            // Parametros de la consulta
+        // Eliminar usuarios no verificados cuyo tiempo expiró
+        const [deletedUsers] = await connection.query(
+
+            // Consulta SQL
             'DELETE FROM users WHERE verified = 0 AND expires_at < ?',
-            //Fecha capturada
+            // Parametros de consulta
             [now]
 
         );
 
-        // Depuracion de NODE CRON
-        if (rows.affectedRows > 0) {
+        // Depuracion de usuarios
+        if (deletedUsers.affectedRows > 0) {
 
-            console.log(`[CRON] Usuarios no verificados eliminados: ${rows.affectedRows}`);
+            console.log(`[CRON] Usuarios no verificados eliminados: ${deletedUsers.affectedRows}`);
 
         } else {
 
             console.log(`[CRON] No hay usuarios expirados para eliminar.`);
 
         }
-        
+
+        // Limpiar códigos de recuperación expirados
+        const [updatedCodes] = await connection.query(
+
+            // Consulta SQL
+            'UPDATE users SET reset_code = NULL, reset_expires_at = NULL WHERE reset_expires_at < ?',
+            // Parametro de sonsulta (fecha instanciada)
+            [now]
+            
+        );
+
+        // Depuracion de codigos de seguridad
+        if (updatedCodes.affectedRows > 0) {
+
+            console.log(`[CRON] Códigos de recuperación eliminados: ${updatedCodes.affectedRows}`);
+
+        } else {
+
+            console.log(`[CRON] No hay códigos de recuperación expirados para limpiar.`);
+
+        }
+
     } catch (err) {
 
-        console.error("[CRON] Error eliminando usuarios no verificados:", err);
+        console.error("[CRON] Error en la tarea programada:", err);
 
     }
 
 });
+
 
 
 
