@@ -1,6 +1,7 @@
 var loginButton = document.getElementById('loginButton');
 var usernameEmail = document.getElementById('username_email');
 var usernamePassword = document.getElementById('username_password');
+const modal = document.getElementById('successModal');
 
 var restHost = 'http://localhost:3000'
 
@@ -47,6 +48,12 @@ loginButton.addEventListener('click', function(event) {
         } else {
 
             console.error("Error al cargar dashboard principal", error);
+            modal.classList.remove('hidden');
+            document.getElementById('tryAgain').addEventListener('click', () => {
+
+                modal.classList.add('hidden');
+
+            });
 
         }
 
@@ -54,6 +61,12 @@ loginButton.addEventListener('click', function(event) {
     .catch(error => {
 
         console.error("Error al procesar la solicitud:", error);
+        modal.classList.remove('hidden');
+        document.getElementById('tryAgain').addEventListener('click', () => {
+
+            modal.classList.add('hidden');
+
+        });
 
     })
     .finally(() => {
@@ -65,7 +78,6 @@ loginButton.addEventListener('click', function(event) {
 
     usernameEmail.value = '';
     usernamePassword.value = '';
-
 
 });
 

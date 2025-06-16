@@ -3,10 +3,10 @@
     height: 100%;
     position: fixed;
     background-color: var(--WhiteBaseColor);
-    padding: 5% 8% 0 8%;
+    padding: 22% 8% 0 8%;
 }
 
-header{
+.header-signup{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -14,7 +14,7 @@ header{
 }
 
 .div_buttons{
-    margin-top: 6dvh;
+    margin-top: 4dvh;
 }
 
 h2{
@@ -28,12 +28,12 @@ h2{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 6vh;
-    margin-bottom: 6vh;
+    margin-top: 4vh;
+    margin-bottom: 4vh;
 }
 
 .logo_img{
-    width: 50%;
+    width: 40%;
 }
 
 .password-warning {
