@@ -3,6 +3,7 @@ var usernameInput = document.getElementById('input_username');
 var usernameMail = document.getElementById('input_mail');
 var usernamePassword = document.getElementById('input_password');
 const modal = document.getElementById('successModal');
+const errorModal = document.getElementById('errorModal');
 const passwordWarning = document.getElementById('passwordWarning');
 
 var restHost = 'http://localhost:3000'
@@ -12,6 +13,11 @@ signupButton.addEventListener('click', function(event) {
     event.preventDefault();
     signupButton.textContent = 'Cargando...';
     signupButton.disabled = true;
+
+    // Verificacion de formato de correo electronico correcto
+    if(!validateEmailFormat()){
+        return;
+    }
 
     const userData = {
 
@@ -88,6 +94,32 @@ function checkInputs() {
     } else {
 
         signupButton.disabled = true;
+
+    }
+
+}
+
+function validateEmailFormat() {
+
+    // Redeclaracion de input email
+    const email = usernameMail.value.trim();
+
+    // Expresión regular para formato de email válido
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+
+        errorModal.classList.remove('hidden');
+        document.getElementById('tryAgain').addEventListener('click', () => {
+            errorModal.classList.add('hidden');
+        });
+
+        // Valor logico
+        return false;
+
+    } else {
+
+        return true;
 
     }
 
