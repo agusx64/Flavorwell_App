@@ -114,6 +114,9 @@ function validateEmailFormat() {
             errorModal.classList.add('hidden');
         });
 
+        signupButton.disabled = false;
+        signupButton.textContent = 'Sign Up';
+
         // Valor logico
         return false;
 
