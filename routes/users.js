@@ -8,9 +8,6 @@ const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 var router = express.Router()
 
-// Variables de acceso global
-const restHost = 'http://localhost:3000';
-
 // Conexión de tipo Pool para multiples conexiones
 const connection = mysql.createPool({
     host: process.env.DB_HOST,
@@ -58,11 +55,13 @@ router.post('/register_user', async function(req, res) {
 
         //Verificación de correo electrónico
         const transporter = nodemailer.createTransport({
+
             service: 'gmail',
             auth: {
                 user: process.env.MAIL_HOST,
                 pass: process.env.MAIL_PASSWORD,
             }
+
         });
 
         const verificationURL = `${process.env.FRONTEND_URL}/users/verify_email?token=${token}`
@@ -328,43 +327,59 @@ router.post('/request_password_reset', async (req, res) => {
 
 });
 
+// Verificación de codigo de seguridad y reestablecimiento de contraseña
 router.post('/set_new_password', async (req, res) => {
 
+    // Recolección de datos del cliente
     const { email, newPassword, securityCode } = req.body;
     try {
 
+        // Ejecucion de consulta
         const [rows] = await connection.query(
 
+            // Consulta SQL
             'SELECT * FROM users WHERE email = ? AND reset_code =?',
+            // Parametros de consulta
             [email, securityCode]
 
         );
 
+        // Verificacion de existencia de correo electronico
         if(rows.length === 0) {
 
+            // Devolución de status
             return res.status(400).json({ success: false, message: 'Correo electronico o codigo invalido' });
 
         }
 
+        // Guardado de datos en redeclaración de variable
         const user = rows[0];
 
+        // Verificacion de validez de codigo de seguridad
         if(new Date() > new Date(user.reset_expires_at)) {
 
+            // Devolución de status
             return res.status(400).json({ success: false, message: 'El código ha expirado' });
 
         }
 
+        // Encriptación de nueva contraseña
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
+        // Ejecución de consulta para actualización
         await connection.query(
 
+            // Consulta SQL
             'UPDATE users SET password = ?, reset_code = NULL, reset_expires_at = NULL WHERE email = ?',
+            // Parametros de consulta SQL
             [hashedPassword, email]
 
         );
 
+        // Devolución de estatus
         res.status(200).json({ success: true, message: 'Contraseña actualizada correctamente' });
     
+    // Intercepción de errores
     } catch (error) {
 
         console.error("Error al actualizar contraseña:", error);
