@@ -71,18 +71,18 @@ router.post('/register_user', async function(req, res) {
             from: 'Flavorwell <agustin.mora.trinidad@gmail.com>',
             to: mail,
             subject: 'Verifica tu cuenta de Flavorwell',
-            html: `<p>Hola ${username},</p>
-                    <p>Gracias por registrarte en Flavorwell. Por favor haz clic en el siguiente enlace para verificar tu correo:</p>
+            html: `<p>Hi! ${username},</p>
+                    <p>Thanks for registering in Flavorwell. Please click on the following link to verify your email:</p>
                     <a href="${verificationURL}">${verificationURL}</a>`
 
         });
 
-        res.status(200).send({ success: true, message: "Usuario registrado con éxito. Por favor verifica tu correo electrónico." });
+        res.status(200).send({ success: true, message: "Success registered user. Please check your email." });
 
     } catch (error) {
 
         console.error("Error al registrar:", error);
-        res.status(500).json({ success: false, error: 'Error interno del servidor' });
+        res.status(500).json({ success: false, error: 'Internal server error, try again later' });
 
     }
 

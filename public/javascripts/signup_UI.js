@@ -3,8 +3,13 @@ var usernameInput = document.getElementById('input_username');
 var usernameMail = document.getElementById('input_mail');
 var usernamePassword = document.getElementById('input_password');
 const modal = document.getElementById('successModal');
-const errorModal = document.getElementById('errorModal');
 const passwordWarning = document.getElementById('passwordWarning');
+
+// Variables de modal de error
+const errorModal = document.getElementById('errorModal');
+const imgErrorModal = document.getElementById('img-context');
+const textErrorModal = document.getElementById('text-context');
+const tryAgainButton = document.getElementById('tryAgain');
 
 var restHost = 'http://localhost:3000'
 
@@ -36,15 +41,28 @@ signupButton.addEventListener('click', function(event) {
         body: JSON.stringify(userData)
 
     })
-    .then(response => {
+    .then(async response => {
+
+        const data = await response.json();
 
         if (!response.ok) {
 
-            throw new Error(`HTTP error! status: ${response.status}`)
+            imgErrorModal.src = '/images/_UI_img/error.webp';
+            textErrorModal.textContent = `${data.message}`;
+
+            errorModal.classList.remove('hidden');
+            tryAgainButton.addEventListener('click', () => {
+
+                errorModal.classList.add('hidden');
+
+            });
+
+            signupButton.disabled = false;
+            signupButton.textContent = 'Sign Up';
 
         }
 
-        return response.json();
+        return data;
 
     })
     .then(data => {
@@ -108,6 +126,9 @@ function validateEmailFormat() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
+
+        textErrorModal.textContent = 'Please enter a email valid address';
+        imgErrorModal.src = '/images/_UI_img/error.webp';
 
         errorModal.classList.remove('hidden');
         document.getElementById('tryAgain').addEventListener('click', () => {
