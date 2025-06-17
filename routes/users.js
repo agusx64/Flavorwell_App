@@ -271,7 +271,7 @@ router.post('/request_password_reset', async (req, res) => {
         // Verificación de existencia de resultados
         if(rows.length === 0) {
 
-            return res.status(404).json({ success: false, message: 'Correo o usuario no encontrado en la base de datos' });
+            return res.status(404).json({ success: false, message: 'This email is not registered, check your information' });
 
         }
 
@@ -315,13 +315,13 @@ router.post('/request_password_reset', async (req, res) => {
         });
 
         // Respuesta existosa del servidor al cliente
-        res.status(200).json({ success: true, message: `Codigo enviando a ${recoverInfo}`});
+        res.status(200).json({ success: true, message: `Code sent to ${recoverInfo}`});
 
     // Intercepción de errorres
     } catch(error){
 
         console.error('Error enviando codigo de verificacion', error);
-        res.status(500).json({ success: false, message: 'Error interno del servidor' });
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
 
     }
 
