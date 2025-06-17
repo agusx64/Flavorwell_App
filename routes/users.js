@@ -182,7 +182,7 @@ router.post('/login_user', async function (req, res) {
 
             return res.status(401).json( 
 
-                { success: false, message: 'Correo no registrado'}
+                { success: false, message: 'This email has not yet been registered'}
 
             )
 
@@ -196,7 +196,7 @@ router.post('/login_user', async function (req, res) {
 
             return res.status(403).json(
 
-                { success: false, message: 'Tu correo aun no ha sifo verificado' }
+                { success: false, message: 'Your email has not been verified yet.' }
 
             )
 
@@ -208,7 +208,7 @@ router.post('/login_user', async function (req, res) {
 
             return res.status(401).json(
 
-                { success: false, message: 'Contraseña incorrecta' }
+                { success: false, message: 'Incorrect password, please check and try again.' }
 
             )
 
@@ -242,7 +242,7 @@ router.post('/login_user', async function (req, res) {
         console.error('Error al iniciar sesión', error );
         res.status(500).json(
 
-            { success: false, error: 'Error interno del servidor' }
+            { success: false, error: 'Internal server error, please try again later.' }
 
         )
 

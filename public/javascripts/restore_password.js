@@ -162,7 +162,6 @@ restorePasswordButton.addEventListener('click', function(event){
             restorePasswordButton.disabled = false;
             restorePasswordButton.textContent = 'Update password';
 
-
         }
 
         return data;
