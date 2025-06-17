@@ -338,7 +338,7 @@ router.post('/set_new_password', async (req, res) => {
         const [rows] = await connection.query(
 
             // Consulta SQL
-            'SELECT * FROM users WHERE email = ? AND reset_code =?',
+            'SELECT * FROM users WHERE email = ? AND reset_code = ?',
             // Parametros de consulta
             [email, securityCode]
 
@@ -386,7 +386,8 @@ router.post('/set_new_password', async (req, res) => {
         res.status(500).json({ success: false, message: 'Error interno del servidor' });
 
     }
-})
+
+});
 
 
 
@@ -394,6 +395,7 @@ router.post('/set_new_password', async (req, res) => {
 
 // Eliminación de usuarios no verificados y limpieza de códigos de recuperación
 cron.schedule('*/10 * * * *', async () => {
+
     try {
         // Instanciar una fecha actual
         const now = new Date();

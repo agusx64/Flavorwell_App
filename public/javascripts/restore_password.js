@@ -16,6 +16,12 @@ const inputCodeNumber4 = document.getElementById('input_code_4');
 // Modal contextual
 const modal = document.getElementById('successModal');
 
+// Variables del modal de error
+const errorModal = document.getElementById('errorModal');
+const imgErrorModal = document.getElementById('img-context');
+const textErrorModal = document.getElementById('text-context');
+const tryAgainButton = document.getElementById('tryAgain');
+
 // Direccion del Back-End
 var restHost = 'http://localhost:3000'
 
@@ -113,6 +119,11 @@ restorePasswordButton.addEventListener('click', function(event){
     restorePasswordButton.textContent = 'Reestableciendo contraseña...'
     restorePasswordButton.disabled = true;
 
+    // Validar formato de correo electronico
+    if(!validateEmailFormat()){
+        return;
+    }
+
     let securityCode = `${inputCodeNumber1.value}${inputCodeNumber2.value}${inputCodeNumber3.value}${inputCodeNumber4.value}`
 
     const userData = {
@@ -132,15 +143,29 @@ restorePasswordButton.addEventListener('click', function(event){
         body: JSON.stringify(userData)
 
     })
-    .then(response => {
+    .then(async response => {
+
+        const data = await response.json();
 
         if (!response.ok) {
 
-            throw new Error(`HTTP error! status: ${response.status}`)
+            imgErrorModal.src = '/images/_UI_img/error.webp';
+            textErrorModal.textContent = `${data.message}`;
+
+            errorModal.classList.remove('hidden');
+            tryAgainButton.addEventListener('click', () => {
+
+                errorModal.classList.add('hidden');
+
+            });
+
+            restorePasswordButton.disabled = false;
+            restorePasswordButton.textContent = 'Update password';
+
 
         }
 
-        return response.json();
+        return data;
 
     })
     .then(data => {
@@ -155,9 +180,11 @@ restorePasswordButton.addEventListener('click', function(event){
 
             });
 
+            console.log(data);
+
         } else {
 
-            console.error("Error al cargar dashboard principal", error);
+            console.error("Ocurrio un error al restaurar la contraseña", data.message);
 
         }
 
@@ -181,7 +208,7 @@ restorePasswordButton.addEventListener('click', function(event){
     inputCodeNumber3.value = '';
     inputCodeNumber4.value = '';
 
-})
+});
 
 //Funciones de prevencion de errores de entrada
 usernameNewPassword.addEventListener('input', () => {
@@ -190,6 +217,41 @@ usernameNewPassword.addEventListener('input', () => {
     checkInputs();
 
 });
+
+function validateEmailFormat() {
+
+    // Redeclaracion de input email
+    const email = usernameEmail.value.trim();
+
+    // Expresión regular para formato de email válido
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+
+        imgErrorModal.src = '/images/_UI_img/error.webp';
+        textErrorModal.textContent = 'Please enter a valid email address';
+
+        errorModal.classList.remove('hidden');
+        tryAgainButton.addEventListener('click', () => {
+
+            errorModal.classList.add('hidden');
+
+        });
+
+        restorePasswordButton.disabled = false;
+        restorePasswordButton.textContent = 'Update password';
+
+        // Valor logico
+        return false;
+
+    } else {
+
+        // Valor logico
+        return true;
+
+    }
+
+}
 
 // Comprobacion de entradas en inputs
 usernameEmail.addEventListener('input', checkInputs);

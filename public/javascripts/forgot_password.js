@@ -1,6 +1,7 @@
 const recoverButton = document.getElementById('recover_password_button');
 const recoverInput = document.getElementById('input_recover_password');
 const modal = document.getElementById('successModal');
+const errorModal = document.getElementById('errorModal');
 
 var restHost = 'http://localhost:3000'
 
@@ -9,6 +10,11 @@ recoverButton.addEventListener('click', function(event) {
     event.preventDefault();
     recoverButton.textContent = 'Enviando correo...'
     recoverButton.disabled = true;
+
+    // Validacion de formato de correo electronico
+    if(!validateEmailFormat()){
+        return;
+    }
 
     const userData = {
 
@@ -81,6 +87,35 @@ function checkInputs() {
     } else {
 
         recoverButton.disabled = true;
+
+    }
+
+}
+
+function validateEmailFormat() {
+
+    // Redeclaracion de input email
+    const email = recoverInput.value.trim();
+
+    // Expresión regular para formato de email válido
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+
+        errorModal.classList.remove('hidden');
+        document.getElementById('tryAgain').addEventListener('click', () => {
+            errorModal.classList.add('hidden');
+        });
+
+        recoverButton.disabled = false;
+        recoverButton.textContent = 'Send Email';
+
+        // Valor logico
+        return false;
+
+    } else {
+
+        return true;
 
     }
 
