@@ -70,10 +70,33 @@ router.post('/register_user', async function(req, res) {
 
             from: 'Flavorwell <agustin.mora.trinidad@gmail.com>',
             to: mail,
-            subject: 'Verifica tu cuenta de Flavorwell',
-            html: `<p>Hi! ${username},</p>
-                    <p>Thanks for registering in Flavorwell. Please click on the following link to verify your email:</p>
-                    <a href="${verificationURL}">${verificationURL}</a>`
+            subject: 'Verify your Flavorwell account',
+            html: ` 
+            <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
+                <div style="text-align: center;">
+                    <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
+                </div>
+                <h2 style="color: rgb(0, 0, 0);">Hi, ${username}!</h2>
+                <p style="color: #333; font-size: 16px;">
+                    Thank you for registering with <strong>Flavorwell</strong>. To complete your registration, please verify your email address by clicking the button below:
+                </p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${verificationURL}" 
+                        style="background-color: #E3170A; color: white; padding: 15px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                        Verify Account
+                    </a>
+                </div>
+                <p style="color: #333; font-size: 14px;">
+                    If the button above doesn't work, copy and paste the following link into your browser:
+                </p>
+                <p style="word-break: break-all; color: #F7B32B; font-size: 14px;">
+                    <a href="${verificationURL}" style="color: #F7B32B;">${verificationURL}</a>
+                </p>
+                <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
+                <p style="text-align: center; color: #aaa; font-size: 12px;">
+                    &copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.
+                </p>
+            </div>`
 
         });
 
@@ -309,8 +332,34 @@ router.post('/request_password_reset', async (req, res) => {
             from: 'Flavorwell <agustin.mora.trinidad@gmail.com>',
             to: recoverInfo,
             subject: 'Recovery password code',
-            html: `<p>Your verification code is: <strong style="font-size: 20px">${resetCode}</strong></p>
-                    <p>This code will expire in 10 minutes</p>`
+            html: `
+            <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
+                <div style="text-align: center;">
+                    <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
+                </div>
+                <h2 style="color: rgb(0, 0, 0); text-align: center;">Reset your password</h2>
+                <p style="color: #333; font-size: 16px;">
+                    We received a request to reset your <strong>Flavorwell</strong> account password.
+                </p>
+                <p style="color: #333; font-size: 16px;">
+                    Use the following code to reset your password:
+                </p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <span style="font-size: 32px; font-weight: bold; background-color: #F7B32B; color: rgb(0, 0, 0); padding: 12px 24px; border-radius: 8px; display: inline-block;">
+                        ${resetCode}
+                    </span>
+                </div>
+                <p style="color: #E3170A; font-size: 14px; text-align: center;">
+                    This code will expire in 10 minutes.
+                </p>
+                <p style="color: #999; font-size: 13px; text-align: center; margin-top: 40px;">
+                    If you didn't request this, you can safely ignore this email.
+                </p>
+                <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
+                <p style="text-align: center; color: #aaa; font-size: 12px;">
+                    &copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.
+                </p>
+            </div>`
 
         });
 
@@ -449,8 +498,5 @@ cron.schedule('*/10 * * * *', async () => {
     }
 
 });
-
-
-
 
 module.exports = router;
