@@ -23,6 +23,7 @@ var apis = require('./routes/apis');
 
 // Routes modulations
 var users = require('./routes/users');
+var dashboard = require('./routes/dashboard');
 
 var app = express();
 
@@ -43,6 +44,7 @@ app.use('/', posts);
 app.use('/', apis);
 
 app.use('/users', users);
+app.use('/dashboard', dashboard);
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {

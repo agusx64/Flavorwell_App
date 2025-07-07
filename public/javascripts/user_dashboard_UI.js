@@ -100,9 +100,9 @@ function dynamicGetRender() {
 
 }
 
-function fetchNewRecipes() {
+async function fetchNewRecipes() {
 
-    fetch('/new_food')
+    await fetch('/dashboard/new_food')
 
     .then(response => response.json())
     .then(data => {
@@ -160,9 +160,9 @@ function fetchNewRecipes() {
 
 };
 
-function fetchGetDayFood() {
+async function fetchGetDayFood() {
 
-    fetch('/day_food')
+    await fetch('/dashboard/day_food')
 
     .then(response => response.json())
     .then(data => {
@@ -225,18 +225,4 @@ function fetchGetDayFood() {
     })
 
 };
-
-let veganButton = document.getElementById('vegan_button');
-let dessertsButton = document.getElementById('desserts_button');
-let drinksButton = document.getElementById('drinks_button');
-let breakfastButton = document.getElementById('breakfast_button');
-
-// Botones del menú principal
-veganButton.addEventListener('click', function() { window.location.href = '/vegan_book'; });
-dessertsButton.addEventListener('click', function() { window.location.href = '/desserts_book'; });
-drinksButton.addEventListener('click', function() { window.location.href = '/strong_book'; });
-breakfastButton.addEventListener('click', function() { window.location.href = '/breakfast_book'; });
-
-let recommendedFoodButtons = document.querySelectorAll('.day_food');
-let recipeDayNames = document.querySelectorAll('.recipe_day_name');
 

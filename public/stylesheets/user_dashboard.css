@@ -4,11 +4,11 @@
 
 body{
     padding-bottom: 90px;
-    padding-top: 37%;
+    padding-top: 20%;
 }
 
 .header_dashboard{
-    height: 15%;
+    height: 9%;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -32,12 +32,10 @@ body{
     width: 60%;
 }
 
-.logo_small{
-    width: 50px;
-}
+
 
 .header_text{
-    font-size: 25px;
+    font-size: 1dvw;
     color: var(--WhiteBaseColor);
     margin-top: 7px;
 }
@@ -58,15 +56,18 @@ body{
     width: 40px;
     height: 40px;
     fill: var(--WhiteBaseColor);
+    color: var(--WhiteBaseColor);
+    font-size: 3.5vh;
 }
 
 .label_carousel{
+    margin-top: 4%;
     padding-left: 4%;
     padding-right: 4%;
 }
 
 .label_carousel_new{
-    font-size: 13px;
+    font-size: 4vw;
     color: var(--Xhantous);
 }
 
@@ -108,7 +109,7 @@ body{
 .label_carousel_search{
     margin-top: 15px;
     color: var(--ChiliRed);
-    font-size: 13px;
+    font-size: 4vw;
 }
 
 .input_section{
@@ -267,4 +268,112 @@ body{
     justify-content: center;
     align-items: center;
     padding: 5px;
+}
+
+.recipe_post_container{
+    width: 100%;
+    height: auto;
+    padding: 4% 4% 4% 4%;
+}
+
+.card-post-container{
+    background-color: var(--GreyLight);
+    border-radius: 2vh;
+    width: 100%;
+    height: auto;
+    margin: 0% 0% 5% 0%;
+}
+
+.card-post-img{
+    width: 100%;
+    height: 30vh;
+    border-top-left-radius: 2vh;
+    border-top-right-radius: 2vh;
+    margin-bottom: 2vh;
+    object-fit: cover;
+}
+
+.recipe-posts-label{
+    padding: 0% 4% 0% 4%;
+    font-size: 4vw;
+    font-weight: 700;
+    color: var(--Xhantous);
+}
+
+.card-post-title{
+    color: var(--ChiliRed);
+    font-weight: 600;
+    padding: 0% 4% 0% 4%;
+}
+
+.card-post-description{
+    color: var(--BlackBaseColor);
+    padding: 2% 4% 2% 4%;
+    font-size: 4vw;
+}
+
+.card-post-status{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+    padding: 0% 4% 0% 4%;
+}
+
+.card-post-buttons-interaction{
+    display: flex;
+}
+
+.card-post-buttons-interaction:nth-child(2){
+    margin-right: 2vw;
+}
+
+.card-post-like-status{
+    display: flex;
+    width: 20vw;
+    height: 5vh;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--Xhantous);
+    padding: 0vh 1vh 0vh 1vh;
+    font-size: 2vh;
+    border-radius: 25vh;
+    font-size: 2.5vh;
+    color: var(--WhiteBaseColor);
+}
+
+.card-post-like-number{
+    font-size: 1.5vh;
+}
+
+.card-post-dish-category{
+    height: 5vh;
+    width: 5vh;
+    background-color: var(--Celadon);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50vh;
+    color: var(--WhiteBaseColor);
+    margin-left: 2vw;
+}
+
+.action-buttons{
+    height: 5vh;
+    width: 5vh;
+    border-style: none;
+    background-color: var(--GreyLight);
+    font-size: 3.5vh;
+    color: var(--ChiliRed);
+}
+
+.card-post-main-button{
+    background-color: var(--ChiliRed);
+    width: 92%;
+    height: 5.5vh;
+    margin: 8% 4% 6% 4%;
+    border-radius: 25vh;
+    color: var(--WhiteBaseColor);
+    border-style: none;
 }
