@@ -14,6 +14,7 @@ const searchInput = document.querySelector('.input_search');
 const searchResultsContainer = document.getElementById('search_results_container');
 const resultsList = document.getElementById('search_results_list');
 
+// Buscador de recetas (realtime)
 searchInput.addEventListener('input', async () => {
 
     const query = searchInput.value.trim();
@@ -76,6 +77,7 @@ searchInput.addEventListener('input', async () => {
 
 });
 
+// Este evento cierra el cuadro de busqueda en caso de que sele de click fuera del modal
 document.addEventListener('click', e => {
 
     if (!searchInput.contains(e.target) && !searchResultsContainer.contains(e.target)) {
