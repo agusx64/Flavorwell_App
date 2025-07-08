@@ -16,38 +16,48 @@ const connection = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     waitForConnections: true,
+    multipleStatements: true,
     connectionLimit: 10,
     queueLimit: 0
 });
 
-//------------------------New recipes selector (user_dashboard)-----------------
+// Selector de recetas mas recientes en la base de datos
 router.get('/new_food', async function (req, res) {
 
+    // Consulta SQL
     const queries = [
 
-        `(SELECT name, img_path FROM breakfast ORDER BY created_at DESC LIMIT 1)
+        // Union de resultados de busqueda
+        `(SELECT id, name, img_path FROM breakfast ORDER BY created_at DESC LIMIT 1)
         UNION ALL
-        (SELECT name, img_path FROM desserts ORDER BY created_at DESC LIMIT 1)
+        (SELECT id, name, img_path FROM desserts ORDER BY created_at DESC LIMIT 1)
         UNION ALL
-        (SELECT name, img_path FROM strong_dish ORDER BY created_at DESC LIMIT 1)
+        (SELECT id, name, img_path FROM strong_dish ORDER BY created_at DESC LIMIT 1)
         UNION ALL
-        (SELECT name, img_path FROM vegan ORDER BY created_at DESC LIMIT 1);`
+        (SELECT id, name, img_path FROM vegan ORDER BY created_at DESC LIMIT 1);`
         
     ];
 
     try {
 
+        // Creación de array para guardado de resultados
         let finalResults = [];
+
+        // Descomposición de consultas
         for (const query of queries) {
 
+            // Ejecución de consultas
             const [results] = await connection.execute(query);
-            console.log(results);
+
+            // Guardado de resultados en el array
             finalResults.push(results);
 
         }
 
+        // Envio de objeto JSON con los resultados
         res.json(finalResults);
 
+    // Intercepción de errores
     } catch (error) {
 
         console.error('Error executing queries:', error);
@@ -57,120 +67,133 @@ router.get('/new_food', async function (req, res) {
 
 });
 
-//------------------------Random recipe selector (user_dashboard)---------------
+// Selector de recetas random para area de recomendaciones
 router.get('/day_food', async function (req, res) {
 
-    const queries = [
-        
-        'SELECT MIN(id) AS min_ID_breakfast, MAX(id) AS max_ID_breakfast INTO @min_ID_breakfast, @max_ID_breakfast FROM breakfast;',
-        'SELECT MIN(id) AS min_ID_desserts, MAX(id) AS max_ID_desserts INTO @min_ID_desserts, @max_ID_desserts FROM desserts;',
-        'SELECT MIN(id) AS min_ID_strong_dish, MAX(id) AS max_ID_strong_dish INTO @min_ID_strong_dish, @max_ID_strong_dish FROM strong_dish;',
-        'SELECT MIN(id) AS min_ID_vegan, MAX(id) AS max_ID_vegan INTO @min_ID_vegan, @max_ID_vegan FROM vegan;',
-        'SET @random_ID_breakfast = FLOOR(RAND() * (@max_ID_breakfast - @min_ID_breakfast + 1)) + @min_ID_breakfast;',
-        'SET @random_ID_desserts = FLOOR(RAND() * (@max_ID_desserts - @min_ID_desserts + 1)) + @min_ID_desserts;',
-        'SET @random_ID_strong_dish = FLOOR(RAND() * (@max_ID_strong_dish - @min_ID_strong_dish + 1)) + @min_ID_strong_dish;',
-        'SET @random_ID_vegan = FLOOR(RAND() * (@max_ID_vegan - @min_ID_vegan + 1)) + @min_ID_vegan;',
-        `(
-            SELECT id, name, img_path FROM breakfast WHERE id = @random_ID_breakfast LIMIT 1
+    // Consulta SQL compuesta
+    const query = `
+        (
+        SELECT id, name, img_path FROM breakfast ORDER BY RAND() LIMIT 1
         )
         UNION ALL
         (
-            SELECT id, name, img_path FROM desserts WHERE id = @random_ID_desserts LIMIT 1
+            SELECT id, name, img_path FROM desserts ORDER BY RAND() LIMIT 1
         )
         UNION ALL
         (
-            SELECT id, name, img_path FROM strong_dish WHERE id = @random_ID_strong_dish LIMIT 1
+            SELECT id, name, img_path FROM strong_dish ORDER BY RAND() LIMIT 1
         )
         UNION ALL
         (
-            SELECT id, name, img_path FROM vegan WHERE id = @random_ID_vegan LIMIT 1
-        );`
-    ];
+            SELECT id, name, img_path FROM vegan ORDER BY RAND() LIMIT 1
+        );
+
+    `;
 
     try {
-        let finalResults = [];
-        for (const query of queries) {
-            const [results] = await connection.execute(query);
-            console.log(results);
-            finalResults.push(results);
-        }
 
-        res.json(finalResults);
+        // Ejecucion monolineal de consulta SQL
+        const [results] = await connection.query(query);
+
+        // Envio de objeto JSON al servidor
+        res.json(results);
+
+    // Intercepcion de errores
     } catch (error) {
-        console.error('Error executing queries:', error);
+
+        console.error('Error executing query:', error);
         res.status(500).send('Error executing random rows');
-    }
-});
-
-//------------------------Send JSON to recipe viewer-----------------------------
-router.get('/recipe_viewer', (req, res) => {
-
-    let data = req.query.data;
-
-    if (data) {
-
-        try {
-
-            let parsedData = JSON.parse(decodeURIComponent(data));
-            res.render('recipe_viewer', { data: parsedData });
-
-        } catch (error) {
-
-            console.error('Error parsing data:', error);
-            res.status(400).send('Invalid JSON data');
-
-        }
-
-    } else {
-
-        res.status(400).send('No data received');
 
     }
 
 });
 
-//--------------------------Dynamic query URI encripter --------------
-// Ruta para manejar la solicitud POST
-router.post('/sended_text', async (req, res) => {
+// Buscador de recetas para insercion en el visor de recetas
+router.get('/recipe_viewer', async (req, res) => {
 
-    const dish = req.body;
-    let nameQuery = dish.dish;
-    console.log('Received dish name:', nameQuery);
+    // Recolección de datos de la URL
+    const id = parseInt(req.query.id);
+    const table = req.query.table;
+
+    // Array delimitador de nombres de tablas
+    const allowedTables = ['breakfast', 'desserts', 'vegan', 'strong_dish']
+
+    // Comprobación de coicidencia cliente - servidor
+    if (!id || !allowedTables.includes(table)) {
+
+        // Envio de estatus de parametros invalidos
+        return res.status(400).json({ success: false, message: 'Invalid parameters.' });
+
+    }
 
     try {
 
-        let recipeSearcher = `
-        
-            (SELECT * FROM breakfast WHERE name = ?)
-            UNION ALL 
-            (SELECT * FROM desserts WHERE name = ?)
-            UNION ALL
-            (SELECT * FROM vegan WHERE name = ?)
-            UNION ALL
-            (SELECT * FROM strong_dish WHERE name = ?)
 
-        `
-        conection.query(recipeSearcher, [nameQuery, nameQuery, nameQuery, nameQuery], function(err, results) {
+        // Consulta SQL para busqueda de receta
+        const query = `
+            SELECT * FROM ${table} WHERE id = ?;
+        `;
 
-            if (err) {
+        // Ejecución de consulta de forma asicrona, para metros de la consulta: Nombre de tabla e id.
+        const [results] = await connection.query(query, [id]);
 
-                throw err;
+        // Verificación de existencia o coincidencia de resultados
+        if (results.length === 0) {
 
-            }
-            else {
+            // Mensaje de estatus 'Receta no encontrada'
+            return res.status(404).json({ success: false, message: 'Recipe not found.' });
 
-                res.json(results);
+        }
+        console.log(results);
 
-            }
-        })
+        // return res.status(200).json({ success: true, data: results[0], message: 'Recipe data found.'});
+        res.render('recipe_viewer', { data: results[0] });
 
+    // Intercepción de errores
     } catch (error) {
 
-        console.error('Database query error:', error);
-        res.status(500).send('Error querying the database');
+        console.error('Error retrieving recipe:', error);
+        res.status(500).send('Internal server error');
 
     }
-    
+
+});
+
+//Obtener receta selecionada mediante el ID
+router.post('/get_recipe_by_id', async (req, res) => {
+
+    // Extracción de datos del JSON
+    const { id, table } = req.body;
+
+    try {
+
+        // Consulta SQL para busqueda de receta
+        let query = `
+            SELECT * FROM ${table} WHERE id = ?;
+        `;
+
+        // Ejecucion y guardado de resultados en array 'results', parametros: Tabla y id
+        const [results] = await connection.query(query, [id]);
+
+        // Validación de existencia de resultados
+        if (results.length === 0){
+
+            // Envio de estatus invalido: 'Receta no encontrada'
+            return res.status(404).json({ success: false, message: 'Recipe not found' });
+
+        }
+
+        // Envió de resultados al cliente
+        res.json({ success: true, message: 'Recipe found succesfully.', data: results[0]});
+
+    // Intercepcion de errores
+    } catch(error) {
+
+        console.error('Database query error: ', error);
+        res.status(500).json({ success: false, message: 'Error queryng the database.'});
+
+    }
+
 });
 
 

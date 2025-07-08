@@ -1,11 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    fetchGetDayFood();
-    fetchNewRecipes();
-    dynamicGetRender();
-    dynamicGetRecentRecipe();
+    requestAnimationFrame(() => {
+        fetchNewRecipes();
+        dynamicGetRender();
+        dynamicGetRecentRecipe();
+        fetchGetDayFood();
+    });
 
 });
+
+const restHost = 'http://localhost:3000';
 
 function dynamicGetRecentRecipe() { 
 
@@ -15,35 +19,50 @@ function dynamicGetRecentRecipe() {
 
         component.addEventListener('click', async function() {
 
-            const dishName = this.querySelector('h1').textContent;
-            const dishJSON = { dish: dishName };
+            const id = this.querySelector('img').getAttribute('data-id');
+            const table = this.querySelector('img').getAttribute('data-table');
+            const recipeData = { id: parseInt(id), table: table };
 
             try {
 
-                const response = await fetch('/sended_text', {
+                await fetch(restHost + '/dashboard/get_recipe_by_id', {
 
                     method: 'POST',
                     headers: {
-
-                        'content-type': 'application/json',
-
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(dishJSON)
+                    body: JSON.stringify(recipeData)
 
-                });
+                })
+                .then(async response => {
 
-                if(!response.ok) {
+                    const data = await response.json();
+                    if (!response.ok) {
 
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                        console.error(data.message);
 
-                }
+                    }
 
-                const data = await response.json();
-                window.location.href = `/recipe_viewer?data=${encodeURIComponent(JSON.stringify(data))}`;
+                    return data;
+
+                })
+                .then(data => {
+
+                    if (data.success) {
+
+                        window.location.href = `/html/recipe_viewer.html?id=${id}&table=${table}`;
+
+                    } else {
+
+                        console.error('Recipe not found', data.message)
+
+                    }
+
+                })
 
             } catch(error) {
 
-                console.error(error);
+                console.error(error)
 
             }
 
@@ -51,7 +70,7 @@ function dynamicGetRecentRecipe() {
 
     })
 
-}
+};
 
 function dynamicGetRender() {
 
@@ -61,32 +80,46 @@ function dynamicGetRender() {
 
         element.addEventListener('click', async function() {
 
-            const dishName = this.querySelector('h2').textContent;
-
-            const dishJSON = { dish: dishName };
+            const id = this.querySelector('img').getAttribute('data-id');
+            const table = this.querySelector('img').getAttribute('data-table');
+            const recipeData = { id: parseInt(id), table: table };
 
             try {
 
-                const response = await fetch('/sended_text', {
+                await fetch(restHost + '/dashboard/get_recipe_by_id', {
 
                     method: 'POST',
                     headers: {
-
                         'Content-Type': 'application/json'
-
                     },
-                    body: JSON.stringify(dishJSON)
+                    body: JSON.stringify(recipeData)
+
+                })
+                .then(async response => {
+
+                    const data = await response.json();
+                    if (!response.ok) {
+
+                        console.error(data.message);
+
+                    }
+
+                    return data;
+
+                })
+                .then(data => {
+
+                    if (data.success) {
+
+                        window.location.href = `/html/recipe_viewer.html?id=${id}&table=${table}`;
+
+                    } else {
+
+                        console.error(data.message);
+
+                    }
 
                 });
-
-                if (!response.ok) {
-
-                    throw new Error(`HTTP error! status: ${response.status}`);
-
-                }
-
-                const data = await response.json();
-                window.location.href = `/recipe_viewer?data=${encodeURIComponent(JSON.stringify(data))}`;
 
             } catch (error) {
 
@@ -102,7 +135,7 @@ function dynamicGetRender() {
 
 async function fetchNewRecipes() {
 
-    await fetch('/dashboard/new_food')
+    await fetch(restHost + '/dashboard/new_food')
 
     .then(response => response.json())
     .then(data => {
@@ -127,15 +160,19 @@ async function fetchNewRecipes() {
                 if(newRecipes.length >= 4) {
 
                     imgCarouselBreakfast.src = newRecipes[0].img_path;
+                    imgCarouselBreakfast.setAttribute('data-id', newRecipes[0].id);
                     nameCarouselBreakfast.textContent = newRecipes[0].name;
 
                     imgCarouselDessert.src = newRecipes[1].img_path;
+                    imgCarouselDessert.setAttribute('data-id', newRecipes[1].id);
                     nameCarouselDessert.textContent = newRecipes[1].name;
 
                     imgCarouselStrongDish.src = newRecipes[2].img_path;
+                    imgCarouselStrongDish.setAttribute('data-id', newRecipes[2].id);
                     nameCarouselStrongDish.textContent = newRecipes[2].name;
 
                     imgCarouselVegan.src = newRecipes[3].img_path;
+                    imgCarouselVegan.setAttribute('data-id', newRecipes[3].id);
                     nameCarouselVegan.textContent = newRecipes[3].name;
 
                 } else {
@@ -162,14 +199,14 @@ async function fetchNewRecipes() {
 
 async function fetchGetDayFood() {
 
-    await fetch('/dashboard/day_food')
+    await fetch(restHost + '/dashboard/day_food')
 
     .then(response => response.json())
     .then(data => {
 
         if (Array.isArray(data) && data.length > 0) {
 
-            const recipes = data[data.length - 1];
+            const recipes = data;
 
             if(Array.isArray(recipes)) {
 
@@ -189,15 +226,19 @@ async function fetchGetDayFood() {
 
                     
                     imgCardBreakfast.src = recipes[0].img_path;
+                    imgCardBreakfast.setAttribute('data-id', recipes[0].id);
                     imgNameBreakfast.textContent = recipes[0].name;
 
                     imgCardDessert.src = recipes[1].img_path;
+                    imgCardDessert.setAttribute('data-id', recipes[1].id);
                     imgNameDessert.textContent = recipes[1].name;
 
                     imgCardStrongDish.src = recipes[2].img_path;
+                    imgCardStrongDish.setAttribute('data-id', recipes[2].id);
                     imgNameStrongDish.textContent = recipes[2].name;
 
                     imgCardVegan.src = recipes[3].img_path;
+                    imgCardVegan.setAttribute('data-id', recipes[3].id);
                     imgNameVegan.textContent = recipes[3].name;
 
                 } else {
@@ -225,4 +266,3 @@ async function fetchGetDayFood() {
     })
 
 };
-

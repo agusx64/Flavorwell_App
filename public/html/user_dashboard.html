@@ -22,7 +22,7 @@
         </div>
     </header>
 
-    <div class="label_carousel">
+    <!-- <div class="label_carousel">
         <p class="label_carousel_search poppins-bold">Are you looking for a dish? ?</p>
     </div>
 
@@ -33,7 +33,7 @@
             </div>
             <input type="search" name="" id="" placeholder="Search recipes" class="input_search">
         </div>
-    </section>
+    </section> -->
 
     <div class="label_carousel">
         <p class="label_carousel_new poppins-bold">Explore new recipes</p>
@@ -44,28 +44,28 @@
             <div class="carousel-inner">
 
                 <div class="carousel-item active">
-                    <img src="" class="d-block w-100 flv_img_carousel" alt="..." id="new_breakfast_img_recipe">
+                    <img src="" class="d-block w-100 flv_img_carousel" alt="..." id="new_breakfast_img_recipe" data-table="breakfast">
                     <div class="carousel-caption">
                         <h1 class="recipe_name poppins-semibold" id="new_breakfast_name_recipe"></h1>
                     </div>
                 </div>
 
                 <div class="carousel-item">
-                    <img src="" class="d-block w-100 flv_img_carousel" alt="..." id="new_dessert_img_recipe">
+                    <img src="" class="d-block w-100 flv_img_carousel" alt="..." id="new_dessert_img_recipe" data-table="desserts">
                     <div class="carousel-caption">
                         <h1 class="recipe_name poppins-semibold" id="new_dessert_name_recipe"></h1>
                     </div>
                 </div>
 
                 <div class="carousel-item">
-                    <img src="" class="d-block w-100 flv_img_carousel" alt="..." id="new_strong_dish_img_recipe">
+                    <img src="" class="d-block w-100 flv_img_carousel" alt="..." id="new_strong_dish_img_recipe" data-table="strong_dish">
                     <div class="carousel-caption">
                         <h1 class="recipe_name poppins-semibold" id="new_strong_dish_name_recipe"></h1>
                     </div>
                 </div>
 
                 <div class="carousel-item">
-                    <img src="" class="d-block w-100 flv_img_carousel" alt="..." id="new_vegan_img_recipe">
+                    <img src="" class="d-block w-100 flv_img_carousel" alt="..." id="new_vegan_img_recipe" data-table="vegan">
                     <div class="carousel-caption">
                         <h1 class="recipe_name poppins-semibold" id="new_vegan_name_recipe"></h1>
                     </div>
@@ -106,7 +106,7 @@
     <section class="recommended_food">
 
         <div class="day_food day_breakfast">
-            <img class="card_img_style" src="/images/_img_recipe/breakfast_cat.jpg" alt="" id="img_card_breakfast">
+            <img class="card_img_style" src="/images/_img_recipe/breakfast_cat.jpg" alt="" id="img_card_breakfast" data-table="breakfast">
             <div class="dish_name">
                 <h2 class="recipe_day_name" id="recipe_breakfast_name"></h2>
             </div>
@@ -116,7 +116,7 @@
         </div>
 
         <div class="day_food day_dessert">
-            <img class="card_img_style" src="/images/_img_recipe/dessert_cat.jpg" alt="" id="img_card_dessert">
+            <img class="card_img_style" src="/images/_img_recipe/dessert_cat.jpg" alt="" id="img_card_dessert" data-table="desserts">
             <div class="dish_name">
                 <h2 class="recipe_day_name" id="recipe_dessert_name"></h2>
             </div>
@@ -126,7 +126,7 @@
         </div>
 
         <div class="day_food day_drink">
-            <img class="card_img_style" src="/images/_img_recipe/drink_cat.jpg" alt="" id="img_card_strong_dish">
+            <img class="card_img_style" src="/images/_img_recipe/drink_cat.jpg" alt="" id="img_card_strong_dish" data-table="strong_dish">
             <div class="dish_name">
                 <h2 class="recipe_day_name" id="recipe_strong_dish_name"></h2>
             </div>
@@ -136,7 +136,7 @@
         </div>
 
         <div class="day_food day_vegan">
-            <img class="card_img_style" src="/images/_img_recipe/vegan_cat.jpg" alt="" id="img_card_vegan">
+            <img class="card_img_style" src="/images/_img_recipe/vegan_cat.jpg" alt="" id="img_card_vegan" data-table="vegan">
             <div class="dish_name">
                 <h2 class="recipe_day_name" id="recipe_vegan_name"></h2>
             </div>
@@ -183,7 +183,7 @@
 
     </section> -->
 
-    <nav class="bottom_navbar">
+    <!-- <nav class="bottom_navbar">
         <div class="nav_icons" id="start">
             <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFF"><path d="M160-120v-480l320-240 320 240v480H560v-280H400v280H160Z"/></svg>
         </div>
@@ -198,10 +198,10 @@
         <div class="nav_icons" id="settings">
             <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFF"><path d="m382-80-18.67-126.67q-17-6.33-34.83-16.66-17.83-10.34-32.17-21.67L178-192.33 79.33-365l106.34-78.67q-1.67-8.33-2-18.16-.34-9.84-.34-18.17 0-8.33.34-18.17.33-9.83 2-18.16L79.33-595 178-767.67 296.33-715q14.34-11.33 32.34-21.67 18-10.33 34.66-16L382-880h196l18.67 126.67q17 6.33 35.16 16.33 18.17 10 31.84 22L782-767.67 880.67-595l-106.34 77.33q1.67 9 2 18.84.34 9.83.34 18.83 0 9-.34 18.5Q776-452 774-443l106.33 78-98.66 172.67-118-52.67q-14.34 11.33-32 22-17.67 10.67-35 16.33L578-80H382Zm98.67-266.67q55.33 0 94.33-39T614-480q0-55.33-39-94.33t-94.33-39q-55.67 0-94.5 39-38.84 39-38.84 94.33t38.84 94.33q38.83 39 94.5 39Z"/></svg>
         </div>
-    </nav>
+    </nav> -->
 
     <script src="/javascripts/user_dashboard_UI.js"></script>
-    <script src="/javascripts/navbar_UI.js"></script>
+    <!-- <script src="/javascripts/navbar_UI.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
