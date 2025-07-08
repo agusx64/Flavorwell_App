@@ -3,7 +3,7 @@
 }
 
 body{
-    padding-bottom: 90px;
+    padding-bottom: 10%;
     padding-top: 20%;
 }
 
@@ -27,17 +27,20 @@ body{
 
 .flv_div{
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
     width: 60%;
 }
 
-
+.welcome-label{
+    color: var(--WhiteBaseColor);
+    font-size: 3vw;
+}
 
 .header_text{
-    font-size: 1dvw;
+    font-size: 1vw;
     color: var(--WhiteBaseColor);
-    margin-top: 7px;
 }
 
 .profile_header{
@@ -53,11 +56,18 @@ body{
 }
 
 .svg_profile{
-    width: 40px;
-    height: 40px;
+    width: 5vh;
+    height: 5vh;
     fill: var(--WhiteBaseColor);
     color: var(--WhiteBaseColor);
     font-size: 3.5vh;
+}
+
+.img-header-user{
+    width: 4vh;
+    height: 4vh;
+    object-fit: cover;
+    border-radius: 50vh;
 }
 
 .label_carousel{
@@ -339,7 +349,7 @@ body{
     justify-content: space-between;
     align-items: center;
     background-color: var(--Xhantous);
-    padding: 0vh 1vh 0vh 1vh;
+    padding: 0vh 2vh 0vh 1.5vh;
     font-size: 2vh;
     border-radius: 25vh;
     font-size: 2.5vh;

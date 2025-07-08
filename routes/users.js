@@ -596,6 +596,32 @@ router.post('/api/toggle_save', authenticateToken, async (req, res) => {
 
 });
 
+// Endpoint para obtener foto de perfil y nombre de usuario a traves de JWT para menu dashboard
+router.get('/api/user_profile', authenticateToken, async (req, res) => {
+
+    const userId = req.user.userId;
+
+    try {
+
+        const [[user]] = await connection.query(
+
+            `SELECT username, img_profile_path FROM users WHERE id = ?`, [userId]
+
+        );
+
+        if (!user) return res.status(404).json({ success: false, message: 'User not found.' });
+
+        res.json({ success: true, name: user.username, profile_img: user.img_profile_path });
+
+    } catch (error) {
+
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+
+    }
+
+});
+
 //---------------------------------------------------------NODE CRON JOBS ---------------------------------------------------------------------------------
 
 // Eliminación de usuarios no verificados y limpieza de códigos de recuperación

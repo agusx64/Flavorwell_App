@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     requestAnimationFrame(() => {
+        getUserInfo();
         fetchNewRecipes();
         dynamicGetRender();
         dynamicGetRecentRecipe();
@@ -20,6 +21,43 @@ const resultsList = document.getElementById('search_results_list');
 // Variables para post de recetas de la comunidad
 let offset = 0, limit = 10, loading = false, allRecipes = [];
 const token = localStorage.getItem('token');
+
+// Funcion para obtener nombre y foto de perfil
+async function getUserInfo() {
+
+    try {
+
+        const res = await fetch(restHost + '/users/api/user_profile', {
+
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+
+        })
+
+        const data = await res.json();
+        if (!data.success) return;
+
+        // Seteo de nombre de usuario
+        const headerText = document.querySelector('.header_text');
+        headerText.textContent = data.name;
+
+        // Seteo de foto de perfil
+        const profileHeader = document.querySelector('.profile_header');
+        // Uso de función LAMDA
+        profileHeader.innerHTML = data.profile_img
+            // Si existe una foto de perfilinsertan este componente
+            ? `<img src="${data.profile_img}" alt="User profile" class="img-header-user">`
+            // Si no existe insertan este componente
+            : `<i class="bi bi-person-circle svg_profile"></i>`;
+
+    } catch (error) {
+
+        console.error('Error loading user profile.', error)
+
+    }
+
+}
 
 // Funacion para la carga de recetas
 async function loadRecipes() {
