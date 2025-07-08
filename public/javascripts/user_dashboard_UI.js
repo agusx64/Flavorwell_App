@@ -10,6 +10,81 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 const restHost = 'http://localhost:3000';
+const searchInput = document.querySelector('.input_search');
+const searchResultsContainer = document.getElementById('search_results_container');
+const resultsList = document.getElementById('search_results_list');
+
+searchInput.addEventListener('input', async () => {
+
+    const query = searchInput.value.trim();
+
+    if (query.length < 2) {
+
+        searchResultsContainer.classList.add('hidden');
+        return;
+
+    }
+
+    try {
+
+        const response = await fetch('/dashboard/search_recipes', {
+
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query })
+
+        });
+
+        const results = await response.json();
+
+        resultsList.innerHTML = '';
+        if (results.length === 0) {
+
+            searchResultsContainer.classList.remove('hidden');
+            resultsList.innerHTML = '<li class="info-circle-text"><i class="bi bi-info-circle-fill info-circle"></i>No results found</li>';
+            return;
+
+        }
+
+        results.forEach(recipe => {
+
+            const li = document.createElement('li');
+            li.innerHTML = `
+            
+                <img src="${recipe.img_path}" alt="${recipe.name}" />
+                <span class="recipe-name-search-result">${recipe.name}</span>
+            
+            `;
+
+            li.addEventListener('click', () => {
+
+                window.location.href = `/html/recipe_viewer.html?id=${recipe.id}&table=${recipe.table_name}`;
+
+            });
+
+            resultsList.appendChild(li);
+
+        });
+
+        searchResultsContainer.classList.remove('hidden');
+
+    } catch (error) {
+
+        console.error('Search error', error);
+
+    }
+
+});
+
+document.addEventListener('click', e => {
+
+    if (!searchInput.contains(e.target) && !searchResultsContainer.contains(e.target)) {
+
+        searchResultsContainer.classList.add('hidden');
+
+    }
+
+});
 
 function dynamicGetRecentRecipe() { 
 

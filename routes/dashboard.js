@@ -196,5 +196,45 @@ router.post('/get_recipe_by_id', async (req, res) => {
 
 });
 
+// Endpoint para el sistema de busqueda de user_dashboard
+router.post('/search_recipes', async (req, res) => {
+
+    const { query } = req.body;
+
+    if (!query || typeof query !== 'string') {
+
+        return res.status(400).json({ error: 'Invalid search query.' });
+
+    }
+
+    const sql = `
+
+        SELECT id, name, img_path, 'breakfast' AS table_name FROM breakfast WHERE name LIKE ? 
+        UNION ALL
+        SELECT id, name, img_path, 'desserts' FROM desserts WHERE name LIKE ? 
+        UNION ALL
+        SELECT id, name, img_path, 'strong_dish' FROM strong_dish WHERE name LIKE ? 
+        UNION ALL
+        SELECT id, name, img_path, 'vegan' FROM vegan WHERE name LIKE ?
+        LIMIT 10
+
+    `;
+
+    const values = Array(4).fill(`%${query}%`);
+
+    try {
+
+        const [results] = await connection.execute(sql, values);
+        res.json(results);
+
+    } catch (error) {
+
+        console.error('Search error: ', error);
+        res.status(500).json({ error: 'Database search failed' });
+
+    }
+
+});
+
 
 module.exports = router;
