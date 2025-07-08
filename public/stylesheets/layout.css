@@ -190,11 +190,19 @@
     background-color: var(--Xhantous);
     bottom: 0;
     position: fixed;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 0.5vh;
+    border-top-right-radius: 0.5vh;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
+}
+
+.nav_icons{
+    color: var(--WhiteBaseColor);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 7vw;
 }
 
 .reusable_button{

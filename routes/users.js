@@ -20,6 +20,23 @@ const connection = mysql.createPool({
     queueLimit: 0
 });
 
+// Middleware para JWT
+const authenticateToken = (req, res, next) => {
+    
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+
+    });
+
+};
+
 // Endpoint para el registro de usuarios nuevos
 router.post('/register_user', async function(req, res) {
 
@@ -438,7 +455,146 @@ router.post('/set_new_password', async (req, res) => {
 
 });
 
+// Selector de recetas para mural de posteos de la comunidad
+router.get('/api/recent_posts', authenticateToken, async (req, res) => {
 
+    const userId = req.user.userId;
+    const tables = ['vegan', 'desserts', 'strong_dish', 'breakfast'];
+    let combined = [];
+
+    try {
+
+        for (const table of tables) {
+
+            const [rows] = await connection.query(
+
+                `SELECT id,name,img_path AS image_url,description,? AS category
+                FROM ${table} ORDER BY created_at DESC LIMIT 20`, [table]
+
+            );
+
+            for (const rec of rows) {
+
+                const [[liked]] = await connection.query(
+
+                    `SELECT 1 FROM likes WHERE user_id=? AND recipe_id=? AND category=?`,
+                    [userId,rec.id,table]
+
+                );
+
+                const [[saved]] = await connection.query(
+
+                    `SELECT 1 FROM saved_recipes WHERE user_id=? AND recipe_id=? AND category=?`,
+                    [userId,rec.id,table]
+
+                );
+
+                const [[likeCount]] = await connection.query(
+                    `SELECT COUNT(*) AS total FROM likes WHERE recipe_id = ? AND category = ?`,
+                    [rec.id, table]
+                );
+
+                rec.liked = !!liked;
+                rec.saved = !!saved;
+                rec.likeCount = likeCount.total;
+
+            }
+
+            combined.push(...rows);
+
+        }
+
+        combined.sort(() => 0.5 - Math.random());
+        res.json(combined);
+
+    } catch (error) {
+
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+
+});
+
+// Toggle para guardado de likes
+router.post('/api/toggle_like', authenticateToken, async (req, res) => {
+
+    const { recipeId, category } = req.body;
+    const userId = req.user.userId;
+
+    try {
+
+        const [[exists]] = await connection.query(
+
+            `SELECT id FROM likes WHERE user_id=? AND recipe_id=? AND category=?`,
+            [userId,recipeId,category]
+
+        );
+
+        if (exists) {
+
+            await connection.query(
+
+                `DELETE FROM likes WHERE id=?`, [exists.id]
+
+            );
+            return res.json({ success: true, liked: false });
+
+        }
+
+        await connection.query(
+
+            `INSERT INTO likes(user_id,recipe_id,category) VALUES(?,?,?)`,
+            [userId, recipeId, category]
+
+        );
+        res.json({ success: true, liked: true});
+
+    } catch (error) {
+
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+
+});
+
+// Toggle para guardado de recetas
+router.post('/api/toggle_save', authenticateToken, async (req, res) => {
+
+    const { recipeId, category } = req.body;
+    const userId = req.user.userId;
+
+    try {
+
+        const [[exists]] = await connection.query(
+
+            `SELECT id FROM saved_recipes WHERE user_id = ? AND recipe_id = ? AND category = ?`,
+            [userId, recipeId, category]
+
+        );
+
+        if (exists) {
+
+            await connection.query('DELETE FROM saved_recipes WHERE id = ?', [exists.id]);
+            return res.json({ success: true, saved: false });
+
+        }
+
+        await connection.query(
+
+            `INSERT INTO saved_recipes(user_id,recipe_id,category) VALUES(?,?,?)`,
+            [userId, recipeId, category]
+
+        );
+        res.json({ success: true, saved: true });
+
+    } catch (error) {
+
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal server error '});
+
+    }
+
+});
 
 //---------------------------------------------------------NODE CRON JOBS ---------------------------------------------------------------------------------
 
