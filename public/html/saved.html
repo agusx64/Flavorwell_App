@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/stylesheets/saved.css">
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <title>Saved recipes</title>
+</head>
+<body>
+    
+    <!-- Template for another UI -->
+    <header class="header_menu" onclick="history.back()">
+        <button class="svg_icon return">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
+            </svg>
+        </button>
+        <h2 class="header_text poppins-semibold">Saved recipes</h2>
+        <div class="svg_icon">
+            <i class="bi bi-bookmark-fill"></i>
+        </div>
+    </header>
+
+    <!-- Recetas guardadas por el usuario -->
+    <section class="saved-recipes-container">
+
+        <!-- Componente para lista de recetas -->
+        <div class="recipe-card">
+            <img src="/images/_img_recipe/fried_fish.jpg" alt="" class="recipe-card-img">
+            <p class="recipe-card-author">
+                <span class="recipe-tempalte-text">Author: </span>
+                <span class="recipe-template-name">AgustinMXD</span>
+            </p>
+            <h2 class="recipe-card-text">
+                <span class="recipe-card-text-name">Pescado frito con papas y aderezo</span>
+            </h2>
+        </div>
+        
+    </section>
+
+    <!-- Barra de navegación -->
+    <nav class="bottom_navbar">
+        <div class="nav_icons" id="start">
+            <i class="bi bi-house-door-fill"></i>
+        </div>
+        <div class="nav_icons" id="saved">
+            <i class="bi bi-bookmark-fill"></i>
+        </div>
+        <div class="nav_icons" id="add">
+            <i class="bi bi-plus-circle-fill"></i>
+        </div>
+        <div class="nav_icons" id="profile">
+            <i class="bi bi-person-circle"></i>
+        </div>
+        <div class="nav_icons" id="settings">
+            <i class="bi bi-gear-fill"></i>
+        </div>
+    </nav>
+
+    <script src="/javascripts/saved_UI.js"></script>
+    <script src="/javascripts/navbar_UI.js"></script>
+</body>
+</html>

@@ -29,10 +29,9 @@
     font-family: 'Poppins';
 }
 
-/* body{
-    padding-bottom: 90px;
-    padding-top: 35%;
-} */
+body{
+    background-color: var(--WhiteBaseColor);
+}
 
 .header_menu{
     width: 100%;

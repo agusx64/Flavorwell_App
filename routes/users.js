@@ -622,6 +622,42 @@ router.get('/api/user_profile', authenticateToken, async (req, res) => {
 
 });
 
+// Endpoint para obtener recetas guardadas por el usuario
+router.get('/api/saved_recipes', authenticateToken, async (req, res) => {
+
+    const userId = req.user.userId;
+    const tables = ['vegan', 'desserts', 'strong_dish', 'breakfast'];
+    const savedRecipes = [];
+
+    try {
+
+        for (const table of tables) {
+
+            const [rows] = await connection.query(
+
+                `SELECT r.id, r.name, r.img_path AS image_url, r.author AS author, ? AS category
+                FROM ${table} r
+                INNER JOIN saved_recipes s ON r.id = s.recipe_id
+                WHERE s.user_id = ? AND s.category = ?`,
+                [table, userId, table]
+
+            );
+
+            savedRecipes.push(...rows);
+
+        }
+
+        res.json(savedRecipes);
+
+    } catch(error) {
+
+        console.error(error);
+        res.status(500).json({ success: true, message: 'Internal server error' });
+
+    }
+
+});
+
 //---------------------------------------------------------NODE CRON JOBS ---------------------------------------------------------------------------------
 
 // Eliminación de usuarios no verificados y limpieza de códigos de recuperación

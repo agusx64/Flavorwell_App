@@ -1,12 +1,34 @@
-//NAVBAR buttons-------------------------------------------------------------------------------------------------------
-let startButton = document.getElementById('start');
-let recipesButton = document.getElementById('recipes');
-let addButton = document.getElementById('add');
-let profileButton = document.getElementById('profile');
-let settingsButton = document.getElementById('settings');
+const homeButton = document.getElementById('start');
+const savedButton = document.getElementById('saved');
+const uploadButton = document.getElementById('add');
+const profileButton = document.getElementById('profile');
+const settingsButton = document.getElementById('settings');
 
-startButton.addEventListener('click', function() {window.location.href = '/start';});
-recipesButton.addEventListener('click', function(){window.location.href ='/ai'});
-addButton.addEventListener('click', function(){ window.location.href = '/add';});
-profileButton.addEventListener('click', function(){ window.location.href = '/profile';});
-settingsButton.addEventListener('click', function(){window.location.href = '/settings'});
+homeButton.addEventListener('click', function() {
+
+    window.location.href = '/html/user_dashboard.html';
+
+});
+
+savedButton.addEventListener('click', function() {
+
+    window.location.href = '/html/saved.html';
+
+});
+
+uploadButton.addEventListener('click', function() {
+
+    window.location.href = '/html/recipe_register.html';
+
+});
+
+profileButton.addEventListener('click', function() {
+
+    window.location.href = '/html/user_profile.html';
+
+});
+
+settingsButton.addEventListener('click', function() {
+
+    window.location.href = '/html/user.profile.html';
+})

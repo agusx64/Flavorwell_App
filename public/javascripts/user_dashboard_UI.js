@@ -181,7 +181,6 @@ document.addEventListener('click', async (e) => {
             icon.classList.toggle('bi-hand-thumbs-up-fill', resp.liked);
             icon.classList.toggle('bi-hand-thumbs-up', !resp.liked);
 
-            // 🧠 Obtener el contador actual y actualizarlo
             const countSpan = btnLike.closest('.card-post-container').querySelector('.card-post-like-number');
             let currentLikes = parseInt(countSpan.textContent);
             countSpan.textContent = resp.liked ? currentLikes + 1 : currentLikes - 1;
