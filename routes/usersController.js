@@ -20,17 +20,28 @@ const connection = mysql.createPool({
     queueLimit: 0
 });
 
-// Middleware para JWT
+// Middleware para JWT (Función para auntenticar a traves de JWT)
 const authenticateToken = (req, res, next) => {
     
+    // Extracción del encabezado 'Authorization' de solicitud HTTP proveniente del formato 'Bearer <token>'
     const authHeader = req.headers['authorization'];
+
+    // Verificacion y estraccion del auth token de la cadena de caracteres encriptada
     const token = authHeader && authHeader.split(' ')[1];
+
+    // Verificación de la existencia de un token proveniente del cliente en caso de que no exista devolvera 'Unauthorized'
     if (!token) return res.sendStatus(401);
 
+    // Validacion del token extraido a traves de firma y decodificacion de email y password
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
 
+        // Si los parametros son invalidos se devolvera 'Forbidden'
         if (err) return res.sendStatus(403);
+
+        // Agregar informacion decodificada el objeto 'req', para que sea accesible a otras funciones del backend
         req.user = user;
+
+        // Si todo es correcto se pasa el control a otra ruta o middleware
         next();
 
     });
@@ -458,57 +469,85 @@ router.post('/set_new_password', async (req, res) => {
 // Selector de recetas para mural de posteos de la comunidad
 router.get('/api/recent_posts', authenticateToken, async (req, res) => {
 
+    // Extraccion del 'userId' que esta contenido dentro del 'req.user' asignado en el middleware de JWT
     const userId = req.user.userId;
+
+    // Array de nombres de tablas para consultas SQL posteriores
     const tables = ['vegan', 'desserts', 'strong_dish', 'breakfast'];
+
+    // Array vacio para guardar las recetas mezcladas de forma random
     let combined = [];
 
     try {
 
+        // Iteracion. Por cada categoria se ejecutaran conexiones y ejecucion de consultas
         for (const table of tables) {
 
+            // Conexion y ejecución de consulta SQL
             const [rows] = await connection.query(
 
+                // Obtención de 20 recetas mas recientes de la iteración actual
                 `SELECT id,name,img_path AS image_url,description,? AS category
                 FROM ${table} ORDER BY created_at DESC LIMIT 20`, [table]
 
             );
 
+            // Iteración en cada una de las recetas obtenidas de la tabla en iteración
             for (const rec of rows) {
 
+                // Conexion y ejecución de consulta SQL
                 const [[liked]] = await connection.query(
 
+                    // Consulta de tabla likes para identificar likes correspondientes a la receta.
                     `SELECT 1 FROM likes WHERE user_id=? AND recipe_id=? AND category=?`,
                     [userId,rec.id,table]
 
                 );
 
+                // Conexión y ejecución de consulta SQL
                 const [[saved]] = await connection.query(
 
+                    // Consulta de tabla saved para identificar recetas guardadas por el usuario.
                     `SELECT 1 FROM saved_recipes WHERE user_id=? AND recipe_id=? AND category=?`,
                     [userId,rec.id,table]
 
                 );
 
+                // Conexión y ejecución de consulta SQL
                 const [[likeCount]] = await connection.query(
+
+                    // Consulta tipo count para saber la cantidad de likes que tiene la receta en iteracion.
                     `SELECT COUNT(*) AS total FROM likes WHERE recipe_id = ? AND category = ?`,
                     [rec.id, table]
+
                 );
 
+                // Comprobación booleana si hay o no hay like en la receta en iteración.
                 rec.liked = !!liked;
+
+                // Comprobación booleana si la receta en iteración esta o no guardada por algun usuario.
                 rec.saved = !!saved;
+
+                // Guardado del total de likes de receta en iteración.
                 rec.likeCount = likeCount.total;
 
             }
 
+            // Guardado de todos los resultados en el array 'combined'
             combined.push(...rows);
 
         }
 
+        // Ordenamiento random del array con las recetas iteradas.
         combined.sort(() => 0.5 - Math.random());
+
+        // Envio de array al frontend.
         res.json(combined);
 
+    // Intercepción de errores
     } catch (error) {
 
+        // Mensaje de error en consola y envio de estatus del servidor.
         console.error(error);
         res.status(500).json({ success: false, message: 'Server error' });
     }

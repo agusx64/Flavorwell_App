@@ -199,14 +199,18 @@ router.post('/get_recipe_by_id', async (req, res) => {
 // Endpoint para el sistema de busqueda de user_dashboard
 router.post('/search_recipes', async (req, res) => {
 
+    // Obtención de caracteres typeados dentro del input
     const { query } = req.body;
 
+    // Filtrado de caracteres invalidos
     if (!query || typeof query !== 'string') {
 
+        // Envio de estatus de consulta invalida
         return res.status(400).json({ error: 'Invalid search query.' });
 
     }
 
+    // Consulta SQL (Union de 4 resultados provenientes de cada tabla)
     const sql = `
 
         SELECT id, name, img_path, 'breakfast' AS table_name FROM breakfast WHERE name LIKE ? 
@@ -220,15 +224,21 @@ router.post('/search_recipes', async (req, res) => {
 
     `;
 
+    // Integracion de texto typeado, en cada una de las entradas de la consulta SQL
     const values = Array(4).fill(`%${query}%`);
 
     try {
 
+        // Ejecución de la consulta SQL con la query ingresada por el usuario
         const [results] = await connection.execute(sql, values);
+
+        // Envio de las coincidencias a traves de un objeto JSON
         res.json(results);
 
+    // Intercepcion de errores
     } catch (error) {
 
+        // Depuración de errores y envio de status de error
         console.error('Search error: ', error);
         res.status(500).json({ error: 'Database search failed' });
 
