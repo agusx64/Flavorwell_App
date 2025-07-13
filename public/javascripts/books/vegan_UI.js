@@ -5,7 +5,7 @@ const restHost = 'http://localhost:3000';
 
 async function getVeganList() {
 
-    await fetch(restHost + '/category/vegan/list')
+    await fetch(restHost + '/lists/category/vegan/list')
     .then(response => response.json())
     .then(data => {
 
@@ -20,7 +20,7 @@ async function getVeganList() {
                     const card = document.createElement('div');
                     card.classList.add('recipe-card');
                     card.innerHTML = `
-                    <img src="${recipe.image_url}" alt="${recipe.name}" class="recipe-card-img" data-id="${recipe.id}" data-category="${recipe.category}">
+                    <img src="${recipe.img_path}" alt="${recipe.name}" class="recipe-card-img" data-id="${recipe.id}">
                     <p class="recipe-card-author">
                         <span class="recipe-tempalte-text">Author: </span>
                         <span class="recipe-template-name">${recipe.author || 'Unknown'}</span>
@@ -54,3 +54,16 @@ async function getVeganList() {
     })
 
 };
+
+recipeContainer.addEventListener('click', (e) => {
+
+    const img = e.target.closest('.recipe-card-img');
+    if (img) {
+
+        const id = img.dataset.id;
+        window.location.href = `/html/recipe_viewer.html?id=${id}&table=vegan`;
+
+    }
+})
+
+getVeganList();

@@ -13,7 +13,40 @@
 </head>
 <body>
     
+    <!-- Template for another UI -->
+    <header class="header_menu" onclick="history.back()">
+        <button class="svg_icon return">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
+            </svg>
+        </button>
+        <h2 class="header_text poppins-semibold">Breakfasts</h2>
+        <div class="svg_icon">
+            <i class="bi bi-cup-hot-fill"></i>
+        </div>
+    </header>
 
+    <!-- Contenedor de recetas -->
+    <section class="recipe-container"></section>
+
+    <!-- Barra de navegación -->
+    <nav class="bottom_navbar">
+        <div class="nav_icons" id="start">
+            <i class="bi bi-house-door-fill"></i>
+        </div>
+        <div class="nav_icons" id="saved">
+            <i class="bi bi-bookmark-fill"></i>
+        </div>
+        <div class="nav_icons" id="add">
+            <i class="bi bi-plus-circle-fill"></i>
+        </div>
+        <div class="nav_icons" id="profile">
+            <i class="bi bi-person-circle"></i>
+        </div>
+        <div class="nav_icons" id="settings">
+            <i class="bi bi-gear-fill"></i>
+        </div>
+    </nav>
 
     <script src="/javascripts/books/breakfasts_UI.js"></script>
 </body>

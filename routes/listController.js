@@ -3,6 +3,89 @@ var mysql = require('mysql2/promise');
 require('dotenv').config();
 var router = express.Router()
 
+// Conexión de tipo Pool para multiples conexiones
+const connection = mysql.createPool({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    multipleStatements: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
 
+router.get('/category/vegan/list', async (req, res) =>{
+
+    const query = 'SELECT id, name, img_path, author FROM vegan;';
+
+    try {
+
+        const [results] = await connection.query(query);
+
+        res.json(results);
+
+    } catch(error) {
+
+        console.error(error);
+
+    }
+
+});
+
+router.get('/category/strong_dish/list', async (req, res) =>{
+
+    const query = 'SELECT id, name, img_path, author FROM strong_dish;';
+
+    try {
+
+        const [results] = await connection.query(query);
+
+        res.json(results);
+
+    } catch(error) {
+
+        console.error(error);
+
+    }
+
+});
+
+router.get('/category/desserts/list', async (req, res) =>{
+
+    const query = 'SELECT id, name, img_path, author FROM desserts;';
+
+    try {
+
+        const [results] = await connection.query(query);
+
+        res.json(results);
+
+    } catch(error) {
+
+        console.error(error);
+
+    }
+
+});
+
+router.get('/category/breakfast/list', async (req, res) =>{
+
+    const query = 'SELECT id, name, img_path, author FROM breakfast;';
+
+    try {
+
+        const [results] = await connection.query(query);
+
+        res.json(results);
+
+    } catch(error) {
+
+        console.error(error);
+
+    }
+
+});
 
 module.exports = router;
