@@ -1,11 +1,6 @@
 var express = require('express');
 var mysql = require('mysql2/promise');
 require('dotenv').config();
-var cron = require('node-cron');
-var bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer');
-const { v4: uuidv4 } = require('uuid');
-const jwt = require('jsonwebtoken');
 var router = express.Router()
 
 // Conexión de tipo Pool para multiples conexiones
