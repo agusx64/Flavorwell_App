@@ -22,6 +22,12 @@ const resultsList = document.getElementById('search_results_list');
 let offset = 0, limit = 10, loading = false, allRecipes = [];
 const token = localStorage.getItem('token');
 
+// Variables de los botones de categorias
+const vegansButton = document.getElementById('vegan_button');
+const breakfastsButton = document.getElementById('breakfast_button');
+const dishesButton = document.getElementById('dishes_button');
+const dessertsButton = document.getElementById('desserts_button');
+
 // Funcion para obtener nombre y foto de perfil
 async function getUserInfo() {
 
@@ -552,3 +558,27 @@ async function fetchGetDayFood() {
     })
 
 };
+
+vegansButton.addEventListener('click', () => {
+
+    window.location.href = '/html/libraries/vegan_list.html';
+
+});
+
+breakfastsButton.addEventListener('click', () => {
+
+    window.location.href = '/html/libraries/breakfasts_list.html';
+
+});
+
+dessertsButton.addEventListener('click', () => {
+
+    window.location.href = '/html/libraries/desserts_list.html';
+
+});
+
+dishesButton.addEventListener('click', () => {
+
+    window.location.href = '/html/libraries/dishes_list.html';
+
+});
