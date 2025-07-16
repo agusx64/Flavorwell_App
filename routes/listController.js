@@ -89,22 +89,39 @@ router.get('/category/breakfast/list', async (req, res) =>{
 });
 
 router.get('/api/ingredients/search', async (req, res) => {
+
+    // Obtener query proveniente del frontend
     const q = req.query.q;
 
+    // Verificación de entrada vacia u objeto JSON vacio
     if (!q || q.trim() === '') {
+
+        // Si hay una query vacia se devuelve un JSON vacio
         return res.json([]);
+
     }
 
     try {
+
+        // Conexón SQL
         const [results] = await connection.query(
+
+            // Consulta SQL para busqueda de coincidencias
             `SELECT name, src_reference FROM ingredients_list WHERE name LIKE ? LIMIT 10`, 
             [`%${q}%`]
+
         );
+
+        // Envio de coincidencias al frontend
         res.json(results);
+
+    // Intercepción de errores
     } catch (error) {
+
         console.error(error);
-        res.status(500).json({ error: 'Error fetching ingredients' });
+
     }
+
 });
 
 
