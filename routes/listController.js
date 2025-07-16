@@ -88,4 +88,24 @@ router.get('/category/breakfast/list', async (req, res) =>{
 
 });
 
+router.get('/api/ingredients/search', async (req, res) => {
+    const q = req.query.q;
+
+    if (!q || q.trim() === '') {
+        return res.json([]);
+    }
+
+    try {
+        const [results] = await connection.query(
+            `SELECT name, src_reference FROM ingredients_list WHERE name LIKE ? LIMIT 10`, 
+            [`%${q}%`]
+        );
+        res.json(results);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error fetching ingredients' });
+    }
+});
+
+
 module.exports = router;

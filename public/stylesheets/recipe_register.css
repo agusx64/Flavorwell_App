@@ -2,45 +2,14 @@
     font-family: 'Poppins';
 }
 
+ul, ol {
+    padding-left: 0 !important;
+}
+
 .screen_recipe_register{
-    width: 100%;
+    padding: 0% 4% 0% 4%;
     height: auto;
-}
-
-.header_menu{
     width: 100%;
-    height: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 4%;
-    padding-right: 4%;
-    padding-top: 12%;
-    position: fixed;
-    top: 0;
-    background-color: var(--Xhantous);
-    padding-bottom: 20px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    z-index: 3;
-}
-
-.svg_icon{
-    fill: var(--WhiteBaseColor);
-    width: 40px;
-    height: 40px;
-}
-
-.return{
-    width: 30px;
-    height: 30px;
-    background-color: transparent;
-    border-style: none;
-}
-
-.header_text{
-    color: var(--WhiteBaseColor);
-    text-align: center;
 }
 
 .title_text_container{
@@ -48,25 +17,21 @@
     justify-content: center;
     align-items: start;
     flex-direction: column;
-    padding-left: 4%;
-    padding-right: 4%;
-    margin-top: 8%;
+    margin-top: 6%;
 }
 
 .title{
-    font-size: 32px;
+    font-size: 9vw;
     color: var(--ChiliRed);
 }
 
 .desc_text{
     color: var(--Xhantous);
-    font-size: 16px;
-    margin-top: 10px;
+    font-size: 4vw;
+    margin-top: 2vh;
 }
 
 .form_post_recipe_register{
-    padding-left: 4%;
-    padding-right: 4%;
     width: 100%;
     height: auto;
     margin-top: 5%;
@@ -128,6 +93,8 @@
     display: flex;
     align-items: center;
     border: 1px solid var(--Xhantous);
+    font-size: 4vw;
+    font-weight: 500;
 }
 
 .custom-option img {
@@ -149,25 +116,29 @@
 }
 
 .option_icon{
-    width: 25px;
-    height: 25px;
+    width: 3vh;
+    height: 3vh;
     margin-right: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.3vh;
 }
 
 .vegan{
-    fill: var(--Celadon);
+    color: var(--Celadon);
 }
 
 .dish{
-    fill: var(--NightBlue);
+    color: var(--NightBlue);
 }
 
 .dessert{
-    fill: var(--CandyPink);
+    color: var(--CandyPink);
 }
 
 .breakfast{
-    fill: var(--Xhantous);
+    color: var(--Xhantous);
 }
 
 .input_text{
@@ -218,13 +189,37 @@
 }
 
 .description_recipe{
-    height: 150px;
-    padding: 4%;
+    height: 12vh;
     resize: none;
     overflow-wrap: break-word;
     word-wrap: break-word;
     font-size: 12px;
+    padding: 1vh 5vh 1vh 1vh;
 }
+
+.description-recipe-input-container {
+    width: 100%;
+    height: auto;
+    position: relative; /* Importante para que el botón se posicione respecto a este contenedor */
+}
+
+.generate-description-button {
+    position: absolute;
+    top: 5vh; /* Ajusta según donde quieras colocarlo */
+    right: 1vh;
+    background-color: var(--ChiliRed);
+    color: var(--WhiteBaseColor);
+    height: 3.5vh;
+    width: 3.5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1vh;
+    text-align: center;
+    font-size: 1.7vh;
+    border-style: none;
+}
+
 
 .form_control_file{
     color: var(--ChiliRed);
@@ -264,3 +259,157 @@ body{
 .under{
     margin-bottom: 20px;
 }
+
+/* Estilos del buscador de ingredientes estilo Notion */
+.search-box {
+    position: relative;
+}
+
+.results-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    background: var(--WhiteBaseColor);
+    border: 2px solid var(--ChiliRed);
+    max-height: 150px;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 1vh;
+}
+
+.ingredient-suggestion {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    cursor: pointer;
+    color: var(--ChiliRed);
+}
+
+.ingredient-suggestion:hover {
+    background-color: var(--GreySimple);
+}
+
+.selected-ingredients-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+.ingredient-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 8px;
+    border: 1px solid var(--Xhantous);
+    margin-bottom: 6px;
+    background-color: var(--WhiteBaseColor);
+    cursor: grab;
+    color: var(--ChiliRed);
+}
+
+.ingredient-item .drag-handle {
+    cursor: grab;
+}
+
+.hidden {
+    display: none;
+}
+
+.ingredient-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+.ingredient-name{
+    font-weight: 400;
+    font-size: 1.8vh;
+    margin-left: 1vh;
+    color: var(--Grey);
+}
+
+.ingredient-img{
+    width: 3.5vh;
+    height: 3.5vh;
+}
+
+.add-icon{
+    font-size: 2.5vh;
+    color: var(--ChiliRed)
+}
+
+.li-img{
+    margin-left: 2vh;
+}
+
+/* Estilos del componente para agregar instrucciones */
+
+.step-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.step-input{
+    width: 85%;
+}
+
+.step-search-bar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-step-btn{
+    background-color: var(--Xhantous);
+    height: 40px;
+    width: 40px;
+    color: var(--WhiteBaseColor);
+    border-radius: 1vh;
+    border-style: none;
+    font-size: 3vh;
+}
+
+.step-list{
+    list-style: none;
+}
+
+.step-instruction{
+    width: 33vh;
+    height: auto;
+    overflow-wrap: break-word;
+}
+
+.step-instruction-name{
+    font-size: 1.6vh;
+}
+
+.step-drag{
+    margin-right: 5px;
+    color: var(--ChiliRed);
+    font-size: 1.3rem;
+}
+
+.step-delete{
+    color: var(--ChiliRed);
+    font-size: 1.3rem;
+}
+
+.step-item{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--Xhantous);
+    background-color: var(--WhiteBaseColor);
+    padding: 1vh;
+};
+
+
