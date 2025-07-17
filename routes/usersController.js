@@ -723,6 +723,7 @@ router.get('/api/saved_recipes', authenticateToken, async (req, res) => {
 router.post('/recipes/register', authenticateToken, upload.single('image'), async (req, res) => {
     try {
         const userId = req.user.userId;
+        const username = req.user.username;
         const { name, description, category, ingredients, instructions } = req.body;
         const parsedInstructions = JSON.parse(instructions);
         const parsedIngredients = JSON.parse(ingredients);
@@ -764,18 +765,85 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
                 });
 
                 const html = `
-                    <h2>New Recipe Submission</h2>
-                    <p><strong>Name:</strong> ${name}</p>
-                    <p><strong>Description:</strong> ${description}</p>
-                    <p><strong>Category:</strong> ${category}</p>
-                    <p><strong>Author:</strong> ${userId}</p>
-                    <p><strong>Ingredients:</strong><br>${parsedIngredients.join('<br>')}</p>
-                    <p><strong>Instructions:</strong><br>${parsedInstructions.join('<br>')}</p>
-                    <p><img src="${imageUrl}" style="max-width:300px"/></p>
-                    <p>
-                        <a href="http://localhost:3000/users/admin/recipes/verify?category=${category}&id=${recipeId}&verified=true">✅ Approve</a> |
-                        <a href="http://localhost:3000/users/admin/recipes/verify?category=${category}&id=${recipeId}&verified=false">❌ Deny</a>
-                    </p>
+                    <div style="max-width: 700px;
+                                margin: auto;
+                                font-family: 'Poppins';
+                                padding: 20px;
+                                background-color: #FFF;
+                                font-family:Arial, Helvetica, sans-serif;">
+                        <table style="width: 100%; text-align: center;">
+                            <tr>
+                                <td>
+                                    <img style="max-width: 120px;
+                                                margin-bottom: 16px;" src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell logo">
+                                    <h1 style="font-size: 5vh;
+                                                color: #E3170A;">Flavorwell</h1>
+                                </td>
+                            </tr>
+                        </table>
+                        <strong style="color: #E3170A;">New cooking recipe sent</strong>
+                        <img style="width: 100%;
+                                        height: 20vh;
+                                        background-color: rgb(182, 182, 182);
+                                        object-fit: cover;
+                                        margin-bottom: 16px;
+                                        margin-top: 16px;" src="${imageUrl}" alt="Cooking recipe">
+                        <div style="width: 100%; margin-bottom: 16px;">
+                            <span style="color: #000;
+                                            margin-bottom: 16px;"><strong style="color: #E3170A;
+                                                                        font-weight: 600;">Name: </strong>${name}</span>
+                        </div>
+                        <div style="width: 100%; margin-bottom: 16px;">
+                            <span style="color: #000;
+                                            margin-bottom: 16px;
+                                            line-height: 3vh;"><strong style="color: #E3170A;
+                                                                        font-weight: 600;">Description: </strong>${description}</span>
+                        </div>
+                        <div style="width: 100%; margin-bottom: 16px;">
+                            <span style="color: #000;
+                                            margin-bottom: 16px;
+                                            line-height: 3vh;"><strong style="color: #E3170A;
+                                                                        font-weight: 600;">Category: </strong>${category}</span>
+                        </div>
+                        <div style="width: 100%;">
+                            <strong style="color: #E3170A;">Ingredients: </strong>
+                        </div>
+                        <span style="color: #000;">${parsedIngredients.join('<br>')}</span>
+                        <div style="width: 100%; height: 16px;"></div>
+                        <div style="width: 100%;">
+                            <strong style="color: #E3170A;">Ingredients: </strong>
+                        </div>
+                        <span style="color: #000;">${parsedIngredients.join('<br>')}</span>
+                        <div style="width: 100%; height: 16px;"></div>
+                        <div style="width: 100%; margin-bottom: 16px;">
+                            <span style="color: #000;
+                                            margin-bottom: 16px;
+                                            line-height: 3vh;"><strong style="color: #E3170A;
+                                                                        font-weight: 600;">Author: </strong>${username}</span>
+                        </div>
+                        <div style="width: 100%; margin-bottom: 16px;">
+                            <P style="font-size: 15px;
+                                            margin-bottom: 46px;"><strong>Note: </strong>This recipe has been registered in the 'Flavorwell_DB' database, but has not yet been verified. This recipe will only be valid in the database for 1 hour, after which it will be deleted unless approved.</P>
+                        </div>
+                        <!-- Botones -->
+                        <table width="100%" style="text-align: center; margin-bottom: 40px;">
+                            <tr>
+                                <td>
+                                    <a href="${process.env.FRONTEND_URL}/users/admin/recipes/verify?category=${category}&id=${recipeId}&verified=false"
+                                        style="background-color: #E3170A; color: #FFF; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 6px; display: inline-block; margin-right: 10px;">Decline</a>
+
+                                    <a href="${process.env.FRONTEND_URL}/users/admin/recipes/verify?category=${category}&id=${recipeId}&verified=true"
+                                        style="background-color: #A9E5BB; color: #000; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 6px; display: inline-block;">Approve</a>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- Footer -->
+                        <table width="100%" style="text-align: center; color: #717171; font-size: 13px;">
+                            <tr>
+                                <td>&copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.</td>
+                            </tr>
+                        </table>
+                    </div>
                 `;
 
                 await transporter.sendMail({
@@ -827,7 +895,7 @@ router.get('/admin/recipes/verify', async (req, res) => {
 //---------------------------------------------------------NODE CRON JOBS ---------------------------------------------------------------------------------
 
 // Eliminación de usuarios no verificados y limpieza de códigos de recuperación
-cron.schedule('*/10 * * * *', async () => {
+cron.schedule('*/60 * * * *', async () => {
 
     try {
         // Instanciar una fecha actual
@@ -877,47 +945,60 @@ cron.schedule('*/10 * * * *', async () => {
 
         // 3. Eliminar recetas no verificadas y sus ingredientes
         const unverified = 0;
-        const categories = ['breakfast', 'vegan', 'strong_dish', 'desserts']; // corregido 'desserts'
+        const categories = ['breakfast', 'vegan', 'strong_dish', 'desserts'];
 
+        // Iteración sobre los valores del array
         for (const category of categories) {
 
+            // Conexión y ejecución a la base de datos
             const [unverifiedRecipes] = await connection.query(
 
+                // Consulta SQL
                 `SELECT id FROM ${category} WHERE verified = ?`,
+                // Parametro de verificación
                 [unverified]
 
             );
 
+            // Depurador de existencia de recetas por eliminar
             if (unverifiedRecipes.length > 0) {
 
+                // Mapeo de valores en forma de lista
                 const idsToDelete = unverifiedRecipes.map(r => r.id);
 
                 // Eliminar ingredientes relacionados
                 await connection.query(
 
+                    // Consulta SQL (Borra de la tabla 'recipe_ingredients' los ingredientes que coincidan con el id de la receta y su categoria correspondiente)
                     'DELETE FROM recipe_ingredients WHERE recipe_id IN (?) AND category = ?',
+                    // Parametros de consulta (Rango de valores de coincidencia, categoria)
                     [idsToDelete, category]
 
                 );
 
-                // Eliminar las recetas
+                // Eliminar las recetas (Conexión SQL)
                 const [deletedRecipes] = await connection.query(
 
+                    // Consulta SQL (borrar recetas coincidentes con rango de id)
                     `DELETE FROM ${category} WHERE id IN (?)`,
+                    // Parametro de consulta
                     [idsToDelete]
 
                 );
 
+                // Depuración de recetas
                 console.log(`[CRON] Recetas no verificadas eliminadas de ${category}: ${deletedRecipes.affectedRows}`);
 
             } else {
 
+                // Mnesaje depuracion en caso de no haber recetas por eliminar
                 console.log(`[CRON] No hay recetas no verificadas para eliminar en ${category}.`);
 
             }
             
         }
 
+    // Intercepción de errores 
     } catch (err) {
 
         console.error("[CRON] Error en la tarea programada:", err);
