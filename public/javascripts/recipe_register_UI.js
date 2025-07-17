@@ -1,12 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+    const token = localStorage.getItem('token');
+
+    // Variables del selector de categoria
     const selectWrapper = document.querySelector('.custom-select-wrapper');
     const selectTrigger = document.querySelector('.custom-select-trigger');
     const customOptions = document.querySelector('.custom-options');
     const customOptionsItems = document.querySelectorAll('.custom-option');
     const realSelect = document.getElementById('real-select');
-    const getSelectedValueButton = document.getElementById('get-value');
-
+    const sendRecipeButton = document.getElementById('send-recipe');
     let text_category;
+
+    // Host backend
     const restHost = 'http://localhost:3000';
 
     // Variables para el buscador de ingredientes
@@ -39,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Crear componentes frontend para sugerencias de ingredientes
     function renderSuggestions() {
         resultsList.innerHTML = '';
         resultsList.classList.remove('hidden');
@@ -93,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Drag & Drop
+    // Drag & Drop para ingredientes
     function updateDragAndDrop() {
         let dragged;
 
@@ -173,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Drag & drop reordenamiento
+    // Drag & drop reordenamiento para instrucciones
     let dragged;
 
     stepList.addEventListener('dragstart', (e) => {
@@ -196,28 +202,113 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Filtro del selector de categorias
     if (!realSelect) {
         console.error('Elemento con ID "real-select" no encontrado.');
         return;
     }
 
+    // Apertura de menu desplegable de categorias
     selectTrigger.addEventListener('click', () => {
         customOptions.classList.toggle('open');
     });
 
+    // Obtención del valor seleccionado 
     customOptionsItems.forEach(option => {
         option.addEventListener('click', () => {
             text_category = option.textContent.trim();
             selectTrigger.querySelector('span').textContent = text_category;
             customOptions.classList.remove('open');
+            validateForm();
         });
     });
 
+    console.log(text_category)
+    // Quitar menu desplegable si se da click fuera del menu
     document.addEventListener('click', (e) => {
         if (!selectWrapper.contains(e.target)) {
             customOptions.classList.remove('open');
         }
     });
 
+    function validateForm() {
+
+        const name = document.getElementById('name-recipe-text');
+        const description = document.getElementById('recipe-description-text');
+        const category = text_category;
+        const ingredients = selectedList.querySelectorAll('.ingredient-item');
+        const instructions = stepList.querySelectorAll('.step-item');
+        const image = document.getElementById('formFile').files[0];
+
+        const isValid = 
+            name &&
+            description &&
+            category &&
+            image &&
+            ingredients.length >= 3 &&
+            instructions.length >= 3;
+
+        sendRecipeButton.disabled = !isValid;
+    }
+
+    document.getElementById('name-recipe-text').addEventListener('input', validateForm);
+    document.getElementById('recipe-description-text').addEventListener('input', validateForm);
+    document.getElementById('formFile').addEventListener('change', validateForm);
+
+    const observer = new MutationObserver(validateForm);
+    const configObserver = { childList: true, subtree: false };
+
+    observer.observe(selectedList, configObserver);
+    observer.observe(stepList, configObserver);
+
+    sendRecipeButton.addEventListener('click', async (event) => {
+
+        event.preventDefault();
+        const name = document.getElementById('name-recipe-text').value.trim();
+        const description = document.getElementById('recipe-description-text').value.trim();
+        const category = text_category;
+        const ingredients = [...selectedList.querySelectorAll('.ingredient-name')].map(i => i.textContent.trim());
+        const instructions = [...stepList.querySelectorAll('.step-instruction-name')].map(i => i.textContent.trim());
+        const image = document.getElementById('formFile').files[0];
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('category', category);
+        formData.append('ingredients', JSON.stringify(ingredients));
+        formData.append('instructions', JSON.stringify(instructions));
+        formData.append('image', image);
+
+        try {
+
+            const res = await fetch(restHost + '/users/recipes/register', {
+
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+
+                // Integrar modal
+            } else {
+
+                // Modal de error
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    })
+
+    document.getElementById('formFile').disabled = false;
+
 });
- 

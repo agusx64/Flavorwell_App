@@ -6,7 +6,30 @@ var bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
 var router = express.Router()
+
+// Configuración del multer
+const storage = multer.memoryStorage();
+const upload = multer({
+
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024 } // Límite de 5MB
+
+});
+
+// Autenticación al servicio de Cloudinary
+cloudinary.config({
+
+    // Variables de entorno de cloudinary
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+
+});
+
+
 
 // Conexión de tipo Pool para multiples conexiones
 const connection = mysql.createPool({
@@ -697,6 +720,110 @@ router.get('/api/saved_recipes', authenticateToken, async (req, res) => {
 
 });
 
+router.post('/recipes/register', authenticateToken, upload.single('image'), async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { name, description, category, ingredients, instructions } = req.body;
+        const parsedInstructions = JSON.parse(instructions);
+        const parsedIngredients = JSON.parse(ingredients);
+        const recipeId = require('crypto').randomUUID();
+
+        // 📤 Subir imagen a Cloudinary desde buffer
+        const uploadResult = await cloudinary.uploader.upload_stream(
+            { folder: 'image_recipes' }, // Opcional: carpeta destino
+            async (error, result) => {
+                if (error) {
+                    console.error('Error uploading to Cloudinary:', error);
+                    return res.status(500).json({ success: false, message: 'Image upload failed' });
+                }
+
+                const imageUrl = result.secure_url;
+
+                // 🔄 Insertar ingredientes
+                for (const ing of parsedIngredients) {
+                    await connection.query(
+                        `INSERT INTO recipe_ingredients (recipe_id, category, ingredient_name) VALUES (?, ?, ?)`,
+                        [recipeId, category, ing]
+                    );
+                }
+
+                // 🔄 Insertar receta
+                await connection.query(
+                    `INSERT INTO ${category} (id, name, description, instruction, img_path, author, items, verified)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, FALSE)`,
+                    [recipeId, name, description, JSON.stringify(parsedInstructions), imageUrl, userId, parsedIngredients.length]
+                );
+
+                // 📧 Enviar notificación por correo
+                const transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: process.env.MAIL_HOST,
+                        pass: process.env.MAIL_PASSWORD
+                    }
+                });
+
+                const html = `
+                    <h2>New Recipe Submission</h2>
+                    <p><strong>Name:</strong> ${name}</p>
+                    <p><strong>Description:</strong> ${description}</p>
+                    <p><strong>Category:</strong> ${category}</p>
+                    <p><strong>Author:</strong> ${userId}</p>
+                    <p><strong>Ingredients:</strong><br>${parsedIngredients.join('<br>')}</p>
+                    <p><strong>Instructions:</strong><br>${parsedInstructions.join('<br>')}</p>
+                    <p><img src="${imageUrl}" style="max-width:300px"/></p>
+                    <p>
+                        <a href="http://localhost:3000/users/admin/recipes/verify?category=${category}&id=${recipeId}&verified=true">✅ Approve</a> |
+                        <a href="http://localhost:3000/users/admin/recipes/verify?category=${category}&id=${recipeId}&verified=false">❌ Deny</a>
+                    </p>
+                `;
+
+                await transporter.sendMail({
+                    from: process.env.MAIL_HOST,
+                    to: process.env.MAIL_HOST,
+                    subject: 'New Recipe Pending Approval',
+                    html: html
+                });
+
+                return res.json({ success: true, message: 'Recipe submitted and pending approval.' });
+            }
+        );
+
+        // Aquí se pasa el buffer a Cloudinary
+        if (req.file && req.file.buffer) {
+            // Inicia la carga al stream
+            const stream = uploadResult;
+            stream.end(req.file.buffer);
+        } else {
+            return res.status(400).json({ success: false, message: 'No image file received.' });
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Error registering recipe.' });
+    }
+});
+
+
+router.get('/admin/recipes/verify', async (req, res) => {
+
+    console.log(req.body);
+    const { category, id, verified } = req.query;
+
+    try {
+        await connection.query(
+            `UPDATE ${category} SET verified = ? WHERE id = ?`,
+            [verified === 'true', id]
+        );
+
+        res.send(`<h2>Recipe has been ${verified === 'true' ? 'approved' : 'rejected'}.</h2>`);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error updating recipe.');
+    }
+});
+
+
 //---------------------------------------------------------NODE CRON JOBS ---------------------------------------------------------------------------------
 
 // Eliminación de usuarios no verificados y limpieza de códigos de recuperación
@@ -746,6 +873,49 @@ cron.schedule('*/10 * * * *', async () => {
 
             console.log(`[CRON] No hay códigos de recuperación expirados para limpiar.`);
 
+        }
+
+        // 3. Eliminar recetas no verificadas y sus ingredientes
+        const unverified = 0;
+        const categories = ['breakfast', 'vegan', 'strong_dish', 'desserts']; // corregido 'desserts'
+
+        for (const category of categories) {
+
+            const [unverifiedRecipes] = await connection.query(
+
+                `SELECT id FROM ${category} WHERE verified = ?`,
+                [unverified]
+
+            );
+
+            if (unverifiedRecipes.length > 0) {
+
+                const idsToDelete = unverifiedRecipes.map(r => r.id);
+
+                // Eliminar ingredientes relacionados
+                await connection.query(
+
+                    'DELETE FROM recipe_ingredients WHERE recipe_id IN (?) AND category = ?',
+                    [idsToDelete, category]
+
+                );
+
+                // Eliminar las recetas
+                const [deletedRecipes] = await connection.query(
+
+                    `DELETE FROM ${category} WHERE id IN (?)`,
+                    [idsToDelete]
+
+                );
+
+                console.log(`[CRON] Recetas no verificadas eliminadas de ${category}: ${deletedRecipes.affectedRows}`);
+
+            } else {
+
+                console.log(`[CRON] No hay recetas no verificadas para eliminar en ${category}.`);
+
+            }
+            
         }
 
     } catch (err) {

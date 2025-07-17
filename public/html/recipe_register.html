@@ -78,7 +78,7 @@
             <!-- Contenedor de input para nombre de receta -->
             <div class="name-recipe-input-container">
                 <label for="name_recipe" class="label_text_form poppins-semibold">Type the name of the recipe</label>
-                <input name="name_recipe" type="text" class="input_text" placeholder="Example: Chesse fingers">
+                <input id="name-recipe-text" name="name_recipe" type="text" class="input_text" placeholder="Example: Chesse fingers">
             </div>
             
             <!-- Contenedor de input para descripción de recetas -->
@@ -87,7 +87,7 @@
                     <i class="bi bi-stars"></i>
                 </button>
                 <label for="recipe_description" class="label_text_form poppins-semibold">Recipe description</label>
-                <textarea name="recipe_description" maxlength="200" id="recipe_description" cols="30" rows="10" class="input_text description_recipe" placeholder="Type a description (max. 150 words)"></textarea>
+                <textarea name="recipe_description" maxlength="200" id="recipe-description-text" cols="30" rows="10" class="input_text description_recipe" placeholder="Type a description (max. 150 words)"></textarea>
             </div>
 
             <!-- Buscador de ingredientes -->
@@ -117,11 +117,11 @@
             <!-- Input para subir imagen de receta -->
             <div class="mb-3">
                 <label for="formFile" class="form-label label_text_form poppins-semibold">Select an image for your recipe</label>
-                <input name="recipe_image" accept=".jpg, .jpeg, .png" class="form-control form_control_file" type="file" id="formFile" disabled>
+                <input name="image" accept=".jpg, .jpeg, .png" class="form-control form_control_file" type="file" id="formFile" disabled>
             </div>
 
             <!-- Boton de envio de datos -->
-            <button class="post_button_recipe poppins-semibold" id="get-value" disabled>Share your dish now</button>
+            <button class="post_button_recipe poppins-semibold" id="send-recipe" disabled>Share your dish now</button>
 
         </section>
     </div>

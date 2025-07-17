@@ -16,11 +16,6 @@ const OpenAI = require('openai-api');
 // Load environment variables from .env file
 dotenv.config();
 
-// Routes declarations
-var gets = require('./routes/gets');
-var posts = require('./routes/posts');
-var apis = require('./routes/apis');
-
 // Routes modulations
 var users = require('./routes/usersController');
 var dashboard = require('./routes/dashboardController');
@@ -40,10 +35,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Declaration of directories from Routes
-app.use('/', gets);
-app.use('/', posts);
-app.use('/', apis);
-
 app.use('/users', users);
 app.use('/dashboard', dashboard);
 app.use('/lists', lists);
