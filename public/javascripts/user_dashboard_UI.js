@@ -176,7 +176,7 @@ document.addEventListener('click', async (e) => {
                 'Content-Type':'application/json',
                 'Authorization':`Bearer ${token}`
             },
-            body: JSON.stringify({ recipeId: +id, category: cat })
+            body: JSON.stringify({ recipeId: id, category: cat })
 
         });
 
@@ -206,7 +206,7 @@ document.addEventListener('click', async (e) => {
                 'Content-Type':'application/json',
                 'Authorization':`Bearer ${token}`
             },
-            body: JSON.stringify({ recipeId:+id, category:cat })
+            body: JSON.stringify({ recipeId: id, category:cat })
 
         });
 

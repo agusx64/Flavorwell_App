@@ -198,3 +198,70 @@ li{
     font-size: 1.5vh;
     color: var(--Grey);
 }
+
+.recipe-viewer-status-container{
+    width: 100%;
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.recipe-viewer-status{
+    width: 50%;
+    height: 100%;
+}
+
+.status-left{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.status-right{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.recipe-viewer-status-img{
+    width: 4vh;
+    height: 4vh;
+    border-radius: 50vh;
+    object-fit: cover;
+    margin-right: 1vh;
+}
+
+.svg_profile{
+    font-size: 4vh;
+    color: var(--Xhantous);
+    margin-right: 1vh;
+}
+
+.recipe-viewer-status-author{
+    color: var(--BlackBaseColor);
+    font-size: 1.5vh;
+    font-weight: 600;
+}
+
+.recipe-viewer-status-counter-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 4vh;
+    padding: 5px;
+    border-radius: 25vh;
+    margin-right: 1vh;
+    color: var(--WhiteBaseColor);
+    background-color: var(--ChiliRed);
+}
+
+.counter-icon{
+    font-size: 2vh;
+}
+
+.recipe-viewer-status-counter{
+    font-size: 1.5vh;
+    margin-left: 3px;
+}

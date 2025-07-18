@@ -504,8 +504,6 @@ router.get('/api/recent_posts', authenticateToken, async (req, res) => {
         // Iteracion. Por cada categoria se ejecutaran conexiones y ejecucion de consultas
         for (const table of tables) {
 
-            console.log(`SELECT id,name,img_path AS image_url,description,${table} AS category FROM ${table} WHERE verified = 1 ORDER BY created_at DESC LIMIT 20`, [table])
-
             // Conexion y ejecución de consulta SQL
             const [rows] = await connection.query(
 
@@ -970,12 +968,11 @@ router.get('/update/status/recipe', (req, res) => {
 // Busacodr de recetas por id y nombre de tabla para el recipe viewer
 router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
 
-    const userId = req.user.userId;
     const { id, table } = req.body;
 
     try {
 
-        // 1. Obtener receta
+        // Obtener receta
         const [results] = await connection.query(
 
             `SELECT * FROM ?? WHERE id = ? AND verified = 1;`,
@@ -991,11 +988,12 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
 
         const recipe = results[0];
         const authorId = recipe.author;
+        const recipeId = recipe.id;
 
         //  Obtener nombre del author
         const [author] = await connection.query(
 
-            'SELECT username FROM users WHERE id = ?;',
+            'SELECT username, img_profile_path FROM users WHERE id = ?;',
             [authorId]
 
         );
@@ -1006,7 +1004,25 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
 
         }
 
-        // 2. Obtener ingredientes relacionados
+        // Obtención de likes totales de la receta
+        const [likeCount] = await connection.query(
+
+            // Consulta tipo count para saber la cantidad de likes que tiene la receta en iteracion.
+            `SELECT COUNT(*) AS total FROM likes WHERE recipe_id = ? AND category = ?`,
+            [recipeId, table]
+
+        );
+
+        // Obtención de cantidad de guardados de la receta
+        const [savedCount] = await connection.query(
+
+            // Consulta tipo count para saber la cantidad de likes que tiene la receta en iteracion.
+            `SELECT COUNT(*) AS total FROM saved_recipes WHERE recipe_id = ? AND category = ?`,
+            [recipeId, table]
+
+        );
+
+        // Obtener ingredientes relacionados
         const [ingredients] = await connection.query(
             `
             SELECT r.ingredient_name, i.src_reference
@@ -1023,7 +1039,9 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
             message: 'Recipe and ingredients fetched successfully',
             data: recipe,
             ingredients,
-            author: author
+            author: author,
+            likeCount,
+            savedCount
         });
 
     } catch (error) {

@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded',async () => {
     const recipeCategory = document.getElementById('recipe-viewer-details-category');
     const recipeItems = document.getElementById('recipe-viewer-details-items');
     const recipeCopyright = document.getElementById('recipe-viewer-copyright-text');
+    const recipeAuthorContainer = document.getElementById('recipe-viewer-status-img');
+    const recipeLikedCounter = document.getElementById('recipe-viewer-status-counter-like');
+    const recipeSavedCounter = document.getElementById('recipe-viewer-status-counter-saved');
 
     const token = localStorage.getItem('token');
     const queryString = window.location.search;
@@ -54,9 +57,19 @@ document.addEventListener('DOMContentLoaded',async () => {
         recipeDate.textContent =  new Date(data.data.created_at).toLocaleDateString();
         recipeCategory.textContent = table.charAt(0).toUpperCase() + table.slice(1);
         recipeItems.textContent = data.data.items;
-        recipeCopyright.textContent = `© ${new Date().getFullYear()} Flavorwell. All rights reserved to Flavorwell Team and ${data.author[0].username}.`
+        recipeCopyright.textContent = `© ${new Date().getFullYear()} Flavorwell. All rights reserved to Flavorwell Team and ${data.author[0].username}.`;
+        recipeLikedCounter.textContent = data.likeCount[0].total || '0'; 
+        recipeSavedCounter.textContent = data.savedCount[0].total || '0';
         let ingredients = data.ingredients || [];
         const instructionsArray = JSON.parse(data.data.instruction);
+
+        recipeAuthorContainer.innerHTML = data.author[0].img_profile_path
+            // Si existe una foto de perfilinsertan este componente
+            ? `<img src="${data.author[0].img_profile_path}" alt="image_of_author" class="recipe-viewer-status-img">
+                <p class="recipe-viewer-status-author">${data.author[0].username}</p>`
+            // Si no existe insertan este componente
+            : `<i class="bi bi-person-circle svg_profile"></i>
+                <p class="recipe-viewer-status-author">${data.author[0].username}</p>`;
 
         // Agregar ingredientes de receta dinamicamente
         const ingredientsContainer = document.querySelector('.recipe-viewer-ingredients-list-container');
