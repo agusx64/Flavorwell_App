@@ -306,6 +306,7 @@ body{
     gap: 1rem;
     padding: 8px;
     border: 1px solid var(--Xhantous);
+    border-radius: 1vh;
     margin-bottom: 6px;
     background-color: var(--WhiteBaseColor);
     cursor: grab;
@@ -410,6 +411,8 @@ body{
     border: 1px solid var(--Xhantous);
     background-color: var(--WhiteBaseColor);
     padding: 1vh;
+    border-radius: 1vh;
+    margin-bottom: 6px;
 };
 
 

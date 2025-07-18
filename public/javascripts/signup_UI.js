@@ -16,7 +16,7 @@ var restHost = 'http://localhost:3000'
 signupButton.addEventListener('click', function(event) {
 
     event.preventDefault();
-    signupButton.textContent = 'Cargando...';
+    signupButton.textContent = 'Loading...';
     signupButton.disabled = true;
 
     // Verificacion de formato de correo electronico correcto

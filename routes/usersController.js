@@ -300,8 +300,6 @@ router.post('/login_user', async function (req, res) {
 
         );
 
-        console.log(token);
-
         // Enviar token al cliente
         res.status(200).json({
 
@@ -720,50 +718,89 @@ router.get('/api/saved_recipes', authenticateToken, async (req, res) => {
 
 });
 
+// Registro de recetas por parte de los usuarios
 router.post('/recipes/register', authenticateToken, upload.single('image'), async (req, res) => {
+
     try {
+
+        // Obtención de valores de sesión
         const userId = req.user.userId;
         const username = req.user.username;
+
+        // Obtención de valores de recetas
         const { name, description, category, ingredients, instructions } = req.body;
+
+        // Alistamiento de instrucciones
         const parsedInstructions = JSON.parse(instructions);
+
+        // Alistamiento de insgredientes
         const parsedIngredients = JSON.parse(ingredients);
+
+        // Integración de dependencia 'crypto' para generar UUID
         const recipeId = require('crypto').randomUUID();
 
-        // 📤 Subir imagen a Cloudinary desde buffer
+        // Subir imagen a Cloudinary a traves de .upload_stream
         const uploadResult = await cloudinary.uploader.upload_stream(
-            { folder: 'image_recipes' }, // Opcional: carpeta destino
+
+            // Guardado de recetas en el folder especificado (Carpeta de destino)
+            { folder: 'image_recipes' },
+
+            // Creación que función anonima asicrona
             async (error, result) => {
+
+                // Intercepción de errores
                 if (error) {
+
+                    // Depuración de errores
                     console.error('Error uploading to Cloudinary:', error);
+                    // Envio de estatus al frontend
                     return res.status(500).json({ success: false, message: 'Image upload failed' });
+
                 }
 
+                // Obtención de link publico proporcionado por Cloudinary
                 const imageUrl = result.secure_url;
 
-                // 🔄 Insertar ingredientes
+                // Iteración de lista de ingredientes para inserción en tabla de relaciones
                 for (const ing of parsedIngredients) {
+
+                    // Conexión a la base de datos
                     await connection.query(
+
+                        // Consulta SQL
                         `INSERT INTO recipe_ingredients (recipe_id, category, ingredient_name) VALUES (?, ?, ?)`,
+                        // Parametros de consulta (identificador de la receta, categoria de la receta, nombre del ingrediente)
                         [recipeId, category, ing]
+
                     );
+
                 }
 
-                // 🔄 Insertar receta
+                // Conexión a la base de datos
                 await connection.query(
+
+                    // Inserción de valores verificados
                     `INSERT INTO ${category} (id, name, description, instruction, img_path, author, items, verified)
                     VALUES (?, ?, ?, ?, ?, ?, ?, FALSE)`,
+                    // Parametros de consulta SQL (ingredientes e instrucciones parseados en forma de lista)
                     [recipeId, name, description, JSON.stringify(parsedInstructions), imageUrl, userId, parsedIngredients.length]
+
                 );
 
-                // 📧 Enviar notificación por correo
+                // Creación de instancia de correo electronico
                 const transporter = nodemailer.createTransport({
+
+                    // Declaración de servicio
                     service: 'gmail',
+                    // Autenticación de correo electronico
                     auth: {
                         user: process.env.MAIL_HOST,
                         pass: process.env.MAIL_PASSWORD
                     }
+
                 });
 
+                // Template HTML de correo electronico
                 const html = `
                     <div style="max-width: 700px;
                                 margin: auto;
@@ -846,49 +883,85 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
                     </div>
                 `;
 
+                // Envió de notificación de correo electronico
                 await transporter.sendMail({
+
+                    // Cuerpo del correo electronico 
                     from: process.env.MAIL_HOST,
                     to: process.env.MAIL_HOST,
                     subject: 'New Recipe Pending Approval',
                     html: html
+
                 });
 
-                return res.json({ success: true, message: 'Recipe submitted and pending approval.' });
+                // Envio de objeto JSON de confirmación 
+                return res.json({ success: true });
+
             }
+
         );
 
-        // Aquí se pasa el buffer a Cloudinary
+        // Tranferencia de buffer a Cloudinary
         if (req.file && req.file.buffer) {
+
             // Inicia la carga al stream
             const stream = uploadResult;
             stream.end(req.file.buffer);
+
         } else {
+
+            // Envio de estaus de error al cargar la imagen
             return res.status(400).json({ success: false, message: 'No image file received.' });
+
         }
 
+    // Intercepcion de errores
     } catch (error) {
+
+        // Depuracion de errores
         console.error(error);
         res.status(500).json({ success: false, message: 'Error registering recipe.' });
+
     }
+
 });
 
-
+// Aprobación o ednegación de publicación de recetas en el frontend
 router.get('/admin/recipes/verify', async (req, res) => {
 
-    console.log(req.body);
+    // Obtención de valores de la solicitud
     const { category, id, verified } = req.query;
 
     try {
+
+        // Conexión a la base de datos
         await connection.query(
+
+            // Consulta SQL
             `UPDATE ${category} SET verified = ? WHERE id = ?`,
+            // Parametros de actualización
             [verified === 'true', id]
+
         );
 
-        res.send(`<h2>Recipe has been ${verified === 'true' ? 'approved' : 'rejected'}.</h2>`);
+        res.redirect(`${process.env.FRONTEND_URL}/users/update/status/recipe`);
+    
+    // Intercepción de errores
     } catch (err) {
+
+        // Depuracion de errores
         console.error(err);
-        res.status(500).send('Error updating recipe.');
+
     }
+
+});
+
+// Renderizado de pagina de estatus de receta
+router.get('/update/status/recipe', (req, res) => {
+
+    // Renderizado de view
+    res.render('status');
+
 });
 
 

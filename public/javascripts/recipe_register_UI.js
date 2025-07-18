@@ -25,6 +25,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const addStepBtn = document.getElementById('add_step_btn');
     const stepList = document.getElementById('step_list');
 
+    // Variable de modal de exito
+    const modal = document.getElementById('successModal');
+
+    // Variables de modal de error
+    const errorModal = document.getElementById('errorModal');
+    const imgErrorModal = document.getElementById('img-context');
+    const textErrorModal = document.getElementById('text-context');
+    const tryAgainButton = document.getElementById('tryAgain');
+
     // Buscar en tiempo real
     input.addEventListener('input', async () => {
         const query = input.value.trim();
@@ -223,7 +232,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    console.log(text_category)
     // Quitar menu desplegable si se da click fuera del menu
     document.addEventListener('click', (e) => {
         if (!selectWrapper.contains(e.target)) {
@@ -264,6 +272,9 @@ document.addEventListener("DOMContentLoaded", function () {
     sendRecipeButton.addEventListener('click', async (event) => {
 
         event.preventDefault();
+        sendRecipeButton.textContent = 'Loading...';
+        sendRecipeButton.disabled = true;
+
         const name = document.getElementById('name-recipe-text').value.trim();
         const description = document.getElementById('recipe-description-text').value.trim();
         const category = text_category;
@@ -281,7 +292,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
-            const res = await fetch(restHost + '/users/recipes/register', {
+            await fetch(restHost + '/users/recipes/register', {
 
                 method: 'POST',
                 headers: {
@@ -289,17 +300,60 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 body: formData
 
-            });
+            })
+            .then( async response => {
 
-            const result = await res.json();
+                const data = await response.json();
 
-            if (result.success) {
+                if (!response.ok) {
+                
+                    imgErrorModal.src = '/images/_UI_img/error.webp';
+                    textErrorModal.textContent = `${data.message}`;
+                
+                    errorModal.classList.remove('hidden');
+                    tryAgainButton.addEventListener('click', () => {
+                    
+                        errorModal.classList.add('hidden');
+                    
+                    });
+                
+                    sendRecipeButton.disabled = false;
+                    sendRecipeButton.textContent = 'Share your dish now';
+                
+                }
+            
+                return data;
 
-                // Integrar modal
-            } else {
+            })
+            .then(data => {
 
-                // Modal de error
-            }
+                if (data.success) {
+
+                    // Mostrar modal
+                    modal.classList.remove('hidden');
+
+                    // Acción del botón "Back to login"
+                    document.getElementById('backToMenu').addEventListener('click', () => {
+                        window.location.href = '/html/user_dashboard.html'
+                    });
+
+                } else {
+
+                    console.error("Error al registrar el usuario:", error);
+
+                }
+            })
+            .catch(error => {
+
+                console.error("Error al procesar la solicitud:", error);
+
+            })
+            .finally(() => {
+
+                sendRecipeButton.textContent = 'Share your dish now';
+                sendRecipeButton.disabled = false;
+
+            })
 
         } catch (error) {
 
