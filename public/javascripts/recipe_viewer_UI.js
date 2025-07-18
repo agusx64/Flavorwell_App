@@ -48,13 +48,13 @@ document.addEventListener('DOMContentLoaded',async () => {
 
         console.log('Recipe data:', data);
         recipeTitle.textContent = data.data.name;
-        recipeAuthor.textContent = data.author;
+        recipeAuthor.textContent = data.author[0].username;
         recipeImage.src = data.data.img_path;
         recipeDescription.textContent = data.data.description;
         recipeDate.textContent =  new Date(data.data.created_at).toLocaleDateString();
         recipeCategory.textContent = table.charAt(0).toUpperCase() + table.slice(1);
         recipeItems.textContent = data.data.items;
-        recipeCopyright.textContent = `© ${new Date().getFullYear()} Flavorwell. All rights reserved to Flavorwell Team and ${data.author}.`
+        recipeCopyright.textContent = `© ${new Date().getFullYear()} Flavorwell. All rights reserved to Flavorwell Team and ${data.author[0].username}.`
         let ingredients = data.ingredients || [];
         const instructionsArray = JSON.parse(data.data.instruction);
 

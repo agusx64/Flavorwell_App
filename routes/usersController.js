@@ -853,7 +853,7 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
                         <div style="width: 100%;">
                             <strong style="color: #E3170A;">Ingredients: </strong>
                         </div>
-                        <span style="color: #000;">${parsedIngredients.join('<br>')}</span>
+                        <span style="color: #000;">${parsedInstructions.join('<br>')}</span>
                         <div style="width: 100%; height: 16px;"></div>
                         <div style="width: 100%; margin-bottom: 16px;">
                             <span style="color: #000;
@@ -970,21 +970,41 @@ router.get('/update/status/recipe', (req, res) => {
 // Busacodr de recetas por id y nombre de tabla para el recipe viewer
 router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
 
-    const username = req.user.username;
+    const userId = req.user.userId;
     const { id, table } = req.body;
 
     try {
+
         // 1. Obtener receta
         const [results] = await connection.query(
+
             `SELECT * FROM ?? WHERE id = ? AND verified = 1;`,
             [table, id]
+
         );
 
         if (results.length === 0) {
+
             return res.status(404).json({ success: false, message: 'Recipe not found' });
+
         }
 
         const recipe = results[0];
+        const authorId = recipe.author;
+
+        //  Obtener nombre del author
+        const [author] = await connection.query(
+
+            'SELECT username FROM users WHERE id = ?;',
+            [authorId]
+
+        );
+
+        if (author.length === 0) {
+
+            return res.status(404).json({ success: false, message: 'Author not found' });
+
+        }
 
         // 2. Obtener ingredientes relacionados
         const [ingredients] = await connection.query(
@@ -1003,7 +1023,7 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
             message: 'Recipe and ingredients fetched successfully',
             data: recipe,
             ingredients,
-            author: username
+            author: author
         });
 
     } catch (error) {
