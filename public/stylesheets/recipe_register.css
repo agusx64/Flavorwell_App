@@ -220,6 +220,10 @@ ul, ol {
     border-style: none;
 }
 
+.generate-description-button:disabled{
+    background-color: var(--ChiliRedDisabled);
+}
+
 
 .form_control_file{
     color: var(--ChiliRed);
