@@ -967,6 +967,51 @@ router.get('/update/status/recipe', (req, res) => {
 
 });
 
+// Busacodr de recetas por id y nombre de tabla para el recipe viewer
+router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
+
+    const username = req.user.username;
+    const { id, table } = req.body;
+
+    try {
+        // 1. Obtener receta
+        const [results] = await connection.query(
+            `SELECT * FROM ?? WHERE id = ? AND verified = 1;`,
+            [table, id]
+        );
+
+        if (results.length === 0) {
+            return res.status(404).json({ success: false, message: 'Recipe not found' });
+        }
+
+        const recipe = results[0];
+
+        // 2. Obtener ingredientes relacionados
+        const [ingredients] = await connection.query(
+            `
+            SELECT r.ingredient_name, i.src_reference
+            FROM recipe_ingredients r
+            LEFT JOIN ingredients_list i ON r.ingredient_name = i.name
+            WHERE r.recipe_id = ? AND r.category = ?;
+            `,
+            [id, table]
+        );
+
+        // 3. Enviar receta + ingredientes
+        res.json({
+            success: true,
+            message: 'Recipe and ingredients fetched successfully',
+            data: recipe,
+            ingredients,
+            author: username
+        });
+
+    } catch (error) {
+        console.error('Error fetching recipe:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 
 //---------------------------------------------------------NODE CRON JOBS ---------------------------------------------------------------------------------
 

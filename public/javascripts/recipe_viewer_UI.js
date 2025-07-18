@@ -1,97 +1,99 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',async () => {
 
-    // const queryString = window.location.search;
-    // const urlParams = new URLSearchParams(queryString);
-    // const id = urlParams.get('id');
-    // const table = urlParams.get('table');
-    // const restHost = 'http://localhost:3000';
+    // Elementos para la inserción de información de receta
+    const recipeTitle = document.getElementById('recipe-viewer-title');
+    const recipeAuthor = document.getElementById('recipe-viewer-author');
+    const recipeImage = document.getElementById('recipe-viewer-image');
+    const recipeDescription = document.getElementById('recipe-viewer-description');
+    const recipeDate = document.getElementById('recipe-viewer-details-date');
+    const recipeCategory = document.getElementById('recipe-viewer-details-category');
+    const recipeItems = document.getElementById('recipe-viewer-details-items');
+    const recipeCopyright = document.getElementById('recipe-viewer-copyright-text');
 
-    // if (!id || !table) {
-    //     console.error('Missing ID or Table in URL.');
-    //     return;
-    // }
+    const token = localStorage.getItem('token');
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id');
+    const table = urlParams.get('table');
+    const restHost = 'http://localhost:3000';
 
-    // fetch(restHost + '/dashboard/get_recipe_by_id', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ id: parseInt(id), table })
-    // })
-    // .then(response => response.json())
-    // .then(parsedData => {
-    //     console.log('Recipe data:', parsedData);
+    if (!id || !table) {
+        console.error('Missing ID or Table in URL.');
+        return;
+    }
 
-    //     if (!parsedData.success || !parsedData.data) {
-            
-    //         throw new Error(parsedData.message || 'No recipe data received');
+    await fetch(restHost + '/users/get_recipe_by_id', {
 
-    //     }
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ id: parseInt(id), table })
 
-    //     let data = parsedData.data;
+    })
+    .then(async response => {
 
-    //     // Elementos del DOM
-    //     let name_recipe = document.getElementById('head_text');
-    //     let img_src = document.getElementById('img_recipe_viewer');
-    //     let description_recipe = document.getElementById('description_text_p');
-    //     let textIngredients = document.getElementById('text_ingredients');
-    //     let textTime = document.getElementById('text_time');
-    //     let textEnergy = document.getElementById('text_energy');
-    //     let textAuthor = document.getElementById('recipe_author');
-    //     let recipeInstructions = document.getElementById('recipe_instructions');
+        const data = await response.json();
 
-    //     let veganIngredient = document.getElementById('vegan_ingredient');
-    //     let proteinIngredient = document.getElementById('protein_ingredient');
-    //     let garrisonIngredient = document.getElementById('garrison_ingredient');
-    //     let extraIngredient = document.getElementById('extra_ingredient');
+        if (!response.ok) {
 
-    //     // Asignar contenido
-    //     name_recipe.textContent = data.name;
-    //     img_src.src = data.img_path;
-    //     description_recipe.textContent = data.description;
-    //     textTime.textContent = data.time_make;
-    //     textEnergy.textContent = data.energy;
-    //     textIngredients.textContent = data.id;
-    //     textAuthor.textContent = data.author;
-    //     veganIngredient.textContent = data.vegan_ingredient;
-    //     proteinIngredient.textContent = data.protein_ingredient;
-    //     garrisonIngredient.textContent = data.garrison_ingredient;
-    //     extraIngredient.textContent = data.extra_ingredient;
 
-    //     let textInstructions = data.instruction || '';
-    //     let textInstructionsFormatted = textInstructions.replace(/\r\n/g, ' <br> ');
-    //     recipeInstructions.innerHTML = textInstructionsFormatted;
+        }
 
-    //     // Enviar ingredientes al servidor para obtener imágenes
-    //     const IngredientsJSON = {
-    //         "vegan_ingredient": veganIngredient.textContent,
-    //         "protein_ingredient": proteinIngredient.textContent,
-    //         "garrison_ingredient": garrisonIngredient.textContent,
-    //         "extra_ingredient": extraIngredient.textContent
-    //     };
+        return data;
 
-    //     return fetch(restHost + '/ingredient_list', {
-    //         method: 'POST',
-    //         headers: { 'content-type': 'application/json' },
-    //         body: JSON.stringify(IngredientsJSON)
-    //     });
-    // })
-    // .then(response => {
-    //     if (!response.ok) throw new Error('Network response was not ok');
-    //     return response.json();
-    // })
-    // .then(data => {
-    //     console.log('Response from server:', data);
+    })
+    .then(data => {
 
-    //     if (!Array.isArray(data) || data.length < 4) {
-    //         throw new Error('Incomplete ingredient images from server');
-    //     }
+        console.log('Recipe data:', data);
+        recipeTitle.textContent = data.data.name;
+        recipeAuthor.textContent = data.author;
+        recipeImage.src = data.data.img_path;
+        recipeDescription.textContent = data.data.description;
+        recipeDate.textContent =  new Date(data.data.created_at).toLocaleDateString();
+        recipeCategory.textContent = table.charAt(0).toUpperCase() + table.slice(1);
+        recipeItems.textContent = data.data.items;
+        recipeCopyright.textContent = `© ${new Date().getFullYear()} Flavorwell. All rights reserved to Flavorwell Team and ${data.author}.`
+        let ingredients = data.ingredients || [];
+        const instructionsArray = JSON.parse(data.data.instruction);
 
-    //     document.getElementById('vegan').src = data[0].src_reference;
-    //     document.getElementById('protein').src = data[1].src_reference;
-    //     document.getElementById('garrison').src = data[2].src_reference;
-    //     document.getElementById('extra').src = data[3].src_reference;
-    // })
-    // .catch(error => {
-    //     console.error('There was a problem with the fetch operation:', error);
-    // });
+        // Agregar ingredientes de receta dinamicamente
+        const ingredientsContainer = document.querySelector('.recipe-viewer-ingredients-list-container');
+        ingredientsContainer.innerHTML = ''; // Limpiar contenido existente
+
+        ingredients.forEach(ing => {
+            const item = document.createElement('div');
+            item.className = 'recipe-viewer-ingredients-item';
+
+            item.innerHTML = `
+                <div class="recipe-viewer-ingredients-img-container">
+                    <img class="recipe-viewer-ingredients-img" src="${ing.src_reference || '/images/default.png'}" alt="${ing.ingredient_name}">
+                </div>
+                <p class="recipe-viewer-ingredients-name">${ing.ingredient_name}</p>
+            `;
+
+            ingredientsContainer.appendChild(item);
+        });
+
+        // Agregar instrucciones de receta dinamicamente
+        const instructionsContainer = document.querySelector('.recipe-viewer-instructions-container ul');
+        instructionsContainer.innerHTML = '';
+
+        instructionsArray.forEach(instruction => {
+
+            const li = document.createElement('li');
+            li.textContent = instruction;
+            instructionsContainer.appendChild(li);
+
+        });
+
+    })
+    .catch(error => {
+        
+        console.error(error);
+
+    })
+
 });
 

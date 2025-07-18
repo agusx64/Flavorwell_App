@@ -103,43 +103,6 @@ router.get('/day_food', async function (req, res) {
 
 });
 
-//Obtener receta selecionada mediante el ID
-router.post('/get_recipe_by_id', async (req, res) => {
-
-    // Extracción de datos del JSON
-    const { id, table } = req.body;
-
-    try {
-
-        // Consulta SQL para busqueda de receta
-        let query = `
-            SELECT * FROM ${table} WHERE id = ? AND verified = 1;
-        `;
-
-        // Ejecucion y guardado de resultados en array 'results', parametros: Tabla y id
-        const [results] = await connection.query(query, [id]);
-
-        // Validación de existencia de resultados
-        if (results.length === 0){
-
-            // Envio de estatus invalido: 'Receta no encontrada'
-            return res.status(404).json({ success: false, message: 'Recipe not found' });
-
-        }
-
-        // Envió de resultados al cliente
-        res.json({ success: true, message: 'Recipe found succesfully.', data: results[0]});
-
-    // Intercepcion de errores
-    } catch(error) {
-
-        console.error('Database query error: ', error);
-        res.status(500).json({ success: false, message: 'Error queryng the database.'});
-
-    }
-
-});
-
 // Endpoint para el sistema de busqueda de user_dashboard
 router.post('/search_recipes', async (req, res) => {
 
