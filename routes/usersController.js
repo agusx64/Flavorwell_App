@@ -509,7 +509,7 @@ router.get('/api/recent_posts', authenticateToken, async (req, res) => {
 
                 // Obtención de 20 recetas mas recientes de la iteración actual
                 `SELECT id,name,img_path AS image_url,description,? AS category
-                FROM ${table} ORDER BY created_at DESC LIMIT 20`, [table]
+                FROM ${table} WHERE verified = 1 ORDER BY created_at DESC LIMIT 20`, [table]
 
             );
 

@@ -23,13 +23,13 @@ router.get('/new_food', async function (req, res) {
     const queries = [
 
         // Union de resultados de busqueda
-        `(SELECT id, name, img_path FROM breakfast ORDER BY created_at DESC LIMIT 1)
+        `(SELECT id, name, img_path FROM breakfast WHERE verified = 1 ORDER BY created_at DESC LIMIT 1)
         UNION ALL
-        (SELECT id, name, img_path FROM desserts ORDER BY created_at DESC LIMIT 1)
+        (SELECT id, name, img_path FROM desserts WHERE verified = 1 ORDER BY created_at DESC LIMIT 1)
         UNION ALL
-        (SELECT id, name, img_path FROM strong_dish ORDER BY created_at DESC LIMIT 1)
+        (SELECT id, name, img_path FROM strong_dish WHERE verified = 1 ORDER BY created_at DESC LIMIT 1)
         UNION ALL
-        (SELECT id, name, img_path FROM vegan ORDER BY created_at DESC LIMIT 1);`
+        (SELECT id, name, img_path FROM vegan WHERE verified = 1 ORDER BY created_at DESC LIMIT 1);`
         
     ];
 
@@ -68,19 +68,19 @@ router.get('/day_food', async function (req, res) {
     // Consulta SQL compuesta
     const query = `
         (
-        SELECT id, name, img_path FROM breakfast ORDER BY RAND() LIMIT 1
+        SELECT id, name, img_path FROM breakfast WHERE verified = 1 ORDER BY RAND() LIMIT 1
         )
         UNION ALL
         (
-            SELECT id, name, img_path FROM desserts ORDER BY RAND() LIMIT 1
+            SELECT id, name, img_path FROM desserts WHERE verified = 1 ORDER BY RAND() LIMIT 1
         )
         UNION ALL
         (
-            SELECT id, name, img_path FROM strong_dish ORDER BY RAND() LIMIT 1
+            SELECT id, name, img_path FROM strong_dish WHERE verified = 1 ORDER BY RAND() LIMIT 1
         )
         UNION ALL
         (
-            SELECT id, name, img_path FROM vegan ORDER BY RAND() LIMIT 1
+            SELECT id, name, img_path FROM vegan WHERE verified = 1 ORDER BY RAND() LIMIT 1
         );
 
     `;
@@ -164,7 +164,7 @@ router.post('/get_recipe_by_id', async (req, res) => {
 
         // Consulta SQL para busqueda de receta
         let query = `
-            SELECT * FROM ${table} WHERE id = ?;
+            SELECT * FROM ${table} WHERE id = ? AND verified = 1;
         `;
 
         // Ejecucion y guardado de resultados en array 'results', parametros: Tabla y id
@@ -208,13 +208,13 @@ router.post('/search_recipes', async (req, res) => {
     // Consulta SQL (Union de 4 resultados provenientes de cada tabla)
     const sql = `
 
-        SELECT id, name, img_path, 'breakfast' AS table_name FROM breakfast WHERE name LIKE ? 
+        SELECT id, name, img_path, 'breakfast' AS table_name FROM breakfast WHERE name LIKE ? AND verified = 1
         UNION ALL
-        SELECT id, name, img_path, 'desserts' FROM desserts WHERE name LIKE ? 
+        SELECT id, name, img_path, 'desserts' FROM desserts WHERE name LIKE ? AND verified = 1
         UNION ALL
-        SELECT id, name, img_path, 'strong_dish' FROM strong_dish WHERE name LIKE ? 
+        SELECT id, name, img_path, 'strong_dish' FROM strong_dish WHERE name LIKE ? AND verified = 1
         UNION ALL
-        SELECT id, name, img_path, 'vegan' FROM vegan WHERE name LIKE ?
+        SELECT id, name, img_path, 'vegan' FROM vegan WHERE name LIKE ? AND verified = 1
         LIMIT 10
 
     `;
