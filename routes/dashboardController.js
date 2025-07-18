@@ -103,57 +103,6 @@ router.get('/day_food', async function (req, res) {
 
 });
 
-// Buscador de recetas para insercion en el visor de recetas
-router.get('/recipe_viewer', async (req, res) => {
-
-    // Recolección de datos de la URL
-    const id = parseInt(req.query.id);
-    const table = req.query.table;
-
-    // Array delimitador de nombres de tablas
-    const allowedTables = ['breakfast', 'desserts', 'vegan', 'strong_dish']
-
-    // Comprobación de coicidencia cliente - servidor
-    if (!id || !allowedTables.includes(table)) {
-
-        // Envio de estatus de parametros invalidos
-        return res.status(400).json({ success: false, message: 'Invalid parameters.' });
-
-    }
-
-    try {
-
-
-        // Consulta SQL para busqueda de receta
-        const query = `
-            SELECT * FROM ${table} WHERE id = ?;
-        `;
-
-        // Ejecución de consulta de forma asicrona, para metros de la consulta: Nombre de tabla e id.
-        const [results] = await connection.query(query, [id]);
-
-        // Verificación de existencia o coincidencia de resultados
-        if (results.length === 0) {
-
-            // Mensaje de estatus 'Receta no encontrada'
-            return res.status(404).json({ success: false, message: 'Recipe not found.' });
-
-        }
-        console.log(results);
-
-        // return res.status(200).json({ success: true, data: results[0], message: 'Recipe data found.'});
-        res.render('recipe_viewer', { data: results[0] });
-
-    // Intercepción de errores
-    } catch (error) {
-
-        console.error('Error retrieving recipe:', error);
-        res.status(500).send('Internal server error');
-
-    }
-
-});
-
 //Obtener receta selecionada mediante el ID
 router.post('/get_recipe_by_id', async (req, res) => {
 

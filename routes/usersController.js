@@ -504,6 +504,8 @@ router.get('/api/recent_posts', authenticateToken, async (req, res) => {
         // Iteracion. Por cada categoria se ejecutaran conexiones y ejecucion de consultas
         for (const table of tables) {
 
+            console.log(`SELECT id,name,img_path AS image_url,description,${table} AS category FROM ${table} WHERE verified = 1 ORDER BY created_at DESC LIMIT 20`, [table])
+
             // Conexion y ejecución de consulta SQL
             const [rows] = await connection.query(
 
@@ -571,6 +573,7 @@ router.get('/api/recent_posts', authenticateToken, async (req, res) => {
         // Mensaje de error en consola y envio de estatus del servidor.
         console.error(error);
         res.status(500).json({ success: false, message: 'Server error' });
+
     }
 
 });

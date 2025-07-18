@@ -96,6 +96,7 @@ async function loadRecipes() {
     } finally {
 
         loading = false;
+        
     }
 
 }
