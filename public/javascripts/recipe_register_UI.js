@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Agregar al hacer clic en el ícono +
     resultsList.addEventListener('click', e => {
         if (e.target.classList.contains('add-icon')) {
-            const id = target.dataset.id;
+            const id = e.target.dataset.id;
             const name = e.target.dataset.name;
             const src = e.target.dataset.img;
             addIngredient(id, name, src);
@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const name = document.getElementById('name-recipe-text').value.trim();
         const description = document.getElementById('recipe-description-text').value.trim();
         const category = text_category;
-        const ingredients = [...selectedList.querySelectorAll('.ingredient-name')].map(i => i.dataset.id);
+        const ingredients = [...selectedList.querySelectorAll('.ingredient-item')].map(i => i.dataset.id);
         const instructions = [...stepList.querySelectorAll('.step-instruction-name')].map(i => i.textContent.trim());
         const image = document.getElementById('formFile').files[0];
 
