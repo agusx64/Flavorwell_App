@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <img class="ingredient-img" src="${ingredient.src_reference}" alt="${ingredient.name}">
                     <span class="ingredient-name">${formatText(ingredient.name)}</span>
                 </div>
-                <i class="bi bi-plus add-icon" data-name="${ingredient.name}" data-img="${ingredient.src_reference}"></i>
+                <i class="bi bi-plus add-icon" data-id="${ingredient.id}" data-name="${ingredient.name}" data-img="${ingredient.src_reference}"></i>
             `;
             resultsList.appendChild(li);
         });
@@ -75,9 +75,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Agregar al hacer clic en el ícono +
     resultsList.addEventListener('click', e => {
         if (e.target.classList.contains('add-icon')) {
+            const id = target.dataset.id;
             const name = e.target.dataset.name;
             const src = e.target.dataset.img;
-            addIngredient(name, src);
+            addIngredient(id, name, src);
             input.value = '';
             resultsList.classList.add('hidden');
             resultsList.innerHTML = '';
@@ -85,10 +86,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Agregar ingrediente a la lista seleccionada
-    function addIngredient(name, src) {
+    function addIngredient(id, name, src) {
         const li = document.createElement('li');
         li.className = 'ingredient-item';
         li.setAttribute('draggable', 'true');
+        li.setAttribute('data-id', id)
         li.innerHTML = `
             <div class="ingredient-info">
                 <i class="bi bi-grip-vertical drag-handle"></i>
@@ -278,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const name = document.getElementById('name-recipe-text').value.trim();
         const description = document.getElementById('recipe-description-text').value.trim();
         const category = text_category;
-        const ingredients = [...selectedList.querySelectorAll('.ingredient-name')].map(i => i.textContent.trim());
+        const ingredients = [...selectedList.querySelectorAll('.ingredient-name')].map(i => i.dataset.id);
         const instructions = [...stepList.querySelectorAll('.step-instruction-name')].map(i => i.textContent.trim());
         const image = document.getElementById('formFile').files[0];
 

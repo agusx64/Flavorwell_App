@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded',async () => {
                 <div class="recipe-viewer-ingredients-img-container">
                     <img class="recipe-viewer-ingredients-img" src="${ing.src_reference || '/images/default.png'}" alt="${ing.ingredient_name}">
                 </div>
-                <p class="recipe-viewer-ingredients-name">${ing.ingredient_name}</p>
+                <p class="recipe-viewer-ingredients-name">${formatText(ing.ingredient_name)}</p>
             `;
 
             ingredientsContainer.appendChild(item);
@@ -110,3 +110,9 @@ document.addEventListener('DOMContentLoaded',async () => {
 
 });
 
+function formatText(str) {
+    return str
+        .replace(/_/g, ' ')                             // Reemplaza _ por espacio
+        .toLowerCase()                                  // Convierte todo a minúsculas
+        .replace(/\b\w/g, char => char.toUpperCase());  // Capitaliza la primera letra de cada palabra
+}

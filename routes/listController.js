@@ -107,7 +107,7 @@ router.get('/api/ingredients/search', async (req, res) => {
         const [results] = await connection.query(
 
             // Consulta SQL para busqueda de coincidencias
-            `SELECT name, src_reference FROM ingredients_list WHERE name LIKE ? LIMIT 10`, 
+            `SELECT * FROM ingredients_list WHERE name LIKE ? LIMIT 10`, 
             [`%${q}%`]
 
         );

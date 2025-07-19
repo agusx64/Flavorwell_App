@@ -769,7 +769,7 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
                     await connection.query(
 
                         // Consulta SQL
-                        `INSERT INTO recipe_ingredients (recipe_id, category, ingredient_name) VALUES (?, ?, ?)`,
+                        `INSERT INTO recipe_ingredients (recipe_id, category, ingredient_id) VALUES (?, ?, ?)`,
                         // Parametros de consulta (identificador de la receta, categoria de la receta, nombre del ingrediente)
                         [recipeId, category, ing]
 
@@ -1024,13 +1024,15 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
 
         // Obtener ingredientes relacionados
         const [ingredients] = await connection.query(
+            
             `
-            SELECT r.ingredient_name, i.src_reference
+            SELECT i.name AS ingredient_name, i.src_reference
             FROM recipe_ingredients r
-            LEFT JOIN ingredients_list i ON r.ingredient_name = i.name
+            JOIN ingredients_list i ON r.ingredient_id = i.id
             WHERE r.recipe_id = ? AND r.category = ?;
             `,
             [id, table]
+
         );
 
         // 3. Enviar receta + ingredientes
