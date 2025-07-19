@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded',async () => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ id: parseInt(id), table })
+        body: JSON.stringify({ id: id, table })
 
     })
     .then(async response => {
