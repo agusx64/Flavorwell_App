@@ -735,190 +735,190 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
         console.log(name, description, category, ingredients, instructions);
         
 
-        // // Alistamiento de instrucciones
-        // const parsedInstructions = JSON.parse(instructions);
+        // Alistamiento de instrucciones
+        const parsedInstructions = JSON.parse(instructions);
 
-        // // Alistamiento de insgredientes
-        // const parsedIngredients = JSON.parse(ingredients);
+        // Alistamiento de insgredientes
+        const parsedIngredients = JSON.parse(ingredients);
 
-        // // Integración de dependencia 'crypto' para generar UUID
-        // const recipeId = require('crypto').randomUUID();
+        // Integración de dependencia 'crypto' para generar UUID
+        const recipeId = require('crypto').randomUUID();
 
-        // // Subir imagen a Cloudinary a traves de .upload_stream
-        // const uploadResult = await cloudinary.uploader.upload_stream(
+        // Subir imagen a Cloudinary a traves de .upload_stream
+        const uploadResult = await cloudinary.uploader.upload_stream(
 
-        //     // Guardado de recetas en el folder especificado (Carpeta de destino)
-        //     { folder: 'image_recipes' },
+            // Guardado de recetas en el folder especificado (Carpeta de destino)
+            { folder: 'image_recipes' },
 
-        //     // Creación que función anonima asicrona
-        //     async (error, result) => {
+            // Creación que función anonima asicrona
+            async (error, result) => {
 
-        //         // Intercepción de errores
-        //         if (error) {
+                // Intercepción de errores
+                if (error) {
 
-        //             // Depuración de errores
-        //             console.error('Error uploading to Cloudinary:', error);
-        //             // Envio de estatus al frontend
-        //             return res.status(500).json({ success: false, message: 'Image upload failed' });
+                    // Depuración de errores
+                    console.error('Error uploading to Cloudinary:', error);
+                    // Envio de estatus al frontend
+                    return res.status(500).json({ success: false, message: 'Image upload failed' });
 
-        //         }
+                }
 
-        //         // Obtención de link publico proporcionado por Cloudinary
-        //         const imageUrl = result.secure_url;
+                // Obtención de link publico proporcionado por Cloudinary
+                const imageUrl = result.secure_url;
 
-        //         // Iteración de lista de ingredientes para inserción en tabla de relaciones
-        //         for (const ing of parsedIngredients) {
+                // Iteración de lista de ingredientes para inserción en tabla de relaciones
+                for (const ing of parsedIngredients) {
 
-        //             // Conexión a la base de datos
-        //             await connection.query(
+                    // Conexión a la base de datos
+                    await connection.query(
 
-        //                 // Consulta SQL
-        //                 `INSERT INTO recipe_ingredients (recipe_id, category, ingredient_id) VALUES (?, ?, ?)`,
-        //                 // Parametros de consulta (identificador de la receta, categoria de la receta, nombre del ingrediente)
-        //                 [recipeId, category, ing]
+                        // Consulta SQL
+                        `INSERT INTO recipe_ingredients (recipe_id, category, ingredient_id) VALUES (?, ?, ?)`,
+                        // Parametros de consulta (identificador de la receta, categoria de la receta, nombre del ingrediente)
+                        [recipeId, category, ing]
 
-        //             );
+                    );
 
-        //         }
+                }
 
-        //         // Conexión a la base de datos
-        //         await connection.query(
+                // Conexión a la base de datos
+                await connection.query(
 
-        //             // Inserción de valores verificados
-        //             `INSERT INTO ${category} (id, name, description, instruction, img_path, author, items, verified)
-        //             VALUES (?, ?, ?, ?, ?, ?, ?, FALSE)`,
-        //             // Parametros de consulta SQL (ingredientes e instrucciones parseados en forma de lista)
-        //             [recipeId, name, description, JSON.stringify(parsedInstructions), imageUrl, userId, parsedIngredients.length]
+                    // Inserción de valores verificados
+                    `INSERT INTO ${category} (id, name, description, instruction, img_path, author, items, verified)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, FALSE)`,
+                    // Parametros de consulta SQL (ingredientes e instrucciones parseados en forma de lista)
+                    [recipeId, name, description, JSON.stringify(parsedInstructions), imageUrl, userId, parsedIngredients.length]
 
-        //         );
+                );
 
-        //         // Creación de instancia de correo electronico
-        //         const transporter = nodemailer.createTransport({
+                // Creación de instancia de correo electronico
+                const transporter = nodemailer.createTransport({
 
-        //             // Declaración de servicio
-        //             service: 'gmail',
-        //             // Autenticación de correo electronico
-        //             auth: {
-        //                 user: process.env.MAIL_HOST,
-        //                 pass: process.env.MAIL_PASSWORD
-        //             }
+                    // Declaración de servicio
+                    service: 'gmail',
+                    // Autenticación de correo electronico
+                    auth: {
+                        user: process.env.MAIL_HOST,
+                        pass: process.env.MAIL_PASSWORD
+                    }
 
-        //         });
+                });
 
-        //         // Template HTML de correo electronico
-        //         const html = `
-        //             <div style="max-width: 700px;
-        //                         margin: auto;
-        //                         font-family: 'Poppins';
-        //                         padding: 20px;
-        //                         background-color: #FFF;
-        //                         font-family:Arial, Helvetica, sans-serif;">
-        //                 <table style="width: 100%; text-align: center;">
-        //                     <tr>
-        //                         <td>
-        //                             <img style="max-width: 120px;
-        //                                         margin-bottom: 16px;" src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell logo">
-        //                             <h1 style="font-size: 5vh;
-        //                                         color: #E3170A;">Flavorwell</h1>
-        //                         </td>
-        //                     </tr>
-        //                 </table>
-        //                 <strong style="color: #E3170A;">New cooking recipe sent</strong>
-        //                 <img style="width: 100%;
-        //                                 height: 20vh;
-        //                                 background-color: rgb(182, 182, 182);
-        //                                 object-fit: cover;
-        //                                 margin-bottom: 16px;
-        //                                 margin-top: 16px;" src="${imageUrl}" alt="Cooking recipe">
-        //                 <div style="width: 100%; margin-bottom: 16px;">
-        //                     <span style="color: #000;
-        //                                     margin-bottom: 16px;"><strong style="color: #E3170A;
-        //                                                                 font-weight: 600;">Name: </strong>${name}</span>
-        //                 </div>
-        //                 <div style="width: 100%; margin-bottom: 16px;">
-        //                     <span style="color: #000;
-        //                                     margin-bottom: 16px;
-        //                                     line-height: 3vh;"><strong style="color: #E3170A;
-        //                                                                 font-weight: 600;">Description: </strong>${description}</span>
-        //                 </div>
-        //                 <div style="width: 100%; margin-bottom: 16px;">
-        //                     <span style="color: #000;
-        //                                     margin-bottom: 16px;
-        //                                     line-height: 3vh;"><strong style="color: #E3170A;
-        //                                                                 font-weight: 600;">Category: </strong>${category}</span>
-        //                 </div>
-        //                 <div style="width: 100%;">
-        //                     <strong style="color: #E3170A;">Ingredients: </strong>
-        //                 </div>
-        //                 <span style="color: #000;">${parsedIngredients.join('<br>')}</span>
-        //                 <div style="width: 100%; height: 16px;"></div>
-        //                 <div style="width: 100%;">
-        //                     <strong style="color: #E3170A;">Ingredients: </strong>
-        //                 </div>
-        //                 <span style="color: #000;">${parsedInstructions.join('<br>')}</span>
-        //                 <div style="width: 100%; height: 16px;"></div>
-        //                 <div style="width: 100%; margin-bottom: 16px;">
-        //                     <span style="color: #000;
-        //                                     margin-bottom: 16px;
-        //                                     line-height: 3vh;"><strong style="color: #E3170A;
-        //                                                                 font-weight: 600;">Author: </strong>${username}</span>
-        //                 </div>
-        //                 <div style="width: 100%; margin-bottom: 16px;">
-        //                     <P style="font-size: 15px;
-        //                                     margin-bottom: 46px;"><strong>Note: </strong>This recipe has been registered in the 'Flavorwell_DB' database, but has not yet been verified. This recipe will only be valid in the database for 1 hour, after which it will be deleted unless approved.</P>
-        //                 </div>
-        //                 <!-- Botones -->
-        //                 <table width="100%" style="text-align: center; margin-bottom: 40px;">
-        //                     <tr>
-        //                         <td>
-        //                             <a href="${process.env.FRONTEND_URL}/users/admin/recipes/verify?category=${category}&id=${recipeId}&verified=false"
-        //                                 style="background-color: #E3170A; color: #FFF; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 6px; display: inline-block; margin-right: 10px;">Decline</a>
+                // Template HTML de correo electronico
+                const html = `
+                    <div style="max-width: 700px;
+                                margin: auto;
+                                font-family: 'Poppins';
+                                padding: 20px;
+                                background-color: #FFF;
+                                font-family:Arial, Helvetica, sans-serif;">
+                        <table style="width: 100%; text-align: center;">
+                            <tr>
+                                <td>
+                                    <img style="max-width: 120px;
+                                                margin-bottom: 16px;" src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell logo">
+                                    <h1 style="font-size: 5vh;
+                                                color: #E3170A;">Flavorwell</h1>
+                                </td>
+                            </tr>
+                        </table>
+                        <strong style="color: #E3170A;">New cooking recipe sent</strong>
+                        <img style="width: 100%;
+                                        height: 20vh;
+                                        background-color: rgb(182, 182, 182);
+                                        object-fit: cover;
+                                        margin-bottom: 16px;
+                                        margin-top: 16px;" src="${imageUrl}" alt="Cooking recipe">
+                        <div style="width: 100%; margin-bottom: 16px;">
+                            <span style="color: #000;
+                                            margin-bottom: 16px;"><strong style="color: #E3170A;
+                                                                        font-weight: 600;">Name: </strong>${name}</span>
+                        </div>
+                        <div style="width: 100%; margin-bottom: 16px;">
+                            <span style="color: #000;
+                                            margin-bottom: 16px;
+                                            line-height: 3vh;"><strong style="color: #E3170A;
+                                                                        font-weight: 600;">Description: </strong>${description}</span>
+                        </div>
+                        <div style="width: 100%; margin-bottom: 16px;">
+                            <span style="color: #000;
+                                            margin-bottom: 16px;
+                                            line-height: 3vh;"><strong style="color: #E3170A;
+                                                                        font-weight: 600;">Category: </strong>${category}</span>
+                        </div>
+                        <div style="width: 100%;">
+                            <strong style="color: #E3170A;">Ingredients: </strong>
+                        </div>
+                        <span style="color: #000;">${parsedIngredients.join('<br>')}</span>
+                        <div style="width: 100%; height: 16px;"></div>
+                        <div style="width: 100%;">
+                            <strong style="color: #E3170A;">Ingredients: </strong>
+                        </div>
+                        <span style="color: #000;">${parsedInstructions.join('<br>')}</span>
+                        <div style="width: 100%; height: 16px;"></div>
+                        <div style="width: 100%; margin-bottom: 16px;">
+                            <span style="color: #000;
+                                            margin-bottom: 16px;
+                                            line-height: 3vh;"><strong style="color: #E3170A;
+                                                                        font-weight: 600;">Author: </strong>${username}</span>
+                        </div>
+                        <div style="width: 100%; margin-bottom: 16px;">
+                            <P style="font-size: 15px;
+                                            margin-bottom: 46px;"><strong>Note: </strong>This recipe has been registered in the 'Flavorwell_DB' database, but has not yet been verified. This recipe will only be valid in the database for 1 hour, after which it will be deleted unless approved.</P>
+                        </div>
+                        <!-- Botones -->
+                        <table width="100%" style="text-align: center; margin-bottom: 40px;">
+                            <tr>
+                                <td>
+                                    <a href="${process.env.FRONTEND_URL}/users/admin/recipes/verify?category=${category}&id=${recipeId}&verified=false"
+                                        style="background-color: #E3170A; color: #FFF; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 6px; display: inline-block; margin-right: 10px;">Decline</a>
 
-        //                             <a href="${process.env.FRONTEND_URL}/users/admin/recipes/verify?category=${category}&id=${recipeId}&verified=true"
-        //                                 style="background-color: #A9E5BB; color: #000; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 6px; display: inline-block;">Approve</a>
-        //                         </td>
-        //                     </tr>
-        //                 </table>
-        //                 <!-- Footer -->
-        //                 <table width="100%" style="text-align: center; color: #717171; font-size: 13px;">
-        //                     <tr>
-        //                         <td>&copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.</td>
-        //                     </tr>
-        //                 </table>
-        //             </div>
-        //         `;
+                                    <a href="${process.env.FRONTEND_URL}/users/admin/recipes/verify?category=${category}&id=${recipeId}&verified=true"
+                                        style="background-color: #A9E5BB; color: #000; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 6px; display: inline-block;">Approve</a>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- Footer -->
+                        <table width="100%" style="text-align: center; color: #717171; font-size: 13px;">
+                            <tr>
+                                <td>&copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.</td>
+                            </tr>
+                        </table>
+                    </div>
+                `;
 
-        //         // Envió de notificación de correo electronico
-        //         await transporter.sendMail({
+                // Envió de notificación de correo electronico
+                await transporter.sendMail({
 
-        //             // Cuerpo del correo electronico 
-        //             from: process.env.MAIL_HOST,
-        //             to: process.env.MAIL_HOST,
-        //             subject: 'New Recipe Pending Approval',
-        //             html: html
+                    // Cuerpo del correo electronico 
+                    from: process.env.MAIL_HOST,
+                    to: process.env.MAIL_HOST,
+                    subject: 'New Recipe Pending Approval',
+                    html: html
 
-        //         });
+                });
 
-        //         // Envio de objeto JSON de confirmación 
-        //         return res.json({ success: true });
+                // Envio de objeto JSON de confirmación 
+                return res.json({ success: true });
 
-        //     }
+            }
 
-        // );
+        );
 
-        // // Tranferencia de buffer a Cloudinary
-        // if (req.file && req.file.buffer) {
+        // Tranferencia de buffer a Cloudinary
+        if (req.file && req.file.buffer) {
 
-        //     // Inicia la carga al stream
-        //     const stream = uploadResult;
-        //     stream.end(req.file.buffer);
+            // Inicia la carga al stream
+            const stream = uploadResult;
+            stream.end(req.file.buffer);
 
-        // } else {
+        } else {
 
-        //     // Envio de estaus de error al cargar la imagen
-        //     return res.status(400).json({ success: false, message: 'No image file received.' });
+            // Envio de estaus de error al cargar la imagen
+            return res.status(400).json({ success: false, message: 'No image file received.' });
 
-        // }
+        }
 
         function formatCategory(name) {
             return name.toLowerCase().replace(/\s+/g, '_');
