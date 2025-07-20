@@ -727,7 +727,7 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
         // Obtención de valores de sesión
         const userId = req.user.userId;
         const username = req.user.username;
-        const category = formatCategory(req.body.category)
+        const category = formatCategory(req.body.category);
 
         // Obtención de valores de recetas
         const { name, description, ingredients, instructions } = req.body;
@@ -792,6 +792,17 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
 
                 );
 
+                // Obtener los nombres de los ingredientes a partir de sus IDs
+                const [ingredientNamesResult] = await connection.query(
+
+                    `SELECT name FROM ingredients_list WHERE id IN (?)`,
+                    [parsedIngredients]
+                    
+                );
+
+                // Extraer solo los nombres en un array
+                const ingredientNames = ingredientNamesResult.map(ing => ing.name);
+
                 // Creación de instancia de correo electronico
                 const transporter = nodemailer.createTransport({
 
@@ -850,10 +861,10 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
                         <div style="width: 100%;">
                             <strong style="color: #E3170A;">Ingredients: </strong>
                         </div>
-                        <span style="color: #000;">${parsedIngredients.join('<br>')}</span>
+                        <span style="color: #000;">${ingredientNames.join('<br>')}</span>
                         <div style="width: 100%; height: 16px;"></div>
                         <div style="width: 100%;">
-                            <strong style="color: #E3170A;">Ingredients: </strong>
+                            <strong style="color: #E3170A;">Instructions: </strong>
                         </div>
                         <span style="color: #000;">${parsedInstructions.join('<br>')}</span>
                         <div style="width: 100%; height: 16px;"></div>

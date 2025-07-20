@@ -314,15 +314,16 @@ function dynamicGetRecentRecipe() {
 
             const id = this.querySelector('img').getAttribute('data-id');
             const table = this.querySelector('img').getAttribute('data-table');
-            const recipeData = { id: parseInt(id), table: table };
+            const recipeData = { id: id, table: table };
 
             try {
 
-                await fetch(restHost + '/dashboard/get_recipe_by_id', {
+                await fetch(restHost + '/users/get_recipe_by_id', {
 
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify(recipeData)
 
@@ -375,15 +376,16 @@ function dynamicGetRender() {
 
             const id = this.querySelector('img').getAttribute('data-id');
             const table = this.querySelector('img').getAttribute('data-table');
-            const recipeData = { id: parseInt(id), table: table };
+            const recipeData = { id: id, table: table };
 
             try {
 
-                await fetch(restHost + '/dashboard/get_recipe_by_id', {
+                await fetch(restHost + '/users/get_recipe_by_id', {
 
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify(recipeData)
 
