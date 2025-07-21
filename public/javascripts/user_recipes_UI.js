@@ -45,7 +45,6 @@ async function getUserRecipes(userToken) {
 
             };
 
-            console.log(data);
             const recipes = data.recipes;
 
             recipes.forEach( recipe => {
