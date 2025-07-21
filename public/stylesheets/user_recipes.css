@@ -1,0 +1,99 @@
+body{
+    padding-top: 25%;
+    padding-bottom: 10%;
+}
+
+.recipe-container{
+    width: 100%;
+    height: auto;
+    padding: 4%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+
+.user-recipe-card{
+    width: 100%;
+    height: auto;
+    background-color: var(--GreyLight);
+    border-radius: 1.5vh;
+    margin-bottom: 2.5vh;
+}
+
+.user-recipe-card-img{
+    width: 100%;
+    height: 28vh;
+    object-fit: cover;
+    border-radius: 1.5vh 1.5vh 0vh 0vh;
+}
+
+.user-recipe-card-info-container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    padding: 4%;
+}
+
+.user-recipe-card-name{
+    color: var(--ChiliRed);
+    font-weight: 600;
+    font-size: 2.5vh;
+}
+
+.user-recipe-card-description{
+    color: var(--BlackBaseColor);
+    font-size: 1.5vh;
+    margin-top: 1.5vh;
+}
+
+.user-recipe-card-status-container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 1.5vh;
+}
+
+.user-recipe-card-status{
+    width: 28%;
+    height: 5vh;
+    background-color: var(--Xhantous);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 10px 0px 12px;
+    color: var(--WhiteBaseColor);
+    border-radius: 25vh;
+    margin-right: 1.5vh;
+    font-size: 1.6vh;
+}
+
+.icon-status{
+    font-size: 2.4vh;
+}
+
+.user-recipe-card-category{
+    width: 5vh;
+    height: 5vh;
+    background-color: var(--Celadon);
+    border-radius: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--WhiteBaseColor);
+}
+
+.user-recipe-button-viewer{
+    width: 100%;
+    height: 5vh;
+    background-color: var(--ChiliRed);
+    border-style: none;
+    color: var(--WhiteBaseColor);
+    border-radius: 25vh;
+    margin-top: 2vh;
+}

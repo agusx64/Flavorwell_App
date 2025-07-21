@@ -488,7 +488,7 @@ router.post('/set_new_password', async (req, res) => {
 });
 
 // Selector de recetas para mural de posteos de la comunidad
-router.get('/api/recent_posts', authenticateToken, async (req, res) => {
+router.get('/api/recent_posts', authenticateToken, async (req, res) => { 
 
     // Extraccion del 'userId' que esta contenido dentro del 'req.user' asignado en el middleware de JWT
     const userId = req.user.userId;
@@ -1071,6 +1071,49 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error' });
     }
 });
+
+router.get('/api/user_recipes', authenticateToken, async (req, res) => {
+    const userId = req.user.userId;
+
+    try {
+        const query = `
+            SELECT r.id, r.name, r.description, r.img_path, r.category,
+                IFNULL(likes.count, 0) AS like_count,
+                IFNULL(saves.count, 0) AS save_count
+            FROM (
+                SELECT id, name, description, img_path, 'breakfast' AS category FROM breakfast WHERE verified = 1 AND author = ?
+                UNION ALL
+                SELECT id, name, description, img_path, 'desserts' AS category FROM desserts WHERE verified = 1 AND author = ?
+                UNION ALL
+                SELECT id, name, description, img_path, 'strong_dish' AS category FROM strong_dish WHERE verified = 1 AND author = ?
+                UNION ALL
+                SELECT id, name, description, img_path, 'vegan' AS category FROM vegan WHERE verified = 1 AND author = ?
+            ) AS r
+            LEFT JOIN (
+                SELECT recipe_id, category, COUNT(*) AS count
+                FROM likes
+                GROUP BY recipe_id, category
+            ) AS likes
+            ON r.id = likes.recipe_id AND r.category = likes.category
+            LEFT JOIN (
+                SELECT recipe_id, category, COUNT(*) AS count
+                FROM saved_recipes
+                GROUP BY recipe_id, category
+            ) AS saves
+            ON r.id = saves.recipe_id AND r.category = saves.category;
+        `;
+
+        const [results] = await connection.query(query, [userId, userId, userId, userId]);
+
+        res.json({ success: true, recipes: results });
+
+    } catch (error) {
+        console.error('Error executing query:', error);
+        res.status(500).json({ success: false, message: 'Error retrieving recipes' });
+    }
+});
+
+
 
 
 //---------------------------------------------------------NODE CRON JOBS ---------------------------------------------------------------------------------

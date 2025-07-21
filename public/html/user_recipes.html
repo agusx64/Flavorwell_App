@@ -3,9 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+    <link rel="stylesheet" href="/stylesheets/user_recipes.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <title>My recipes</title>
 </head>
 <body>
-    <h1>myrecipes</h1>
+
+    <!-- Template for another UI -->
+    <header class="header_menu" onclick="history.back()">
+        <button class="svg_icon return">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
+            </svg>
+        </button>
+        <h2 class="header_text poppins-semibold">My recipes</h2>
+        <div class="svg_icon" id="svg-icon-profile">
+            <i class="bi bi-person-fill-check"></i>
+        </div>
+    </header>
+
+    <!-- Contenedor de recetas -->
+    <section class="recipe-container">
+
+        <div class="user-recipe-card">
+            <img src="/images/_img_recipe/breakfast_cat.jpg" alt="" class="user-recipe-card-img">
+            <div class="user-recipe-card-info-container">
+                <h2 class="user-recipe-card-name" id="user-recipe-card-name">Mushroom soup</h2>
+                <p class="user-recipe-card-description" id="user-recipe-card-description">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Veritatis enim in qui dolores eligendi, deleniti consequatur nam excepturi ut, nesciunt perferendis adipisci fugit iusto exercitationem illo obcaecati quod ipsam. In.</p>
+                <div class="user-recipe-card-status-container">
+                    <div class="user-recipe-card-status">
+                        <i class="bi bi-hand-thumbs-up-fill icon-status"></i>
+                        <p class="user-recipe-card-like-counter">1250</p>
+                    </div>
+                    <div class="user-recipe-card-status">
+                        <i class="bi bi-bookmark-fill icon-status"></i>
+                        <p class="user-recipe-card-saved-counter">1250</p>
+                    </div>
+                    <div class="user-recipe-card-category">
+                        <i class="bi bi-leaf-fill"></i>
+                    </div>
+                </div>
+                <button class="user-recipe-button-viewer" id="user-recipe-button-viewer">
+                    View recipe
+                    <i class="bi bi-fork-knife"></i>
+                </button>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Barra de navegación -->
+    <nav class="bottom_navbar">
+        <div class="nav_icons" id="start">
+            <i class="bi bi-house-door-fill"></i>
+        </div>
+        <div class="nav_icons" id="saved">
+            <i class="bi bi-bookmark-fill"></i>
+        </div>
+        <div class="nav_icons" id="add">
+            <i class="bi bi-plus-circle-fill"></i>
+        </div>
+        <div class="nav_icons" id="profile">
+            <i class="bi bi-person-circle"></i>
+        </div>
+        <div class="nav_icons" id="settings">
+            <i class="bi bi-gear-fill"></i>
+        </div>
+    </nav>
+
+    <script src="/javascripts/user_recipes_UI.js"></script>
+    <script src="/javascripts/navbar_UI.js"></script>
 </body>
 </html>

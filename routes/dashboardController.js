@@ -56,7 +56,6 @@ router.get('/new_food', async function (req, res) {
     } catch (error) {
 
         console.error('Error executing queries:', error);
-        res.status(500).send('Error executing recent rows');
 
     }
 
