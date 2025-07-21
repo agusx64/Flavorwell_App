@@ -666,13 +666,13 @@ router.get('/api/user_profile', authenticateToken, async (req, res) => {
 
         const [[user]] = await connection.query(
 
-            `SELECT username, img_profile_path FROM users WHERE id = ?`, [userId]
+            `SELECT username, email, img_profile_path FROM users WHERE id = ?`, [userId]
 
         );
 
         if (!user) return res.status(404).json({ success: false, message: 'User not found.' });
 
-        res.json({ success: true, name: user.username, profile_img: user.img_profile_path });
+        res.json({ success: true, name: user.username, profile_img: user.img_profile_path, email: user.email });
 
     } catch (error) {
 
