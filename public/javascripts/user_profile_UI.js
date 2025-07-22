@@ -215,7 +215,11 @@ saveButton.addEventListener('click', async (event) => {
             saveButton.disabled = false;
             saveButton.textContent = 'Save changes'
             saveButton.classList.remove('disabled');
-            editModal.classList.add('hidden');
+            setTimeout(function() {
+
+                editModal.classList.add('hidden');
+
+            }, 4000);
             
         })
 
