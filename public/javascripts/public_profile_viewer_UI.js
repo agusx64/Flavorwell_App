@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
     const restHost = 'http://localhost:3000';
+    // Variables para sistema de scrolleo
+    let offset = 0, limit = 10, loading = false, allRecipes = [];
 
     const userImgCover = document.getElementById('public-profile-viewer-img-cover');
     const userImgProfile = document.getElementById('public-profile-viewer-img-user');

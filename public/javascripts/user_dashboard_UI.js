@@ -18,7 +18,7 @@ const searchInput = document.querySelector('.input_search');
 const searchResultsContainer = document.getElementById('search_results_container');
 const resultsList = document.getElementById('search_results_list');
 
-// Variables para post de recetas de la comunidad
+// Variables para sistema de scrolleo
 let offset = 0, limit = 10, loading = false, allRecipes = [];
 const token = localStorage.getItem('token');
 
