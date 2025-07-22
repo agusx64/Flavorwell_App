@@ -35,6 +35,7 @@ body{
     width: 20vh;
     height: 20vh;
     border-radius: 100vh;
+    object-fit: cover;
 }
 
 .user-profile-info-container{
@@ -136,4 +137,107 @@ h2{
 
 .decline{
     margin-left: 1vh;
+}
+
+.modal-content{
+    width: 40vh !important;
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+    align-items: start !important;
+    justify-content: start !important; 
+}
+
+.modal-edit-title{
+    color: var(--ChiliRed);
+    font-size: 2.7vh;
+    font-weight: 600;
+    width: 100%;
+    margin-bottom: 2vh;
+}
+
+label{
+    color: var(--ChiliRed);
+    font-weight: 500;
+    font-size: 1.7vh;
+    margin-bottom: 1vh;
+}
+
+.input-edit-modal{
+    background-color: var(--WhiteBaseColor);
+    border-color: var(--Xhantous);
+    border-style: solid;
+    width: 100%;
+    height: 50px;
+    border-width: 2px;
+    border-radius: 3vw;
+    padding-left: 15px;
+    color: var(--ChiliRed);
+    margin-bottom: 1vh;
+}
+
+.input-edit-modal:focus{
+    border-style: none;
+    outline-color: var(--Xhantous);
+}
+
+.disabled{
+    background-color: var(--ChiliRedDisabled) !important;
+}
+
+.user-input-image {
+    display: none;
+}
+
+.custom-file-upload {
+    width: 100%;
+    height: 10vh;
+    border: 2px dashed var(--GreyContrast);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--Grey);
+    font-size: 4vh;
+    transition: all 0.3s ease;
+}
+
+/* Cambio de estilo al subir imagen */
+.custom-file-upload.uploaded {
+    border-color: #4CAF50;
+    background-color: #e8f5e9;
+    color: #4CAF50;
+}
+
+.user-profile-button-modal-container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5vh;
+}
+
+.user-profile-modal-button{
+    width: 45% !important;
+}
+
+.cancel{
+    background-color: var(--Xhantous) !important;
+}
+
+.message-validation-container{
+    width: 100%;
+    height: auto;
+}
+
+.change-notification{
+    color: var(--GreyContrast);
+    font-size: 1.5vh !important;
+    margin-top: 1.5vh !important;
+}
+
+.notification-icon{
+    margin-right: 5px;
 }

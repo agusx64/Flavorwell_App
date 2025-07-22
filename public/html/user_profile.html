@@ -98,6 +98,39 @@
         </div>
     </div>
 
+    <!-- Modal para editar perfil de usuario -->
+    <div id="edit-profile-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 class="modal-edit-title">Edit profile</h2>
+        
+            <label>Username</label>
+            <input class="input-edit-modal" type="text" id="edit-username" />
+        
+            <label>Email</label>
+            <input class="input-edit-modal" type="email" id="edit-email" />
+        
+            <label>Profile picture</label>
+            <label for="edit-profile-img" class="custom-file-upload">
+                <i class="bi bi-upload"></i>
+            </label>
+            <input class="user-input-image" type="file" id="edit-profile-img" accept="image/*" />
+
+            <label>Cover picture</label>
+            <label for="edit-cover-img" class="custom-file-upload cover-upload">
+                <i class="bi bi-upload"></i>
+            </label>
+            <input class="user-input-image" type="file" id="edit-cover-img" accept="image/*" />
+        
+            <div class="user-profile-button-modal-container">
+                <button id="save-profile-changes" class="user-profile-modal-button disabled" disabled>Save changes</button>
+                <button id="cancel-edit" class="user-profile-modal-button cancel">Cancel</button>
+            </div>
+            <div class="message-validation-container">
+            </div>
+        </div>
+    </div>
+
+
     <script src="/javascripts/user_profile_UI.js"></script>
     <script src="/javascripts/navbar_UI.js"></script>
 </body>

@@ -71,6 +71,21 @@ const authenticateToken = (req, res, next) => {
 
 };
 
+// Middleware para manejar la imagenes deñ usuario en cloudinary
+function uploadToCloudinary(fileBuffer, folder) {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream({ folder }, (error, result) => {
+            if (error) return reject(error);
+            resolve({
+                url: result.secure_url,
+                public_id: result.public_id
+            });
+        });
+
+        stream.end(fileBuffer);
+    });
+}
+
 // Endpoint para el registro de usuarios nuevos
 router.post('/register_user', async function(req, res) {
 
@@ -1072,6 +1087,7 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
     }
 });
 
+// Obtención de recetas creadas por el usuario
 router.get('/api/user_recipes', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
 
@@ -1111,6 +1127,148 @@ router.get('/api/user_recipes', authenticateToken, async (req, res) => {
         console.error('Error executing query:', error);
         res.status(500).json({ success: false, message: 'Error retrieving recipes' });
     }
+});
+
+router.post('/api/update_profile', authenticateToken, upload.fields([
+    { name: 'profile_img' },
+    { name: 'cover_img' }
+]), async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { username, email } = req.body;
+        const profileImg = req.files?.profile_img?.[0];
+        const coverImg = req.files?.cover_img?.[0];
+
+        // Obtener datos actuales del usuario
+        const [userResult] = await connection.query(
+            'SELECT username, email, img_profile_id, img_cover_id FROM users WHERE id = ?',
+            [userId]
+        );
+
+        if (userResult.length === 0) {
+            return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+        }
+
+        const currentUser = userResult[0];
+        const emailChanged = currentUser.email !== email;
+        const usernameChanged = currentUser.username !== username;
+
+        let imgProfilePath = null;
+        let imgCoverPath = null;
+        let imgProfileId = null;
+        let imgCoverId = null;
+
+        // Subir nueva imagen de perfil si se recibió
+        if (profileImg) {
+            if (currentUser.img_profile_id) {
+                await cloudinary.uploader.destroy(currentUser.img_profile_id);
+            }
+            const uploaded = await uploadToCloudinary(profileImg.buffer, 'image_users');
+            imgProfilePath = uploaded.url;
+            imgProfileId = uploaded.public_id;
+        }
+
+        // Subir nueva imagen de portada si se recibió
+        if (coverImg) {
+            if (currentUser.img_cover_id) {
+                await cloudinary.uploader.destroy(currentUser.img_cover_id);
+            }
+            const uploaded = await uploadToCloudinary(coverImg.buffer, 'image_covers');
+            imgCoverPath = uploaded.url;
+            imgCoverId = uploaded.public_id;
+        }
+
+        // Preparar token de verificación
+        const newVerificationToken = uuidv4();
+        const expiresAt = new Date(Date.now() + 1000 * 60 * 60); // 1 hora
+
+        // Actualizar usuario
+        await connection.query(`
+            UPDATE users 
+            SET username = ?, email = ?, 
+                img_profile_path = COALESCE(?, img_profile_path),
+                img_profile_id = COALESCE(?, img_profile_id),
+                img_cover_path = COALESCE(?, img_cover_path),
+                img_cover_id = COALESCE(?, img_cover_id),
+                verified = ?, 
+                verification_token = ?, 
+                expires_at = ?
+            WHERE id = ?
+        `, [
+            username,
+            email,
+            imgProfilePath,
+            imgProfileId,
+            imgCoverPath,
+            imgCoverId,
+            emailChanged || usernameChanged ? 0 : 1,
+            newVerificationToken,
+            expiresAt,
+            userId
+        ]);
+
+        // Si hay cambios sensibles, enviar correo de verificación
+        if (emailChanged || usernameChanged) {
+            const verifyLink = `${process.env.FRONTEND_URL}/users/api/verify_profile?token=${newVerificationToken}`;
+
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.MAIL_HOST,
+                    pass: process.env.MAIL_PASSWORD
+                }
+            });
+
+            await transporter.sendMail({
+                from: `"Mi App" <${process.env.MAIL_HOST}>`,
+                to: email,
+                subject: 'Verifica los cambios en tu perfil',
+                html: `
+                    <h3>Hola ${username}</h3>
+                    <p>Haz clic en el siguiente enlace para verificar tus cambios:</p>
+                    <a href="${verifyLink}">${verifyLink}</a>
+                    <p>Este enlace expirará en 1 hora.</p>
+                `
+            });
+        }
+
+        return res.status(200).json({ success: true, message: 'If you changed your username or email address, a confirmation email has been sent. Please check your inbox.' });
+
+    } catch (error) {
+        console.error('Error actualizando perfil:', error);
+        return res.status(500).json({ success: false, message: 'Error del servidor' });
+    }
+});
+
+
+router.get('/api/verify_profile', async (req, res) => {
+    const { token } = req.query;
+
+    if (!token) return res.status(400).json({ success: false, message: 'Token requerido' });
+
+    const [result] = await connection.query(
+        'SELECT id, expires_at FROM users WHERE verification_token = ?',
+        [token]
+    );
+
+    if (result.length === 0) {
+        return res.status(400).json({ success: false, message: 'Token inválido' });
+    }
+
+    const user = result[0];
+    const now = new Date();
+
+    if (now > user.expires_at) {
+        return res.status(400).json({ success: false, message: 'El token ha expirado' });
+    }
+
+    await connection.query(`
+        UPDATE users 
+        SET verified = 1, verification_token = NULL, expires_at = NULL 
+        WHERE id = ?
+    `, [user.id]);
+
+    return res.status(200).json({ success: true, message: 'Cambios verificados correctamente' });
 });
 
 
