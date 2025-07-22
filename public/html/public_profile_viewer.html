@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/stylesheets/recipe_viewer.css">
+    <link rel="stylesheet" href="/stylesheets/public_profile_viewer.css">
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <title>Public profile</title>
+</head>
+<body>
+
+    <!-- Template for another UI -->
+    <header class="header_menu" onclick="history.back()">
+        <button class="svg_icon return">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
+            </svg>
+        </button>
+        <h2 class="header_text poppins-semibold">[AgUs]' profile</h2>
+        <div class="svg_icon">
+            <i class="bi bi-person-circle"></i>
+        </div>
+    </header>
+
+    <section class="public-profile-viewer-container">
+
+        <!-- Componente de imagenes del usuario -->
+        <div class="public-profile-viewer-img-container">
+            <img id="public-profile-viewer-img-cover" src="" alt="" class="public-profile-viewer-img-cover">
+            <div class="public-profile-viewer-img-user-container">
+                <img id="public-profile-viewer-img-user" src="" alt="" class="public-profile-viewer-img-user">
+            </div>
+        </div>
+
+        <!-- Contendor de nombre y email del usuario -->
+        <div class="public-profile-viewer-user-info-container">
+            <h1 class="public-profile-viewer-username" id="public-profile-viewer-username"></h1>
+            <p class="public-profile-viewer-email" id="public-profile-viewer-email"></p>
+        </div>
+
+        <!-- Contenedor de detalles extra de receta -->
+        <div class="recipe-viewer-recipe-data-container">
+            <div class="recipe-viewer-recipe-data">
+                <i class="bi bi-calendar4-week recipe-viewer-icon"></i>
+                <span class="recipe-viewer-details">
+                    <strong>Income date:</strong>
+                    <p id="public-profile-viewer-income-date"></p>
+                </span>
+            </div>
+            <div class="recipe-viewer-recipe-data">
+                <i class="bi bi-arrow-up-circle-fill recipe-viewer-icon"></i>
+                <span class="recipe-viewer-details">
+                    <strong>Uploaded recipes:</strong>
+                    <p id="public-profile-viewer-uploaded-recipes"></p>
+                </span>
+            </div>
+            <div class="recipe-viewer-recipe-data">
+                <i class="bi bi-bookmark-fill recipe-viewer-icon"></i>
+                <span class="recipe-viewer-details">
+                    <strong>Saved recipes:</strong>
+                    <p id="public-profile-viewer-saved-recipes"></p>
+                </span>
+            </div>
+        </div>
+
+        <!-- Contenedor de etiqueta de recetas del usuario -->
+        <div class="public-profile-viewer-label-container">
+            <p class="public-profile-viewer-label">Explore my recipes</p>
+        </div>
+
+        <!-- Contenedor de recetas del usuario -->
+        <div class="public-profile-viewer-recipes-container">
+        </div>
+
+    </section>
+
+    <!-- Barra de navegación -->
+    <nav class="bottom_navbar">
+        <div class="nav_icons" id="start">
+            <i class="bi bi-house-door-fill"></i>
+        </div>
+        <div class="nav_icons" id="saved">
+            <i class="bi bi-bookmark-fill"></i>
+        </div>
+        <div class="nav_icons" id="add">
+            <i class="bi bi-plus-circle-fill"></i>
+        </div>
+        <div class="nav_icons" id="profile">
+            <i class="bi bi-person-circle"></i>
+        </div>
+        <div class="nav_icons" id="settings">
+            <i class="bi bi-gear-fill"></i>
+        </div>
+    </nav>
+    
+    <script src="/javascripts/public_profile_viewer_UI.js"></script>
+    <script src="/javascripts/navbar_UI.js"></script>
+</body>
+</html>

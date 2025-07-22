@@ -52,7 +52,8 @@ async function getUserInfo(userToken) {
         .then(data => {
 
             if (data.success) {
-                
+
+                console.log(data);
                 userProfileImg.src = data.profile_img
                     ? data.profile_img
                     : '/images/_UI_img/default.png';
@@ -65,6 +66,13 @@ async function getUserInfo(userToken) {
                     ? `<img src="${data.profile_img}" alt="User profile" class="user-img-header">`
                     // Si no existe insertan este componente
                     : `<i class="bi bi-person-circle"></i>`;
+
+                // Ver perfil personal del usuario
+                myPublicProfileButton.addEventListener('click', function() {
+
+                    window.location.href = `/html/public_profile_viewer.html?id=${data.id}`; 
+
+                });
 
             } else {
 
@@ -219,7 +227,7 @@ saveButton.addEventListener('click', async (event) => {
 
                 editModal.classList.add('hidden');
 
-            }, 4000);
+            }, 3000);
             
         })
 
@@ -268,12 +276,6 @@ savedRecipesButton.addEventListener('click', function() {
 myRecipesButton.addEventListener('click', function() {
 
     window.location.href = '/html/user_recipes.html';
-
-});
-
-myPublicProfileButton.addEventListener('click', function() {
-
-    window.location.href = '/html/public_profile.html';
 
 });
 

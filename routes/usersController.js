@@ -681,13 +681,13 @@ router.get('/api/user_profile', authenticateToken, async (req, res) => {
 
         const [[user]] = await connection.query(
 
-            `SELECT username, email, img_profile_path FROM users WHERE id = ?`, [userId]
+            `SELECT id, username, email, img_profile_path FROM users WHERE id = ?`, [userId]
 
         );
 
         if (!user) return res.status(404).json({ success: false, message: 'User not found.' });
 
-        res.json({ success: true, name: user.username, profile_img: user.img_profile_path, email: user.email });
+        res.json({ success: true, id: user.id, name: user.username, profile_img: user.img_profile_path, email: user.email });
 
     } catch (error) {
 
@@ -1082,9 +1082,73 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
         });
 
     } catch (error) {
+
         console.error('Error fetching recipe:', error);
         res.status(500).json({ success: false, message: 'Server error' });
+
     }
+
+});
+
+// Busacdor de información de usuario y datos de recetas relacionadas
+router.post('/get_user_by_id', authenticateToken, async (req, res) => {
+
+    const { id } = req.body;
+
+    try {
+
+        // Obtener usuario a traves de ID
+        const [results] = await connection.query(
+
+            'SELECT id, email, username, created_at, img_profile_path, img_cover_path FROM users WHERE id = ?;',
+            [id]
+
+        );
+
+        if (results.length === 0) {
+
+            return res.status(404).json({ success: false, message: 'User not found' });
+
+        }
+
+        const user = results[0];
+
+        // Obtencion de recetas guardadas por el usuario
+        const [rows] = await connection.query(
+
+            'SELECT COUNT(*) AS total_saved FROM saved_recipes WHERE user_id = ?;',
+            [id]
+
+        );
+        const totalSaved = rows[0].total_saved;
+
+        // Obtención de recetas totales subidas por el usuario
+        const queries = [
+            connection.query('SELECT COUNT(*) AS count FROM breakfast WHERE author = ?', [id]),
+            connection.query('SELECT COUNT(*) AS count FROM desserts WHERE author = ?', [id]),
+            connection.query('SELECT COUNT(*) AS count FROM strong_dish WHERE author = ?', [id]),
+            connection.query('SELECT COUNT(*) AS count FROM vegan WHERE author = ?', [id])
+        ];
+
+        const values = await Promise.all(queries);
+        const totalRecipes = values.reduce((sum, [row]) => sum + row[0].count, 0);
+
+        res.json({
+
+            success: true,
+            user: user,
+            total_saved: totalSaved,
+            total_recipes: totalRecipes
+
+        })
+
+    } catch(error) {
+
+        console.error('Error fetching recipe:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+
+    }
+
 });
 
 // Obtención de recetas creadas por el usuario
