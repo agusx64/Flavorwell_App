@@ -1377,14 +1377,35 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
             });
 
             await transporter.sendMail({
-                from: `"Mi App" <${process.env.MAIL_HOST}>`,
+                from: `"Flavorwell" <${process.env.MAIL_HOST}>`,
                 to: email,
                 subject: 'Verifica los cambios en tu perfil',
                 html: `
-                    <h3>Hola ${username}</h3>
-                    <p>Haz clic en el siguiente enlace para verificar tus cambios:</p>
-                    <a href="${verifyLink}">${verifyLink}</a>
-                    <p>Este enlace expirará en 1 hora.</p>
+                    <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
+                        <div style="text-align: center;">
+                            <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
+                        </div>
+                        <h2 style="color: rgb(0, 0, 0);">Hi, ${username}!</h2>
+                        <p style="color: #333; font-size: 16px;">
+                            Thank you for registering with <strong>Flavorwell</strong>. To complete your registration, please verify your email address by clicking the button below:
+                        </p>
+                        <div style="text-align: center; margin: 30px 0;">
+                            <a href="${verifyLink}" 
+                                style="background-color: #E3170A; color: white; padding: 15px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                                Verify Account
+                            </a>
+                        </div>
+                        <p style="color: #333; font-size: 14px;">
+                            If the button above doesn't work, copy and paste the following link into your browser:
+                        </p>
+                        <p style="word-break: break-all; color: #F7B32B; font-size: 14px;">
+                            <a href="${verifyLink}" style="color: #F7B32B;">${verifyLink}</a>
+                        </p>
+                        <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
+                        <p style="text-align: center; color: #aaa; font-size: 12px;">
+                            &copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.
+                        </p>
+                    </div>
                 `
             });
         }
@@ -1425,7 +1446,8 @@ router.get('/api/verify_profile', async (req, res) => {
         WHERE id = ?
     `, [user.id]);
 
-    return res.status(200).json({ success: true, message: 'Cambios verificados correctamente' });
+    // Redireccion a pagina de verificacion exitosa
+    res.redirect(`${process.env.FRONTEND_URL}/users/verified_success`);
 });
 
 

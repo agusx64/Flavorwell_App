@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded',async () => {
     })
     .then(data => {
 
-        console.log('Recipe data:', data);
         recipeTitle.textContent = data.data.name;
         recipeAuthor.textContent = data.author[0].username;
         recipeImage.src = data.data.img_path;

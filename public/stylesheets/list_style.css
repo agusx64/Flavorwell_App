@@ -21,16 +21,16 @@ body{
     color: var(--WhiteBaseColor);
     font-size: 3vw;
     position: relative;
-    margin: 0vw 3vw 0vw 3vw;
-    top: -10vh;
+    margin: 0vw 1vh 0vw 1vh;
+    top: -12vh;
 }
 
 .recipe-card-text{
     color: var(--WhiteBaseColor);
-    font-size: 4.5vw;
+    font-size: 2.5vh;
     position: relative;
-    top: -10vh;
-    margin: 0vw 3vw 0vw 3vw;
+    top: -12vh;
+    margin: 0vw 1vh 0vw 1vh;
 }
 
 .recipe-card-img{
