@@ -1,5 +1,5 @@
 body{
-    padding-top: 25%;
+    padding-top: 25% !important;
 }
 
 .public-profile-viewer-container{
@@ -18,7 +18,6 @@ body{
 .public-profile-viewer-img-cover{
     width: 100%;
     height: 25vh;
-    background-color: grey;
     border-radius: 1.5vh;
     object-fit: cover;
 }
@@ -40,7 +39,6 @@ body{
     width: 18vh;
     height: 18vh;
     border-radius: 50vh;
-    background-color: grey;
     object-fit: cover;
 }
 

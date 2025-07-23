@@ -53,7 +53,6 @@ async function getUserInfo(userToken) {
 
             if (data.success) {
 
-                console.log(data);
                 userProfileImg.src = data.profile_img
                     ? data.profile_img
                     : '/images/_UI_img/default.png';

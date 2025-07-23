@@ -66,10 +66,16 @@ document.addEventListener('DOMContentLoaded',async () => {
         recipeAuthorContainer.innerHTML = data.author[0].img_profile_path
             // Si existe una foto de perfilinsertan este componente
             ? `<img src="${data.author[0].img_profile_path}" alt="image_of_author" class="recipe-viewer-status-img">
-                <p class="recipe-viewer-status-author">${data.author[0].username}</p>`
+                <p id="recipe-viewer-view-user-profile" class="recipe-viewer-status-author">${data.author[0].username}</p>`
             // Si no existe insertan este componente
             : `<i class="bi bi-person-circle svg_profile"></i>
-                <p class="recipe-viewer-status-author">${data.author[0].username}</p>`;
+                <p id="recipe-viewer-view-user-profile" class="recipe-viewer-status-author">${data.author[0].username}</p>`;
+
+        const recipeViewerViewUserProfile = document.getElementById('recipe-viewer-view-user-profile');
+        recipeViewerViewUserProfile.addEventListener('click', function() {
+
+            window.location.href = `/html/public_profile_viewer.html?id=${data.authorId}`;
+        })
 
         // Agregar ingredientes de receta dinamicamente
         const ingredientsContainer = document.querySelector('.recipe-viewer-ingredients-list-container');
