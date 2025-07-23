@@ -1,115 +1,89 @@
-@media screen and (max-width: 767px) {
+body{
+    padding-top: 30%;
+}
 
-    *{
-        font-family: 'Poppins';
-    }
-    
-    .gear{
-        color: var(--WhiteBaseColor);
-        font-size: 25px;
-    }
+.user-settings-container{
+    padding: 4%;
+    width: 100%;
+    height: auto;
+}
 
-    .svg_icon{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+.user-settings-info-container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
 
-    .settings_container{
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        align-items: center;
-        padding-top: 20vh;
-        padding-bottom: 10vh;
-    }
+.user-settings-username-container{
+    margin-left: 2vh;
+}
 
-    .profile_information{
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        align-items: center;
-    }
+.user-settings-username{
+    color: var(--ChiliRed);
+    font-size: 3.5vh;
+}
 
-    .circle_profile{
-        background-color: var(--GreyLight);
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .image_profile{
-        width: 188px;
-        height: 188px;
-        object-fit: cover;
-        border-radius: 50%;
-    }
+.user-settings-email{
+    color: var(--GreyContrast);
+    font-size: 2vh;
+}
 
-    .name_user{
-        margin-top: 2vh;
-        color: var(--ChiliRed);
-        font-weight: 600;
-    }
+.user-settings-img-container{
+    width: 6.5vh;
+    height: 6.5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    .email_user{
-        color: var(--GreySimple);
-    }
+.user-settings-icon-header{
+    color: var(--GreyContrast);
+    font-size: 6vh;
+}
 
-    .edit_profile{
-        margin-top: 1vh;
-        background-color: var(--ChiliRed);
-        width: 15vh;
-        height: 6vh;
-        color: var(--WhiteBaseColor);
-        border-radius: 50px;
-        border-style: none;
-    }
+.user-settings-line-container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3vh;
+    margin-bottom: 4vh;
+}
 
-    .button_help_container{
-        width: 90%;
-        height: auto;
-        margin-top: 25px;
-    }
+.user-settings-line{
+    width: 80%;
+    height: 4px;
+    background-color: var(--Xhantous);
+    border-radius: 25px;
+}
 
-    .container_option{
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: start;
-    }
+.user-settings-options-container{
+    width: 100%;
+    height: auto;
+}
 
-    .label_option{
-        color: var(--GreySimple);
-        font-size: 13px;
-    }
+.user-settings-option{
+    width: 100%;
+    height: 7vh;
+    padding-left: 2vh;
+    background-color: var(--GreyLight);
+    color: var(--ChiliRed);
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    border-radius: 1.5vh;
+    margin-bottom: 2vh;
+}
 
-    .button_option{
-        background-color: var(--GreyLight);
-        color: var(--ChiliRed);
-        border-style: none;
-        height: 7vh;
-        width: 100%;
-        margin-top: 1vh;
-        margin-bottom: 1vh;
-        border-radius: 15px;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        padding-left: 20px;
-    }
+.user-settings-option-icon{
+    font-size: 2.7vh;
+    margin-right: 1.5vh;
+}
 
-    .label_text_button{
-        font-weight: 600;
-        margin-left: 15px;
-    }
-
-
-
+.user-settings-option-text{
+    font-size: 1.7vh;
+    color: var(--BlackBaseColor);
 }

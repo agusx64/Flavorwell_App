@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/stylesheets/settings.css">
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <title>Settings</title>
+</head>
+<body>
+
+    <!-- Template for another UI -->
+    <header class="header_menu" onclick="history.back()">
+        <button class="svg_icon return">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
+            </svg>
+        </button>
+        <h2 class="header_text poppins-semibold">Settings</h2>
+        <div class="svg_icon" id="svg-icon-profile">
+            <i class="bi bi-gear-wide-connected"></i>
+        </div>
+    </header>
+
+    <!-- Contendor de opciones de configuración -->
+    <section class="user-settings-container">
+
+        <!-- Contenedor de datos de usuario en sesion -->
+        <div class="user-settings-info-container">
+            <div class="user-settings-img-container">
+                <i class="bi bi-person-circle user-settings-icon-header"></i>
+            </div>
+            <div class="user-settings-username-container">
+                <h1 class="user-settings-username">Agus.js</h1>
+                <p class="user-settings-email">agusm1253@gmail.com</p>
+            </div>
+        </div>
+
+        <!-- Contenedor de linea de división -->
+        <div class="user-settings-line-container">
+            <div class="user-settings-line"></div>
+        </div>
+
+        <!-- Contenedor de opciones de configuracion -->
+        <div class="user-settings-options-container">
+            <div class="user-settings-option">
+                <i class="bi bi-info-circle-fill user-settings-option-icon"></i>
+                <span class="user-settings-option-text">About flavorwell</span>
+            </div>
+            <div class="user-settings-option">
+                <i class="bi bi-question-circle-fill user-settings-option-icon"></i>
+                <span class="user-settings-option-text">Help center</span>
+            </div>
+            <div class="user-settings-option">
+                <i class="bi bi-person-circle user-settings-option-icon"></i>
+                <span class="user-settings-option-text">My profile</span>
+            </div>
+            <div class="user-settings-option">
+                <i class="bi bi-box-arrow-right user-settings-option-icon"></i>
+                <span class="user-settings-option-text">Log out</span>
+            </div>
+            <div class="user-settings-option">
+                <i class="bi bi-trash-fill user-settings-option-icon"></i>
+                <span class="user-settings-option-text">Delete account</span>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Barra de navegación -->
+    <nav class="bottom_navbar">
+        <div class="nav_icons" id="start">
+            <i class="bi bi-house-door-fill"></i>
+        </div>
+        <div class="nav_icons" id="saved">
+            <i class="bi bi-bookmark-fill"></i>
+        </div>
+        <div class="nav_icons" id="add">
+            <i class="bi bi-plus-circle-fill"></i>
+        </div>
+        <div class="nav_icons" id="profile">
+            <i class="bi bi-person-circle"></i>
+        </div>
+        <div class="nav_icons" id="settings">
+            <i class="bi bi-gear-fill"></i>
+        </div>
+    </nav>
+    
+    <script src="/javascripts/settings_UI.js"></script>
+    <script src="/javascripts/navbar_UI.js"></script>
+</body>
+</html>

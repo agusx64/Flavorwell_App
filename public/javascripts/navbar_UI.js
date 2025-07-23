@@ -30,5 +30,6 @@ profileButton.addEventListener('click', function() {
 
 settingsButton.addEventListener('click', function() {
 
-    window.location.href = '/html/user.profile.html';
-})
+    window.location.href = '/html/settings.html';
+
+});
