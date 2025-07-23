@@ -241,3 +241,17 @@ label{
 .notification-icon{
     margin-right: 5px;
 }
+
+.modalLogOut{
+    width: 60% !important;
+    height: 30% !important;
+    background-color: var(--WhiteBaseColor) !important;
+    border-radius: 10px !important;
+    text-align: center !important;
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.3) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 1.5vh !important;
+}
