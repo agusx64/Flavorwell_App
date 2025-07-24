@@ -7,11 +7,97 @@
     <link rel="stylesheet" href="/stylesheets/about.css">
     <link rel="stylesheet" href="/stylesheets/layout.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 
     <title>About</title>
 </head>
 <body>
     
+    <!-- Template for another UI -->
+    <header class="header_menu" onclick="history.back()">
+        <button class="svg_icon return">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
+            </svg>
+        </button>
+        <h2 class="header_text poppins-semibold">About Us</h2>
+        <div class="svg_icon" id="svg-icon-profile">
+            <i class="bi bi-info-circle-fill"></i>
+        </div>
+    </header>
+
+    <section class="info-about-container">
+        <h3>About flavorwell</h3>
+        <p>Flavorwell is a digital platform designed to transform the way people discover, prepare, and enjoy their everyday meals. Combining modern technology with an intuitive cooking experience, Flavorwell offers a diverse library of recipes organized by dish type, dietary preferences, and preparation time, all in a single app.</p>
+
+        <h3>Mision</h3>
+        <p>Our mission is to democratize access to delicious, healthy, and personalized food through a practical, accessible, and user-friendly digital solution for everyone, from cooking novices to more experienced cooks.</p>
+
+        <h3>Approach and values</h3>
+        <strong>Flavorwell promotes</strong>
+        <ul>
+            <li>Access to quality food regardless of culinary experience or time constraints.</li>
+            <li>Inclusive options, such as vegan, vegetarian, or low-calorie recipes.</li>
+            <li>Continuously updated, with new recipes and improvements based on user feedback.</li>
+            <li>Sustainable and scalable development, following good programming and web architecture practices.</li>
+        </ul>
+
+        <h3>Who's behind it?</h3>
+        <p>Flavorwell is a project developed by <strong>Agustin Mora</strong>, a computer systems engineer with experience in full-stack web development. This project represents the fusion of two passions: technology and gastronomy, and seeks to continue evolving as a useful solution with a real impact on users' lives.</p>
+
+        <h3>Shall we collaborate?</h3>
+        <p>Do you have a recipe you'd like to share? Are you a food content creator or developer interested in contributing?</p>
+        <p>We're open to collaborations!</p>
+        <ul>
+            <li>agustin.mora.trinidad@gmail.com</li>
+            <li>agusm1253@gmail.com</li>
+        </ul>
+
+        <h3>How does Flavorwell work?</h3>
+        <p>Flavorwell has been developed using modern technologies such as Node.js, Express, and MySQL databases, ensuring efficient performance, scalability, and ease of maintenance. It integrates features such as:</p>
+        <ul>
+            <li>Smart recipe catalog, categorized by type: breakfasts, main dishes, desserts, vegan options, among others.</li>
+            <li>Search engine optimized to find dishes based on ingredients, diet type, or difficulty level.</li>
+            <li>Personalized favorites management: easily save, categorize, and access your favorite recipes.</li>
+            <li>Intuitive and responsive interface, adaptable to different devices.</li>
+            <li>Administrative panel to dynamically manage content (under development for future versions).</li>
+        </ul>
+
+        <div class="technologies">
+            <i style="color: rgb(92, 102, 255)" class="devicon-capacitor-plain"></i>
+            <i style="color: rgb(7, 204, 0)" class="devicon-android-plain"></i>
+            <i style="color: rgb(219, 124, 0)" class="devicon-html5-plain"></i>
+            <i style="color: rgb(24, 47, 255)" class="devicon-css3-plain"></i>
+            <img style="width: 2.5vh; height: 2.5vh; object-fit: cover;" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" />
+            <i style="color: rgb(15, 70, 250)" class="devicon-bootstrap-plain"></i>
+            <i style="color: rgb(41, 0, 95)" class="devicon-mysql-original"></i>
+            <i style="color: black" class="devicon-express-original"></i>
+            <i style="color: rgb(41, 26, 95)" class="devicon-github-original"></i>
+            <i style="color: rgb(71, 65, 148)" class="devicon-docker-plain"></i>
+            <img style="width: 2.5vh; height: 2.5vh; object-fit: cover;" src="https://www.jwt.io/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fjwt-flower.f20616b0.png&w=3840&q=75" alt="">
+            <img style="width: 2.5vh; height: 2.5vh; object-fit: cover;" src="https://res.cloudinary.com/dqizoxubr/image/upload/v1723775499/samples/cloudinary-icon.png" alt="">
+        </div>
+    </section>
     
+    <!-- Barra de navegación -->
+    <nav class="bottom_navbar">
+        <div class="nav_icons" id="start">
+            <i class="bi bi-house-door-fill"></i>
+        </div>
+        <div class="nav_icons" id="saved">
+            <i class="bi bi-bookmark-fill"></i>
+        </div>
+        <div class="nav_icons" id="add">
+            <i class="bi bi-plus-circle-fill"></i>
+        </div>
+        <div class="nav_icons" id="profile">
+            <i class="bi bi-person-circle"></i>
+        </div>
+        <div class="nav_icons" id="settings">
+            <i class="bi bi-gear-fill"></i>
+        </div>
+    </nav>
+
+    <script src="/javascripts/navbar_UI.js"></script>
 </body>
 </html>

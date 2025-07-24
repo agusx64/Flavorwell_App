@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const confirmationModal = document.getElementById('confirmationModal');
     const aproveButtonLogOut = document.getElementById('aprove-log-out');
     const declineButtonLogOut = document.getElementById('decline-log-out');
+    const aboutButton = document.getElementById('about-button');
 
     // Funcion para obtener nombre y foto de perfil
     async function getUserInfo() {
@@ -80,5 +81,11 @@ document.addEventListener('DOMContentLoaded', async function() {
         confirmationModal.classList.add('hidden');
 
     });
+
+    aboutButton.addEventListener('click', function() {
+
+        window.location.href = '/html/about.html';
+
+    })
 
 });
