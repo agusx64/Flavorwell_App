@@ -43,6 +43,13 @@ body{
     font-size: 6vh;
 }
 
+.img-header-user{
+    border-radius: 50vh;
+    object-fit: cover;
+    width: 6vh;
+    height: 6vh;
+}
+
 .user-settings-line-container{
     width: 100%;
     height: auto;
@@ -86,4 +93,21 @@ body{
 .user-settings-option-text{
     font-size: 1.7vh;
     color: var(--BlackBaseColor);
+}
+
+.buttons-confirmation-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.aprove{
+    width: 45% !important;
+    background-color: var(--Celadon) !important;
+
+}
+
+.decline{
+    width: 45% !important;
 }

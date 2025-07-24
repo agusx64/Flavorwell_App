@@ -89,9 +89,6 @@ function uploadToCloudinary(fileBuffer, folder) {
 // Endpoint para el registro de usuarios nuevos
 router.post('/register_user', async function(req, res) {
 
-    const register_data = req.body
-    // console.log(register_data);
-
     const { username, mail, pass } = req.body;
 
     try{
@@ -1418,7 +1415,6 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
     }
 });
 
-
 router.get('/api/verify_profile', async (req, res) => {
     const { token } = req.query;
 
@@ -1449,9 +1445,6 @@ router.get('/api/verify_profile', async (req, res) => {
     // Redireccion a pagina de verificacion exitosa
     res.redirect(`${process.env.FRONTEND_URL}/users/verified_success`);
 });
-
-
-
 
 //---------------------------------------------------------NODE CRON JOBS ---------------------------------------------------------------------------------
 

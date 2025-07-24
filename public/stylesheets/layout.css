@@ -235,7 +235,7 @@ body{
 
 .modal-content {
     width: 60%;
-    height: 30%;
+    height: auto;
     background-color: var(--WhiteBaseColor);
     border-radius: 10px;
     text-align: center;

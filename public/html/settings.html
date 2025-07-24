@@ -46,25 +46,21 @@
 
         <!-- Contenedor de opciones de configuracion -->
         <div class="user-settings-options-container">
-            <div class="user-settings-option">
+            <div class="user-settings-option" id="about-button">
                 <i class="bi bi-info-circle-fill user-settings-option-icon"></i>
                 <span class="user-settings-option-text">About flavorwell</span>
             </div>
-            <div class="user-settings-option">
-                <i class="bi bi-question-circle-fill user-settings-option-icon"></i>
-                <span class="user-settings-option-text">Help center</span>
-            </div>
-            <div class="user-settings-option">
+            <div class="user-settings-option" id="my-profile-button">
                 <i class="bi bi-person-circle user-settings-option-icon"></i>
                 <span class="user-settings-option-text">My profile</span>
             </div>
-            <div class="user-settings-option">
+            <div class="user-settings-option donate-button" id="donate-button">
+                <i class="bi bi-paypal user-settings-option-icon paypal"></i>
+                <span class="user-settings-option-text">Donate</span>
+            </div>
+            <div class="user-settings-option" id="log-out-button">
                 <i class="bi bi-box-arrow-right user-settings-option-icon"></i>
                 <span class="user-settings-option-text">Log out</span>
-            </div>
-            <div class="user-settings-option">
-                <i class="bi bi-trash-fill user-settings-option-icon"></i>
-                <span class="user-settings-option-text">Delete account</span>
             </div>
         </div>
 
@@ -88,6 +84,18 @@
             <i class="bi bi-gear-fill"></i>
         </div>
     </nav>
+
+    <!-- Success modal -->
+    <div id="confirmationModal" class="modal hidden">
+        <div class="modal-content modalLogOut">
+            <img src="/images/_UI_img/error.webp" class="check_img" alt="error_img">
+            <p>Are you sure you want to log out?</p>
+            <div class="buttons-confirmation-container">
+                <button class="aprove" id="aprove-log-out">Yes</button>
+                <button class="decline" id="decline-log-out">No</button>
+            </div>
+        </div>
+    </div>
     
     <script src="/javascripts/settings_UI.js"></script>
     <script src="/javascripts/navbar_UI.js"></script>
