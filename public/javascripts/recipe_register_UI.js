@@ -264,6 +264,22 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('name-recipe-text').addEventListener('input', validateForm);
     document.getElementById('recipe-description-text').addEventListener('input', validateForm);
     document.getElementById('formFile').addEventListener('change', validateForm);
+    const inputImage = document.getElementById('formFile');
+    const labelRegisterImg = document.getElementById('label-recipe-register-img');
+
+    inputImage.addEventListener('change', () => {
+
+        if (inputImage.files && inputImage.files[0]) {
+
+            labelRegisterImg.classList.add('uploaded')
+
+        } else {
+
+            labelRegisterImg.classList.remove('uploaded');
+
+        }
+
+    });
 
     const observer = new MutationObserver(validateForm);
     const configObserver = { childList: true, subtree: false };

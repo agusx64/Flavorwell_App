@@ -226,19 +226,7 @@ ul, ol {
 
 
 .form_control_file{
-    color: var(--ChiliRed);
-    font-size: 12px;
-    border-radius: 10px;
-}
-
-.form_control_file::file-selector-button{
-    background-color: var(--ChiliRed);
-    color: var(--WhiteBaseColor);
-    height: 40px;
-}
-
-.mb-3{
-    height: 40px;
+    display: none;
 }
 
 .post_button_recipe{
@@ -419,4 +407,26 @@ body{
     margin-bottom: 6px;
 };
 
+.recipe-register-img-input-container{
+    width: 100%;
+    height: auto;
+}
 
+.file-input-label-style{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 8vh;
+    font-size: 2.5vh;
+    border: 2px dashed var(--ChiliRed);
+    border-radius: 1.5vh;
+    color: var(--ChiliRed);
+    margin-top: 1vh;
+}
+
+.uploaded {
+    border-color: rgb(17, 160, 17);
+    background-color: var(--WhiteBaseColor);
+    color: var(--Celadon);
+}

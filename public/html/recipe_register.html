@@ -113,10 +113,13 @@
             
                 <ul id="step_list" class="step-list"></ul>
             </section> 
-
+            
             <!-- Input para subir imagen de receta -->
-            <div class="mb-3">
-                <label for="formFile" class="form-label label_text_form poppins-semibold">Select an image for your recipe</label>
+            <div class="recipe-register-img-input-container">
+                <label class="label_text_form poppins-semibold">Upload your recipe image</label>
+                <label id="label-recipe-register-img" for="formFile" class="file-input-label-style poppins-semibold">
+                    <i class="bi bi-upload"></i>
+                </label>
                 <input name="image" accept=".jpg, .jpeg, .png .webp" class="form-control form_control_file" type="file" id="formFile" disabled>
             </div>
 
