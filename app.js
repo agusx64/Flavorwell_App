@@ -9,7 +9,6 @@ const mysql = require('mysql');
 const view_engine = require('ejs');
 const multer = require('multer');
 const fs = require('fs');
-const axios = require('axios');
 const dotenv = require('dotenv');
 const OpenAI = require('openai-api');
 
