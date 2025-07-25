@@ -1,4 +1,5 @@
 var express = require('express');
+var OpenAI  = require('openai');
 var mysql = require('mysql2/promise');
 require('dotenv').config();
 var cron = require('node-cron');
@@ -7,6 +8,7 @@ const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+const { parseResponse } = require('openai/lib/ResponsesParser.mjs');
 const cloudinary = require('cloudinary').v2;
 var router = express.Router()
 
@@ -28,8 +30,6 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 
 });
-
-
 
 // Conexión de tipo Pool para multiples conexiones
 const connection = mysql.createPool({
@@ -84,7 +84,14 @@ function uploadToCloudinary(fileBuffer, folder) {
 
         stream.end(fileBuffer);
     });
-}
+};
+
+// Middleware de autenticación para API de OpenAi
+const openai = new OpenAI({
+
+    apiKey: process.env.OPENAI_API_KEY
+
+});
 
 // Endpoint para el registro de usuarios nuevos
 router.post('/register_user', async function(req, res) {
@@ -1445,6 +1452,65 @@ router.get('/api/verify_profile', async (req, res) => {
     // Redireccion a pagina de verificacion exitosa
     res.redirect(`${process.env.FRONTEND_URL}/users/verified_success`);
 });
+
+router.post('/api/recipes/ai-generate', authenticateToken, async (req, res) => {
+
+    const { name, category } = req.body;
+
+    try {
+
+        // 1. Obtener ingredientes desde la base de datos
+        const [rows] = await connection.query('SELECT name FROM ingredients_list;');
+        const ingredientList = rows.map(row => row.name).join(', ');
+
+        // 2. Crear el prompt
+        const prompt = `
+
+            To create a recipe for "${name}" based on the "${category}" category, you must provide:
+            1. A brief description of the recipe (maximum 200 characters).
+            2. Create a list of the necessary ingredients, choosing only from the following available ones: ${ingredientList}.
+            3. Step-by-step cooking instructions.
+            Return the result in JSON format with the structure:
+            {
+                "description": "...",
+                "ingredients": ["...", "..."],
+                "instructions": ["Step 1...", "Step 2...", ...]
+            }
+
+        `;
+
+        const completion = await openai.chat.completions.create({
+
+            model: "gpt-4",
+            messages: [{ role: "user", content: prompt }]
+
+        });
+
+        const responseText = completion.choices[0]?.message?.content || '';
+        let parsed;
+
+        try {
+
+            parsed = JSON.parse(responseText);
+
+        } catch (err) {
+
+            console.error("Error parsing AI response:", err);
+            return res.status(500).json({ error: 'Failed to parse AI response' });
+
+        }
+
+        console.log(parsed);
+        return res.json({success: true, data: parsed, message: 'Recipe generated'});
+
+    } catch (error) {
+
+        console.error("Internal server error", error);
+
+    }
+
+});
+
 
 //---------------------------------------------------------NODE CRON JOBS ---------------------------------------------------------------------------------
 

@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const customOptionsItems = document.querySelectorAll('.custom-option');
     const realSelect = document.getElementById('real-select');
     const sendRecipeButton = document.getElementById('send-recipe');
+    const sendPromptRecipeButton = document.getElementById('generate-description-button');
     let text_category;
 
     // Host backend
@@ -231,6 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
             selectTrigger.querySelector('span').textContent = text_category;
             customOptions.classList.remove('open');
             validateForm();
+            validatePromptButton();
         });
     });
 
@@ -259,9 +261,32 @@ document.addEventListener("DOMContentLoaded", function () {
             instructions.length >= 3;
 
         sendRecipeButton.disabled = !isValid;
-    }
 
-    document.getElementById('name-recipe-text').addEventListener('input', validateForm);
+    };
+
+    function validatePromptButton() {
+
+        const name = document.getElementById('name-recipe-text').value.trim();
+
+        if (name !== '' && text_category) {
+
+            sendPromptRecipeButton.disabled = false;
+
+        } else {
+
+            sendPromptRecipeButton.disabled = true;
+
+        }
+
+    };
+
+
+    document.getElementById('name-recipe-text').addEventListener('input', () => {
+
+        validateForm();
+        validatePromptButton();
+
+    });
     document.getElementById('recipe-description-text').addEventListener('input', validateForm);
     document.getElementById('formFile').addEventListener('change', validateForm);
     const inputImage = document.getElementById('formFile');
@@ -379,7 +404,158 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-    })
+    });
+
+    sendPromptRecipeButton.addEventListener('click', async (event) => {
+
+        event.preventDefault();
+        sendPromptRecipeButton.disabled = true;
+
+        const name = document.getElementById('name-recipe-text').value.trim();
+        const category = text_category;
+
+        try {
+
+            await fetch(restHost + '/users/api/recipes/ai-generate', {
+
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ name: name, category: category })
+
+            })
+            .then( async response => {
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                
+                    imgErrorModal.src = '/images/_UI_img/error.webp';
+                    textErrorModal.textContent = `${data.message}`;
+                
+                    errorModal.classList.remove('hidden');
+                    tryAgainButton.addEventListener('click', () => {
+                    
+                        errorModal.classList.add('hidden');
+                    
+                    });
+                                
+                }
+            
+                return data;
+
+            })
+            .then(data => {
+
+                if (data.success) {
+
+                    console.log(data);
+
+                    const { description, ingredients, instructions } = data.data;
+
+                    // Insertar descipción de la receta
+                    document.getElementById('recipe-description-text').value = description;
+
+                    ingredients.forEach(async (ingredientName) => {
+
+                        try {
+
+                            const res = await fetch(restHost + `/lists/api/ingredients/search?q=${encodeURIComponent(ingredientName)}`);
+                            const results = await res.json();
+
+                            if (results.length > 0) {
+
+                                const ing = results[0];
+                                const li = document.createElement('li');
+                                li.classList.add('ingredient-item');
+                                li.setAttribute('draggable', 'true');
+                                li.setAttribute('data-id', ing.id);
+
+                                li.innerHTML = `
+
+                                    <div class="ingredient-info">
+                                        <i class="bi bi-grip-vertical drag-handle"></i>
+                                        <img class="ingredient-img li-img" src="${ing.src_reference}" alt="${ing.name}">
+                                        <span class="ingredient-name">${formatText(ing.name)}</span>
+                                    </div>
+                                    <i class="bi bi-x remove-icon"></i>
+
+                                `;
+
+                                selectedList.appendChild(li);
+                                updateDragAndDrop();
+
+                            } else {
+
+                                console.log('Hay un ingrediente generado que aun no esta disponible, estamos trabajando en agregar ingredientes constantemente.')
+
+                            }
+
+                        } catch (error) {
+
+                            console.error('Error buscando ingrediente:', ingredientName, err);
+
+                        }
+
+                    });
+
+                    // Insertar los pasos de la receta
+                    stepList.innerHTML = '';
+                    instructions.forEach(step => {
+
+                        const li = document.createElement('li');
+                        li.classList.add('step-item');
+                        li.draggable = true;
+                        li.innerHTML = `
+                            <div class="step-info">
+                                <div><i class="bi bi-grip-vertical step-drag"></i></div>
+                                <div class="step-instruction">
+                                    <span class="step-instruction-name">${step}</span>
+                                </div>
+                            </div>
+                            <i class="bi bi-x step-delete"></i>
+                        `;
+
+                        stepList.appendChild(li);
+
+                    });
+
+                    validateForm();
+
+                } else {
+
+                    // Muestra mensaje de error si deseas
+                    imgErrorModal.src = '/images/_UI_img/error.webp';
+                    textErrorModal.textContent = 'AI response error.';
+                    errorModal.classList.remove('hidden');
+                    tryAgainButton.addEventListener('click', () => {
+
+                        errorModal.classList.add('hidden');
+
+                    });
+
+                }
+            })
+            .catch(error => {
+
+                console.error("Error al procesar la solicitud:", error);
+
+            })
+            .finally(() => {
+
+                sendPromptRecipeButton.disabled = false;
+
+            })
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    });
 
     document.getElementById('formFile').disabled = false;
 
