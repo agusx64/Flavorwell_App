@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">flavorwell</string>
+    <string name="title_activity_main">flavorwell</string>
+    <string name="package_name">com.flavorwell.app</string>
+    <string name="custom_url_scheme">com.flavorwell.app</string>
+</resources>

@@ -23,7 +23,7 @@ const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
 
 // Direccion del Back-End
-var restHost = 'http://localhost:3000'
+var restHost = 'http://192.168.164.102:3000'
 
 restorePasswordButton.disabled = true;
 

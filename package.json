@@ -6,7 +6,10 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@capacitor/android": "^7.4.2",
     "@capacitor/browser": "^7.0.1",
+    "@capacitor/cli": "^7.4.2",
+    "@capacitor/core": "^7.4.2",
     "animate.css": "^4.1.1",
     "bcrypt": "^6.0.0",
     "body-parser": "^1.20.2",
@@ -16,12 +19,12 @@
     "debug": "~2.6.9",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
-    "express": "~4.16.1",
+    "express": "^4.21.2",
     "fs": "^0.0.1-security",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.2",
     "ldrs": "^1.0.1",
-    "morgan": "~1.9.1",
+    "morgan": "^1.10.1",
     "multer": "^2.0.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.11.0",
@@ -33,5 +36,19 @@
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.8"
-  }
+  },
+  "description": "Bienvenido a **Flavorwell App**, una aplicación web movil de tipo red social, en donde los usuarios pueden compartir sus platillos favoritos a el resto de la comunidad, con una interfaz intuitiva, colorida y facil de usar.",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agusx64/Flavorwell_App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/agusx64/Flavorwell_App/issues"
+  },
+  "homepage": "https://github.com/agusx64/Flavorwell_App#readme"
 }

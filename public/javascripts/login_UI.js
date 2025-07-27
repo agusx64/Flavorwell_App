@@ -8,7 +8,7 @@ const imgErrorModal = document.getElementById('img-context');
 const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
 
-var restHost = 'http://localhost:3000'
+var restHost = 'http://192.168.164.102:3000'
 
 loginButton.addEventListener('click', function(event) {
 

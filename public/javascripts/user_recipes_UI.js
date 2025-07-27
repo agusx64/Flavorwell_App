@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
 })
 
 // Host backend
-const restHost = 'http://localhost:3000';
+const restHost = 'http://192.168.164.102:3000';
 
 async function getUserRecipes(userToken) {
 

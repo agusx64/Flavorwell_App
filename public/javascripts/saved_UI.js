@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const container = document.querySelector('.saved-recipes-container');
     const token = localStorage.getItem('token');
-    const restHost = 'http://localhost:3000'
+    const restHost = 'http://192.168.164.102:3000'
 
     async function fetchSavedRecipes() {
 
