@@ -3,14 +3,8 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const logger = require('morgan');
-const mysql = require('mysql');
-const view_engine = require('ejs');
-const multer = require('multer');
-const fs = require('fs');
 const dotenv = require('dotenv');
-const OpenAI = require('openai-api');
 
 // Load environment variables from .env file
 dotenv.config();
