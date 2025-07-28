@@ -27,7 +27,7 @@ const label = document.querySelector('.custom-file-upload');
 const labelCover = document.querySelector('.cover-upload');
 
 const token = localStorage.getItem('token');
-const restHost = 'http://localhost:3000';
+const restHost = 'https://flavorwell.up.railway.app';
 
 async function getUserInfo(userToken) {
 

@@ -8,7 +8,7 @@ const imgErrorModal = document.getElementById('img-context');
 const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
 
-var restHost = 'http://localhost:3000'
+var restHost = 'https://flavorwell.up.railway.app'
 
 recoverButton.addEventListener('click', function(event) {
 

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async function() {
 
     const token = localStorage.getItem('token');
-    const restHost = 'http://localhost:3000';
+    const restHost = 'https://flavorwell.up.railway.app';
     const paypalLink = 'https://www.paypal.com/donate/?hosted_button_id=PDZDH957EZBEG';
     const myProfileButton = document.getElementById('my-profile-button');
     const logOutButton = document.getElementById('log-out-button');

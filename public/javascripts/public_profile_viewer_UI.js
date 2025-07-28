@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
-    const restHost = 'http://localhost:3000';
+    const restHost = 'https://flavorwell.up.railway.app';
     // Variables para sistema de scrolleo
     let offset = 0, limit = 10, loading = false, allRecipes = [];
 

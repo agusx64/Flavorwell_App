@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded',async () => {
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
     const table = urlParams.get('table');
-    const restHost = 'http://localhost:3000';
+    const restHost = 'https://flavorwell.up.railway.app';
 
     if (!id || !table) {
         console.error('Missing ID or Table in URL.');

@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
 })
 
 // Host backend
-const restHost = 'http://localhost:3000';
+const restHost = 'https://flavorwell.up.railway.app';
 
 async function getUserRecipes(userToken) {
 

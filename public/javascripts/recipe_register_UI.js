@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let text_category;
 
     // Host backend
-    const restHost = 'http://localhost:3000';
+    const restHost = 'https://flavorwell.up.railway.app';
 
     // Variables para el buscador de ingredientes
     const input = document.getElementById('ingredient-search');

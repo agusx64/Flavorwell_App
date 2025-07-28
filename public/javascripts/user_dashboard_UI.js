@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Host backend
-const restHost = 'http://localhost:3000';
+const restHost = 'https://flavorwell.up.railway.app';
 
 // Variables del componente de busqueda
 const searchInput = document.querySelector('.input_search');

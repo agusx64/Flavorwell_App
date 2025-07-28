@@ -23,7 +23,7 @@ const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
 
 // Direccion del Back-End
-var restHost = 'http://localhost:3000'
+var restHost = 'https://flavorwell.up.railway.app'
 
 restorePasswordButton.disabled = true;
 
