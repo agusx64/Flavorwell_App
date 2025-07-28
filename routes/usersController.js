@@ -1,16 +1,18 @@
-var express = require('express');
-var OpenAI  = require('openai');
-var mysql = require('mysql2/promise');
-require('dotenv').config();
-var cron = require('node-cron');
-var bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer');
-const { v4: uuidv4 } = require('uuid');
-const jwt = require('jsonwebtoken');
-const multer = require('multer');
-const { parseResponse } = require('openai/lib/ResponsesParser.mjs');
-const cloudinary = require('cloudinary').v2;
-var router = express.Router()
+import express from 'express';
+import OpenAI from 'openai';
+import mysql from 'mysql2/promise.js';
+import dotenv from 'dotenv';
+import cron from 'node-cron';
+import bcrypt from 'bcrypt';
+import nodemailer from 'nodemailer';
+import { v4 as uuidv4 } from 'uuid';
+import jwt from 'jsonwebtoken';
+import multer from 'multer';
+import { v2 as cloudinary } from 'cloudinary';
+const router = express.Router();
+
+// Inicialización de variables de entorno
+dotenv.config()
 
 // Configuración del multer
 const storage = multer.memoryStorage();
@@ -1627,4 +1629,4 @@ cron.schedule('*/60 * * * *', async () => {
 
 });
 
-module.exports = router;
+export default router;

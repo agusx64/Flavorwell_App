@@ -1,20 +1,26 @@
 // Back-end dependencies
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const dotenv = require('dotenv');
+import createError from 'http-errors';
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// Utils para reemplazar __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Load environment variables from .env file
 dotenv.config();
 
-// Routes modulations
-var users = require('./routes/usersController');
-var dashboard = require('./routes/dashboardController');
-var lists = require('./routes/listController');
+// Routes modulations (¡ojo con las extensiones .js!)
+import users from './routes/usersController.js';
+import dashboard from './routes/dashboardController.js';
+import lists from './routes/listController.js';
 
-var app = express();
+const app = express();
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -34,22 +40,15 @@ app.use('/lists', lists);
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
-
   next(createError(404));
-
 });
 
 // Error handler
 app.use(function(err, req, res, next) {
-
-  // Set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // Render the error page
   res.status(err.status || 500);
   res.render('error');
-
 });
 
-module.exports = app;
+export default app;

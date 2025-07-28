@@ -1,7 +1,10 @@
-var express = require('express');
-var mysql = require('mysql2/promise');
-require('dotenv').config();
+import express from 'express';
+import mysql from 'mysql2/promise.js';
+import dotenv from 'dotenv';
 var router = express.Router()
+
+// Inicailizacion de variables de entorno
+dotenv.config();
 
 // Conexión de tipo Pool para multiples conexiones
 const connection = mysql.createPool({
@@ -125,4 +128,4 @@ router.get('/api/ingredients/search', async (req, res) => {
 });
 
 
-module.exports = router;
+export default router;
