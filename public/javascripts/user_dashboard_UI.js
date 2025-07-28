@@ -244,7 +244,7 @@ searchInput.addEventListener('input', async () => {
 
     try {
 
-        const response = await fetch('/dashboard/search_recipes', {
+        const response = await fetch(restHost + '/dashboard/search_recipes', {
 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
