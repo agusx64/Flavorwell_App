@@ -1018,7 +1018,7 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
 
                     // Cuerpo del correo electronico 
                     from: process.env.MAIL_HOST,
-                    to: process.env.MAIL_HOST,
+                    to: process.env.MAIL_ADMIN,
                     subject: 'New Recipe Pending Approval',
                     html: html
 
