@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Host backend
-const restHost = 'http://192.168.164.102:3000';
+const restHost = 'http://localhost:3000';
 
 // Variables del componente de busqueda
 const searchInput = document.querySelector('.input_search');

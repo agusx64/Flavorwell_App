@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let text_category;
 
     // Host backend
-    const restHost = 'http://192.168.164.102:3000';
+    const restHost = 'http://localhost:3000';
 
     // Variables para el buscador de ingredientes
     const input = document.getElementById('ingredient-search');

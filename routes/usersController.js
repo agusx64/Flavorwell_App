@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import { v2 as cloudinary } from 'cloudinary';
+import { randomUUID } from 'crypto';
 const router = express.Router();
 
 // Inicialización de variables de entorno
@@ -855,7 +856,7 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
         const parsedIngredients = JSON.parse(ingredients);
 
         // Integración de dependencia 'crypto' para generar UUID
-        const recipeId = require('crypto').randomUUID();
+        const recipeId = randomUUID();
 
         // Subir imagen a Cloudinary a traves de .upload_stream
         const uploadResult = await cloudinary.uploader.upload_stream(
