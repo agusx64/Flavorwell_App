@@ -7,6 +7,7 @@ import logger from 'morgan';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import cors from 'cors';
 
 // Utils para reemplazar __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -21,6 +22,13 @@ import dashboard from './routes/dashboardController.js';
 import lists from './routes/listController.js';
 
 const app = express();
+
+// Filtrado de solicitudes y preflight
+app.use(cors({
+  origin: '*', // O limita si quieres solo a tu app
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -42,6 +50,7 @@ app.use('/lists', lists);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
 
 // Error handler
 app.use(function(err, req, res, next) {
