@@ -8,7 +8,13 @@ const imgErrorModal = document.getElementById('img-context');
 const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
 
-var restHost = 'https://flavorwell.up.railway.app'
+var restHost = 'https://flavorwell.up.railway.app';
+
+if (window.Capacitor && window.Capacitor.Plugins?.Keyboard) {
+
+    window.Capacitor.Plugins.Keyboard.setScroll({ isDisabled: false });
+
+}
 
 recoverButton.addEventListener('click', function(event) {
 
