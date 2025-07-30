@@ -55,7 +55,7 @@ async function getUserInfo(userToken) {
 
                 userProfileImg.src = data.profile_img
                     ? data.profile_img
-                    : '/images/_UI_img/default.png';
+                    : '/images/_UI_img/default.jpg';
                 userProfileName.textContent = data.name;
                 userProfileEmail.textContent = data.email;
 

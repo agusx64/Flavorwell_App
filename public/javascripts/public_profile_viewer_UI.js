@@ -228,11 +228,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             userImgCover.src = data.user.img_cover_path
                 ? userImgCover.src = data.user.img_cover_path
-                : userImgCover.src = '/images/_img_recipe/vegan_cat.jpg';
+                : userImgCover.src = '/images/_img_recipe/default.jpg';
             
             userImgProfile.src = data.user.img_profile_path
                 ? userImgProfile.src = data.user.img_profile_path
-                : userImgProfile.src = '/images/_UI_img/default.png';
+                : userImgProfile.src = '/images/_UI_img/default.jpg';
 
             userName.textContent = data.user.username;
             userEmail.textContent = data.user.email;
