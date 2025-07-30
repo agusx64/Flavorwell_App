@@ -189,7 +189,7 @@ ul, ol {
 }
 
 .description_recipe{
-    height: 12vh;
+    height: 100px;
     resize: none;
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -205,18 +205,18 @@ ul, ol {
 
 .generate-description-button {
     position: absolute;
-    top: 5vh; /* Ajusta según donde quieras colocarlo */
-    right: 1vh;
+    top: 45px; /* Ajusta según donde quieras colocarlo */
+    right: 10px;
     background-color: var(--ChiliRed);
     color: var(--WhiteBaseColor);
-    height: 3.5vh;
-    width: 3.5vh;
+    height: 30px;
+    width: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 1vh;
     text-align: center;
-    font-size: 1.7vh;
+    font-size: 15px;
     border-style: none;
 }
 
@@ -322,18 +322,18 @@ body{
 
 .ingredient-name{
     font-weight: 400;
-    font-size: 1.8vh;
-    margin-left: 1vh;
+    font-size: 3.5vw;
+    margin-left: 10px;
     color: var(--Grey);
 }
 
 .ingredient-img{
-    width: 3.5vh;
-    height: 3.5vh;
+    width: 8vw;
+    height: 8vw;
 }
 
 .add-icon{
-    font-size: 2.5vh;
+    font-size: 6vw;
     color: var(--ChiliRed)
 }
 
@@ -366,7 +366,10 @@ body{
     color: var(--WhiteBaseColor);
     border-radius: 1vh;
     border-style: none;
-    font-size: 3vh;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .step-list{
@@ -380,7 +383,7 @@ body{
 }
 
 .step-instruction-name{
-    font-size: 1.6vh;
+    font-size: 14px;
 }
 
 .step-drag{
@@ -417,7 +420,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 8vh;
+    height: 80px;
     font-size: 2.5vh;
     border: 2px dashed var(--ChiliRed);
     border-radius: 1.5vh;
