@@ -1,5 +1,12 @@
 {
   "appId": "com.flavorwell.app",
   "appName": "flavorwell",
-  "webDir": "public"
+  "webDir": "public",
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": false,
+      "style": "LIGHT",
+      "backgroundColor": "#F7B32B"
+    }
+  }
 }

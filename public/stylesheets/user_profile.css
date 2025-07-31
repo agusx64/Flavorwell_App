@@ -116,8 +116,8 @@ h2{
 }
 
 .user-img-header{
-    width: 3.5vh;
-    height: 3.5vh;
+    width: 35px;
+    height: 35px;
     object-fit: cover;
     border-radius: 50vh;
 }
