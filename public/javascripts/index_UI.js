@@ -20,4 +20,3 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('No es entorno nativo. Ignorando configuración de navigation bar.');
     }
 });
-
