@@ -1,5 +1,5 @@
 .vscode
 .env
+.jks
 node_modules
 uploads
-.jks
