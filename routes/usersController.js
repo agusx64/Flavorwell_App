@@ -1518,7 +1518,7 @@ router.post('/api/recipes/ai-generate', authenticateToken, async (req, res) => {
 //---------------------------------------------------------NODE CRON JOBS ---------------------------------------------------------------------------------
 
 // Eliminación de usuarios no verificados y limpieza de códigos de recuperación
-cron.schedule('*/60 * * * *', async () => {
+cron.schedule('*/15 * * * *', async () => {
 
     try {
         // Instanciar una fecha actual
