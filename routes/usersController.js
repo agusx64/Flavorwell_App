@@ -36,6 +36,7 @@ cloudinary.config({
 
 // Conexión de tipo Pool para multiples conexiones
 const connection = mysql.createPool({
+
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
@@ -44,6 +45,7 @@ const connection = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
+
 });
 
 // Middleware para JWT (Función para auntenticar a traves de JWT)
@@ -76,17 +78,26 @@ const authenticateToken = (req, res, next) => {
 
 // Middleware para manejar la imagenes deñ usuario en cloudinary
 function uploadToCloudinary(fileBuffer, folder) {
+
     return new Promise((resolve, reject) => {
+
         const stream = cloudinary.uploader.upload_stream({ folder }, (error, result) => {
+
             if (error) return reject(error);
+
             resolve({
+
                 url: result.secure_url,
                 public_id: result.public_id
+
             });
+
         });
 
         stream.end(fileBuffer);
+
     });
+
 };
 
 // Middleware de autenticación para API de OpenAi
