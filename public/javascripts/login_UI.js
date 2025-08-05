@@ -8,6 +8,9 @@ const imgErrorModal = document.getElementById('img-context');
 const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
 
+const togglePassword = document.getElementById('togglePassword');
+const passwordInput = document.getElementById('username_password');
+
 var restHost = 'https://flavorwell.up.railway.app';
 
 loginButton.addEventListener('click', function(event) {
@@ -155,6 +158,17 @@ function validateEmailFormat() {
     }
 
 }
+
+togglePassword.addEventListener('click', () => {
+
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
+
+    // Cambiar ícono
+    togglePassword.classList.toggle('bi-eye');
+    togglePassword.classList.toggle('bi-eye-slash');
+    
+});
 
 // Añadir evento de escucha a los campos de entrada
 usernameEmail.addEventListener('input', checkInputs);

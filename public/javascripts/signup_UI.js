@@ -183,6 +183,34 @@ function validatePasswordStrength(password) {
 
 }
 
+// Mostrar/Ocultar contraseña
+const togglePassword = document.getElementById('togglePassword');
+
+togglePassword.addEventListener('click', () => {
+
+    const passwordField = document.getElementById('input_password');
+    const isPassword = passwordField.type === 'password';
+    passwordField.type = isPassword ? 'text' : 'password';
+    togglePassword.classList.toggle('bi-eye');
+    togglePassword.classList.toggle('bi-eye-slash');
+
+});
+
+// Reemplazar espacios por guiones bajos en el username
+usernameInput.addEventListener('input', (e) => {
+
+    const originalValue = e.target.value;
+    const formattedValue = originalValue.replace(/\s+/g, '_');
+    if (originalValue !== formattedValue) {
+
+        e.target.value = formattedValue;
+        
+    }
+    checkInputs();
+
+});
+
+
 //Funciones de prevencion de errores de entrada
 
 usernamePassword.addEventListener('input', () => {
