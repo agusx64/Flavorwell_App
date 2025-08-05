@@ -15,12 +15,12 @@ const router = express.Router();
 // Inicialización de variables de entorno
 dotenv.config()
 
-// Configuración del multer
+// Configuración del multer para guardado de imagenes temporales en memoriq
 const storage = multer.memoryStorage();
 const upload = multer({
 
     storage,
-    limits: { fileSize: 5 * 1024 * 1024 } // Límite de 5MB
+    limits: { fileSize: 5 * 1024 * 1024 } // Límite de 5MB para subida de imagenes
 
 });
 
@@ -37,6 +37,7 @@ cloudinary.config({
 // Conexión de tipo Pool para multiples conexiones
 const connection = mysql.createPool({
 
+    // Variables de entorno para conexión a la base de datos
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
@@ -79,14 +80,19 @@ const authenticateToken = (req, res, next) => {
 // Middleware para manejar la imagenes deñ usuario en cloudinary
 function uploadToCloudinary(fileBuffer, folder) {
 
+    // Creación de promesa para el manejo de la imagen 
     return new Promise((resolve, reject) => {
 
+        // Función callback stream (permite subir archivos a traves de un flujo de datos)
         const stream = cloudinary.uploader.upload_stream({ folder }, (error, result) => {
 
+            // Intercepción de errores y rechazo de conexión
             if (error) return reject(error);
 
+            // Valores devueltos en caso de resolución de respuesta
             resolve({
 
+                // Entrega de url de acceso publico seguro junto con ID
                 url: result.secure_url,
                 public_id: result.public_id
 
@@ -94,6 +100,7 @@ function uploadToCloudinary(fileBuffer, folder) {
 
         });
 
+        // Finalización del proceso stream
         stream.end(fileBuffer);
 
     });
@@ -103,6 +110,7 @@ function uploadToCloudinary(fileBuffer, folder) {
 // Middleware de autenticación para API de OpenAi
 const openai = new OpenAI({
 
+    // LLave de acceso a Chat GPT 4.0
     apiKey: process.env.OPENAI_API_KEY
 
 });
@@ -1113,24 +1121,30 @@ router.get('/update/status/recipe', (req, res) => {
 // Busacodr de recetas por id y nombre de tabla para el recipe viewer
 router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
 
+    // Valores requeridos para el funcionamiento del endpoint (id de receta, tabla de proveniencia)
     const { id, table } = req.body;
 
     try {
 
-        // Obtener receta
+        // Obtener receta a traves de id y categoria
         const [results] = await connection.query(
 
+            // Consulta SQL
             `SELECT * FROM ?? WHERE id = ? AND verified = 1;`,
+            // Parametros de consulta
             [table, id]
 
         );
 
+        // Envio de mensaje de error en caso de inexistencia de receta
         if (results.length === 0) {
 
+            // Envio de mensaje al cliente
             return res.status(404).json({ success: false, message: 'Recipe not found' });
 
         }
 
+        // Extracción de valores provenientes de la respuesta del cliente para obtener información adicional de la rececta
         const recipe = results[0];
         const authorId = recipe.author;
         const recipeId = recipe.id;
@@ -1138,13 +1152,17 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
         //  Obtener nombre del author
         const [author] = await connection.query(
 
+            // Consulta SQL
             'SELECT username, img_profile_path FROM users WHERE id = ?;',
+            // Parametro de busqueda (ID del author)
             [authorId]
 
         );
 
+        // Busqueda de author relacionado con la receta
         if (author.length === 0) {
 
+            // Envio de respuesta de error en caso de que al autor ya no exista
             return res.status(404).json({ success: false, message: 'Author not found' });
 
         }
@@ -1170,17 +1188,20 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
         // Obtener ingredientes relacionados
         const [ingredients] = await connection.query(
             
+            // Consulta SQL
             `
             SELECT i.name AS ingredient_name, i.src_reference
             FROM recipe_ingredients r
             JOIN ingredients_list i ON r.ingredient_id = i.id
             WHERE r.recipe_id = ? AND r.category = ?;
+
             `,
+            // Prametros de la consulta
             [id, table]
 
         );
 
-        // 3. Enviar receta + ingredientes
+        // Envio de respuesta al fontend (Datos de receta + Ingredientes relacionados + Autor + Likes y guardados totales + ID del autor)
         res.json({
             success: true,
             message: 'Recipe and ingredients fetched successfully',
@@ -1192,6 +1213,7 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
             authorId: authorId
         });
 
+    // Intercepcion de errores y envio de mensaje de error al frontend
     } catch (error) {
 
         console.error('Error fetching recipe:', error);
@@ -1204,6 +1226,7 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
 // Busacdor de información de usuario y datos de recetas relacionadas
 router.post('/get_user_by_id', authenticateToken, async (req, res) => {
 
+    // ID requerido para el funcionamiento del endpoint
     const { id } = req.body;
 
     try {
@@ -1211,26 +1234,35 @@ router.post('/get_user_by_id', authenticateToken, async (req, res) => {
         // Obtener usuario a traves de ID
         const [results] = await connection.query(
 
+            // Consulta SQL
             'SELECT id, email, username, created_at, img_profile_path, img_cover_path FROM users WHERE id = ?;',
+            // Parametro de consulta
             [id]
 
         );
 
+        // Verificación de existencia de usuario en la base de datos
         if (results.length === 0) {
 
+            // Envio de mensdaje de error al frontend
             return res.status(404).json({ success: false, message: 'User not found' });
 
         }
 
+        // Extracción de valores del usuario de la respuesta de MySQL
         const user = results[0];
 
         // Obtencion de recetas guardadas por el usuario
         const [rows] = await connection.query(
 
+            // Consulta SQL
             'SELECT COUNT(*) AS total_saved FROM saved_recipes WHERE user_id = ?;',
+            // Parametro de busqueda
             [id]
 
         );
+
+        // Extracción de numero de guardados de la respuesta de MySQL
         const totalSaved = rows[0].total_saved;
 
         // Obtención de recetas totales subidas por el usuario
@@ -1241,9 +1273,12 @@ router.post('/get_user_by_id', authenticateToken, async (req, res) => {
             connection.query('SELECT COUNT(*) AS count FROM vegan WHERE author = ?', [id])
         ];
 
+        // Ejecución de cada una de la consulta guardadas en el array 'queries'
         const values = await Promise.all(queries);
+        // Sumatoria de los valores devueltos por cada una de las consultas del array
         const totalRecipes = values.reduce((sum, [row]) => sum + row[0].count, 0);
 
+        // Envio de datos al frontend
         res.json({
 
             success: true,
@@ -1253,6 +1288,7 @@ router.post('/get_user_by_id', authenticateToken, async (req, res) => {
 
         })
 
+    // Intercepción de errores y envio de respuesta de error al frontend
     } catch(error) {
 
         console.error('Error fetching recipe:', error);
@@ -1264,9 +1300,13 @@ router.post('/get_user_by_id', authenticateToken, async (req, res) => {
 
 // Obtención de recetas creadas por el usuario
 router.get('/api/user_recipes', authenticateToken, async (req, res) => {
+
+    // Obtencion de ID del usuario en sesión
     const userId = req.user.userId;
 
     try {
+
+        // Consulta SQL para obtencion de recetas creadas por el usuario ()
         const query = `
             SELECT r.id, r.name, r.description, r.img_path, r.category,
                 IFNULL(likes.count, 0) AS like_count,
@@ -1294,40 +1334,68 @@ router.get('/api/user_recipes', authenticateToken, async (req, res) => {
             ON r.id = saves.recipe_id AND r.category = saves.category;
         `;
 
+        // Ejecución de consulta SQL
         const [results] = await connection.query(query, [userId, userId, userId, userId]);
 
+        // Envió de datos al frontend
         res.json({ success: true, recipes: results });
 
+    // Intercepción de errores y envio de mensaje de error al frontend
     } catch (error) {
+
         console.error('Error executing query:', error);
         res.status(500).json({ success: false, message: 'Error retrieving recipes' });
+
     }
+
 });
 
+// Actualizacion de datos del usuario en sesión
 router.post('/api/update_profile', authenticateToken, upload.fields([
+
+    // Obtención de archivos provenientes del frontend (Imagen de perfil e imagen de portada)
     { name: 'profile_img' },
     { name: 'cover_img' }
+
 ]), async (req, res) => {
+
     try {
+
+        // ID del usuario en sesión
         const userId = req.user.userId;
+
+        // Datos provenientes del frontend
         const { username, email } = req.body;
+
+        // Extracción de imagenes 
         const profileImg = req.files?.profile_img?.[0];
         const coverImg = req.files?.cover_img?.[0];
 
-        // Obtener datos actuales del usuario
+        // Obtener datos del usuario en sesión
         const [userResult] = await connection.query(
+
+            // Consulta SQL
             'SELECT username, email, img_profile_id, img_cover_id FROM users WHERE id = ?',
+            // Parametro de consulta 
             [userId]
+
         );
 
+        // Envio de mensaje de error al frontend en caso de inexistencia de usuario
         if (userResult.length === 0) {
+
             return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+
         }
 
+        // Obtención de datos del usuario en sesión
         const currentUser = userResult[0];
+
+        // Variables booleanas para la comprobación de la existencia de cambios
         const emailChanged = currentUser.email !== email;
         const usernameChanged = currentUser.username !== username;
 
+        // Inicializacion tipo 'null' de variables para consulta SQL
         let imgProfilePath = null;
         let imgCoverPath = null;
         let imgProfileId = null;
@@ -1335,31 +1403,50 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
 
         // Subir nueva imagen de perfil si se recibió
         if (profileImg) {
+
+            // Si hay una imagen subida a cludinary que coincida con el id de la imagen la borrará para sustituirla por la nueva imagen
             if (currentUser.img_profile_id) {
+
+                // Eliminación de la imagen coincidente
                 await cloudinary.uploader.destroy(currentUser.img_profile_id);
+
             }
+
+            // Subir la nueva imagen al bucket de cloudinary a traves del middleware
             const uploaded = await uploadToCloudinary(profileImg.buffer, 'image_users');
+
+            // Extracción de ID y URL de la nueva imagen
             imgProfilePath = uploaded.url;
             imgProfileId = uploaded.public_id;
+
         }
 
-        // Subir nueva imagen de portada si se recibió
+        // Se realiza el mismo proceso para la imagen de portada
         if (coverImg) {
+
             if (currentUser.img_cover_id) {
+
                 await cloudinary.uploader.destroy(currentUser.img_cover_id);
+
             }
+
             const uploaded = await uploadToCloudinary(coverImg.buffer, 'image_covers');
             imgCoverPath = uploaded.url;
             imgCoverId = uploaded.public_id;
+
         }
 
         // Preparar token de verificación
         const newVerificationToken = uuidv4();
-        const expiresAt = new Date(Date.now() + 1000 * 60 * 60); // 1 hora
 
-        // Actualizar usuario
-        await connection.query(`
-            UPDATE users 
+        // Creación de una hora de expiración del token (1 hora)
+        const expiresAt = new Date(Date.now() + 1000 * 60 * 60);
+
+        // Actualizar información del usuario
+        await connection.query(
+
+            // Consulta SQL para la actualización de los datos
+            `UPDATE users 
             SET username = ?, email = ?, 
                 img_profile_path = COALESCE(?, img_profile_path),
                 img_profile_id = COALESCE(?, img_profile_id),
@@ -1369,35 +1456,49 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
                 verification_token = ?, 
                 expires_at = ?
             WHERE id = ?
+
         `, [
+
             username,
             email,
             imgProfilePath,
             imgProfileId,
             imgCoverPath,
             imgCoverId,
+            // Se verifica si se hizo un cambio en el nombre del usuario o en el correo electronico
             emailChanged || usernameChanged ? 0 : 1,
             newVerificationToken,
             expiresAt,
             userId
+
         ]);
 
         // Si hay cambios sensibles, enviar correo de verificación
         if (emailChanged || usernameChanged) {
+
+            // Creación de link de verificación de cambios
             const verifyLink = `${process.env.FRONTEND_URL}/users/api/verify_profile?token=${newVerificationToken}`;
 
+            // Creación de instancia de correo electronico
             const transporter = nodemailer.createTransport({
+
                 service: 'gmail',
                 auth: {
                     user: process.env.MAIL_HOST,
                     pass: process.env.MAIL_PASSWORD
                 }
+
             });
 
+            // Envio de correo electronico de verificación de datos
             await transporter.sendMail({
+
+                // Envio de correo electronico a traves del correo electronico de flavorwell
                 from: `"Flavorwell" <${process.env.MAIL_HOST}>`,
                 to: email,
                 subject: 'Verifica los cambios en tu perfil',
+
+                // Correo electronico
                 html: `
                     <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
                         <div style="text-align: center;">
@@ -1405,12 +1506,12 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
                         </div>
                         <h2 style="color: rgb(0, 0, 0);">Hi, ${username}!</h2>
                         <p style="color: #333; font-size: 16px;">
-                            Thank you for registering with <strong>Flavorwell</strong>. To complete your registration, please verify your email address by clicking the button below:
+                            This is a verification email for changes to your <strong>Flavorwell</strong> profile. Please verify the changes to your profile by clicking the button or link.
                         </p>
                         <div style="text-align: center; margin: 30px 0;">
                             <a href="${verifyLink}" 
                                 style="background-color: #E3170A; color: white; padding: 15px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
-                                Verify Account
+                                Verify changes
                             </a>
                         </div>
                         <p style="color: #333; font-size: 14px;">
@@ -1428,56 +1529,86 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
             });
         }
 
+        // Respuesta de confirmacion de envio de correo electronico al frontend
         return res.status(200).json({ success: true, message: 'If you changed your username or email address, a confirmation email has been sent. Please check your inbox.' });
 
+    // Intercepción de errores
     } catch (error) {
+
         console.error('Error actualizando perfil:', error);
         return res.status(500).json({ success: false, message: 'Error del servidor' });
+
     }
+
 });
 
+// Verificacion de cambios o actualización de datos de usuario
 router.get('/api/verify_profile', async (req, res) => {
+
+    // Token proveniente del correo electronico
     const { token } = req.query;
 
+    // Intercepción de intento de consulta sin token
     if (!token) return res.status(400).json({ success: false, message: 'Token requerido' });
 
+    // Busqueda de usuario a traves de token de verificación
     const [result] = await connection.query(
+
+        // Consulta SQL de busqueda
         'SELECT id, expires_at FROM users WHERE verification_token = ?',
+        // Paramatro de busqueda
         [token]
+
     );
 
+    // Envio de mensaje de error en caso de que el usuario no exista o el token sea invalido
     if (result.length === 0) {
+
         return res.status(400).json({ success: false, message: 'Token inválido' });
+
     }
 
+    // Extracción de datos del usuario de respuesta de MySQL
     const user = result[0];
+    // Creación de una fecha actual
     const now = new Date();
 
+    // Verificación de validez de token
     if (now > user.expires_at) {
+
+        // Envió de mensaje al frontend
         return res.status(400).json({ success: false, message: 'El token ha expirado' });
+
     }
 
-    await connection.query(`
-        UPDATE users 
+    // Ejecucion de consulta SQL
+    await connection.query(
+        // Seteo de 1 en verified para evitar la eliminación de el usuario en la base de datos
+        `UPDATE users 
         SET verified = 1, verification_token = NULL, expires_at = NULL 
         WHERE id = ?
     `, [user.id]);
 
     // Redireccion a pagina de verificacion exitosa
     res.redirect(`${process.env.FRONTEND_URL}/users/verified_success`);
+
 });
 
+// Endpoint de generacion de recetas con inteligencia artificial (Chat GPT 4)
 router.post('/api/recipes/ai-generate', authenticateToken, async (req, res) => {
 
+    // Datos requeridos para en endpoint (Nombre de receta y categoria de la receta)
     const { name, category } = req.body;
 
     try {
 
-        // 1. Obtener ingredientes desde la base de datos
+        // Obtención de ingredientes disponibles en la base de datos
         const [rows] = await connection.query('SELECT name FROM ingredients_list;');
+
+        // Creación de string con los nombres de los ingredientes para insertarlo en el propmt para la inteligenia artificial
         const ingredientList = rows.map(row => row.name).join(', ');
 
-        // 2. Crear el prompt
+        // Prompt para la generación de receta con AI (Chat GPT 4)
         const prompt = `
 
             To create a recipe for "${name}" based on the "${category}" category, you must provide:
@@ -1493,30 +1624,41 @@ router.post('/api/recipes/ai-generate', authenticateToken, async (req, res) => {
 
         `;
 
+        // Creación de variable de instancia para uso del modelo de inteligenia artificial
         const completion = await openai.chat.completions.create({
 
+            // Modelo de inteligenia artificial
             model: "gpt-4",
+            // Rol y prompt enviado al modelo de inteligenia artificial
             messages: [{ role: "user", content: prompt }]
 
         });
 
+        // Extracción de la respuesta del API contenida en el objeto JSON
         const responseText = completion.choices[0]?.message?.content || '';
+
+        // Inicialización de variable
         let parsed;
 
         try {
 
+            // Parseo de la respuesta de la inteligenia artificial y guardado en la variable 'parsed'
             parsed = JSON.parse(responseText);
 
+        // Intercepción de errores
         } catch (err) {
 
+            // Envio de mensaje de error al frontend
             console.error("Error parsing AI response:", err);
             return res.status(500).json({ error: 'Failed to parse AI response' });
 
         }
 
+        // Envio de mensaje de exito al frontend y datos de la receta generada por el modelo de AI
         console.log(parsed);
         return res.json({success: true, data: parsed, message: 'Recipe generated'});
 
+    // Intercepción de errores
     } catch (error) {
 
         console.error("Internal server error", error);
