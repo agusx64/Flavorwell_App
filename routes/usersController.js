@@ -617,7 +617,7 @@ router.get('/api/recent_posts', authenticateToken, async (req, res) => {
 
 });
 
-// Selector de recetas para mural de posteos de la comunidad
+// Selector de recetas para mural de posteos del usuario
 router.post('/api/user_posts', authenticateToken, async (req, res) => {
 
     // Obtención de id proveniente del viewer
