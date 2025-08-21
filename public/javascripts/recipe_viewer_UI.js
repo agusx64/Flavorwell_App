@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded',async () => {
     const recipeLikedCounter = document.getElementById('recipe-viewer-status-counter-like');
     const recipeSavedCounter = document.getElementById('recipe-viewer-status-counter-saved');
 
+    // Botones para dar like a la receta en contexto
+    const likeButton = document.querySelector('.recipe-viewer-status-counter-container .bi-hand-thumbs-up-fill');
+    const saveButton = document.querySelector('.recipe-viewer-status-counter-container .bi-bookmark-fill'); 
+
     const token = localStorage.getItem('token');
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -112,6 +116,115 @@ document.addEventListener('DOMContentLoaded',async () => {
         console.error(error);
 
     })
+
+    // Verificador de like a la receta
+    const checkLike = await fetch(restHost + '/users/api/check_like', {
+
+        method: 'POST',
+        headers: {
+
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+
+        },
+        body: JSON.stringify({ recipeId: id, category: table })
+
+    });
+
+    const likeData = await checkLike.json();
+
+    if (likeData.liked) {
+
+        likeButton.style.color = '#F7B32B';
+
+    } else {
+
+        likeButton.style.color = '#FFF';
+    }
+
+    // Verificar si el usuario ya guardó
+    const checkSave = await fetch(restHost + '/users/api/check_save', {
+
+        method: 'POST',
+        headers: {
+
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+
+        },
+        body: JSON.stringify({ recipeId: id, category: table })
+
+    });
+
+    const saveData = await checkSave.json();
+
+    if (saveData.saved) {
+
+        saveButton.style.color = '#F7B32B';
+
+    } else {
+
+        saveButton.style.color = '#FFF';
+
+    }
+
+    // Toggle like
+    likeButton.addEventListener('click', async () => {
+
+        const res = await fetch(restHost + '/users/api/toggle_like', {
+
+            method: 'POST',
+            headers: {
+
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+
+            },
+            body: JSON.stringify({ recipeId: id, category: table })
+
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+
+            likeButton.style.color = data.liked ? '#F7B32B' : '#FFF';
+            recipeLikedCounter.textContent = data.liked
+                ? Number(recipeLikedCounter.textContent) + 1
+                : Number(recipeLikedCounter.textContent) - 1;
+
+        }
+
+    });
+
+    // Toggle save
+    saveButton.addEventListener('click', async () => {
+
+        const res = await fetch(restHost + '/users/api/toggle_save', {
+
+            method: 'POST',
+            headers: {
+
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+
+            },
+            body: JSON.stringify({ recipeId: id, category: table })
+
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+
+            saveButton.style.color = data.saved ? '#F7B32B' : '#FFF';
+            recipeSavedCounter.textContent = data.saved
+                ? Number(recipeSavedCounter.textContent) + 1
+                : Number(recipeSavedCounter.textContent) - 1;
+
+        }
+
+    });
 
 });
 

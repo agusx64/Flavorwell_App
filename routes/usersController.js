@@ -790,6 +790,59 @@ router.post('/api/toggle_save', authenticateToken, async (req, res) => {
 
 });
 
+// Verificar si la receta está likeada
+router.post('/api/check_like', authenticateToken, async (req, res) => {
+
+    const { recipeId, category } = req.body;
+    const userId = req.user.userId;
+
+    try {
+
+        const [[exists]] = await connection.query(
+
+            `SELECT id FROM likes WHERE user_id=? AND recipe_id=? AND category=?`,
+            [userId, recipeId, category]
+
+        );
+
+        res.json({ liked: !!exists });
+
+    } catch (error) {
+
+        console.error(error);
+        res.status(500).json({ liked: false });
+
+    }
+
+});
+
+// Verificar si la receta está guardada
+router.post('/api/check_save', authenticateToken, async (req, res) => {
+
+    const { recipeId, category } = req.body;
+    const userId = req.user.userId;
+
+    try {
+
+        const [[exists]] = await connection.query(
+
+            `SELECT id FROM saved_recipes WHERE user_id=? AND recipe_id=? AND category=?`,
+            [userId, recipeId, category]
+
+        );
+
+        res.json({ saved: !!exists });
+
+    } catch (error) {
+
+        console.error(error);
+        res.status(500).json({ saved: false });
+
+    }
+    
+});
+
+
 // Endpoint para obtener foto de perfil y nombre de usuario a traves de JWT para menu dashboard
 router.get('/api/user_profile', authenticateToken, async (req, res) => {
 

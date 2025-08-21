@@ -244,7 +244,7 @@ li{
     font-weight: 600;
 }
 
-.recipe-viewer-status-counter-container{
+.recipe-viewer-status-counter-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -255,6 +255,7 @@ li{
     margin-right: 1vh;
     color: var(--WhiteBaseColor);
     background-color: var(--ChiliRed);
+    border-style: none;
 }
 
 .counter-icon{
