@@ -363,6 +363,14 @@ router.post('/login_user', async function (req, res) {
 
 });
 
+// Validación de sesión continua
+router.get('/verify_token', authenticateToken, (req, res) => {
+
+    // Devolución de estatus
+    res.status(200).json({ success: true, message: 'Token válido' });
+
+});
+
 // Enviar correo de recuperacion de contraseña con codigo de seguridad
 router.post('/request_password_reset', async (req, res) => {
 
@@ -839,9 +847,8 @@ router.post('/api/check_save', authenticateToken, async (req, res) => {
         res.status(500).json({ saved: false });
 
     }
-    
-});
 
+});
 
 // Endpoint para obtener foto de perfil y nombre de usuario a traves de JWT para menu dashboard
 router.get('/api/user_profile', authenticateToken, async (req, res) => {
