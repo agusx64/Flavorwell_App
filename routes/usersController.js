@@ -182,52 +182,6 @@ const openai = new OpenAI({
 
 });
 
-router.get('/auth/google', (req, res) => {
-
-    const scopes = ['https://www.googleapis.com/auth/gmail.send'];
-
-    const url = oauth2Client.generateAuthUrl({
-
-        access_type: 'offline',
-        scope: scopes,
-        prompt: 'consent'
-
-    });
-
-    res.redirect(url);
-
-});
-
-router.get('/oauth2callback', async (req, res) => {
-
-    const code = req.query.code;
-
-    if (!code) return res.status(400).send('No code provided');
-
-    try {
-
-        const { tokens } = await oauth2Client.getToken(code);
-        console.log('TOKENS: ', tokens)
-
-        res.send(`
-
-            <h3>Tokens obtenidos (guárdalos como variables de entorno)</h3>
-            <pre>${JSON.stringify(tokens, null, 2)}</pre>
-            <p>Copia el <strong>refresh_token</strong> a Railway (GMAIL_REFRESH_TOKEN)</p>
-
-        `)
-
-    } catch (err) {
-
-        console.error('Error intercambiando code', err);
-        res.status(500).send('Error obteniendo tokens');
-
-    }
-
-});
-
-
-
 // Endpoint para el registro de usuarios nuevos
 router.post('/register_user', async function(req, res) {
 
@@ -258,25 +212,10 @@ router.post('/register_user', async function(req, res) {
 
         });
 
-        //Verificación de correo electrónico
-        const transporter = nodemailer.createTransport({
-
-            service: 'gmail',
-            auth: {
-                user: process.env.MAIL_HOST,
-                pass: process.env.MAIL_PASSWORD,
-            }
-
-        });
-
         const verificationURL = `${process.env.FRONTEND_URL}/users/verify_email?token=${token}`
 
-        await transporter.sendMail({
-
-            from: 'Flavorwell <agustin.mora.trinidad@gmail.com>',
-            to: mail,
-            subject: 'Verify your Flavorwell account',
-            html: ` 
+        const subject = 'Verify your flavorwell account';
+        const html = `
             <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
                 <div style="text-align: center;">
                     <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
@@ -301,11 +240,21 @@ router.post('/register_user', async function(req, res) {
                 <p style="text-align: center; color: #aaa; font-size: 12px;">
                     &copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.
                 </p>
-            </div>`
+            </div>
+        `;
 
-        });
+        try {
 
-        res.status(200).send({ success: true, message: "Success registered user. Please check your email." });
+            await sendMail({ to: mail, subject, html})
+            res.status(200).send({ success: true, message: "Success registered user. Please check your email." });
+
+        } catch (error) {
+
+            console.error('Error enviando codigo por Gmail API', error);
+            res.status(500).json({ success: false, message: 'Error sending email' });
+
+        }
+
 
     } catch (error) {
 
@@ -562,7 +511,7 @@ router.post('/request_password_reset', async (req, res) => {
 
         } catch (error) {
 
-            console.error('Error enviando codigo por Gmail API', err);
+            console.error('Error enviando codigo por Gmail API', error);
             res.status(500).json({ success: false, message: 'Error sending email' });
 
         }
@@ -1099,19 +1048,7 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
                 // Extraer solo los nombres en un array
                 const ingredientNames = ingredientNamesResult.map(ing => ing.name);
 
-                // Creación de instancia de correo electronico
-                const transporter = nodemailer.createTransport({
-
-                    // Declaración de servicio
-                    service: 'gmail',
-                    // Autenticación de correo electronico
-                    auth: {
-                        user: process.env.MAIL_HOST,
-                        pass: process.env.MAIL_PASSWORD
-                    }
-
-                });
-
+                const subject = 'New recipe pending aproval'
                 // Template HTML de correo electronico
                 const html = `
                     <div style="max-width: 700px;
@@ -1195,19 +1132,18 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
                     </div>
                 `;
 
-                // Envió de notificación de correo electronico
-                await transporter.sendMail({
+                try {
 
-                    // Cuerpo del correo electronico 
-                    from: process.env.MAIL_HOST,
-                    to: process.env.MAIL_ADMIN,
-                    subject: 'New Recipe Pending Approval',
-                    html: html
+                    await sendMail({ to: process.env.MAIL_ADMIN, subject, html });
+                    // Envio de objeto JSON de confirmación 
+                    return res.json({ success: true });
 
-                });
+                } catch (error) {
 
-                // Envio de objeto JSON de confirmación 
-                return res.json({ success: true });
+                    console.error('Error enviando codigo por Gmail API', error);
+                    res.status(500).json({ success: false, message: 'Error sending email' });
+
+                }
 
             }
 
@@ -1642,28 +1578,9 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
             // Creación de link de verificación de cambios
             const verifyLink = `${process.env.FRONTEND_URL}/users/api/verify_profile?token=${newVerificationToken}`;
 
-            // Creación de instancia de correo electronico
-            const transporter = nodemailer.createTransport({
-
-                service: 'gmail',
-                auth: {
-                    user: process.env.MAIL_HOST,
-                    pass: process.env.MAIL_PASSWORD
-                }
-
-            });
-
-            // Envio de correo electronico de verificación de datos
-            await transporter.sendMail({
-
-                // Envio de correo electronico a traves del correo electronico de flavorwell
-                from: `"Flavorwell" <${process.env.MAIL_HOST}>`,
-                to: email,
-                subject: 'Verifica los cambios en tu perfil',
-
-                // Correo electronico
-                html: `
-                    <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
+            const subject = 'Verify your profile changes';
+            const html = `
+                <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
                         <div style="text-align: center;">
                             <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
                         </div>
@@ -1688,8 +1605,19 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
                             &copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.
                         </p>
                     </div>
-                `
-            });
+            `;
+
+            try {
+
+                await sendMail({ to: email, subject, html })
+
+            } catch (error) {
+
+                console.error('Error enviando codigo por Gmail API', error);
+                res.status(500).json({ success: false, message: 'Error sending email' });
+
+            }
+            
         }
 
         // Respuesta de confirmacion de envio de correo electronico al frontend
