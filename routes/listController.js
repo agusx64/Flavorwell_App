@@ -21,7 +21,14 @@ const connection = mysql.createPool({
 
 router.get('/category/vegan/list', async (req, res) =>{
 
-    const query = 'SELECT id, name, img_path, author FROM vegan WHERE verified = 1;';
+    const query = `
+
+        SELECT v.id, v.name, v.img_path, u.username AS author
+        FROM vegan v
+        JOIN users u ON v.author = u.id
+        WHERE v.verified = 1;
+
+    `;
 
     try {
 
@@ -39,8 +46,15 @@ router.get('/category/vegan/list', async (req, res) =>{
 
 router.get('/category/strong_dish/list', async (req, res) =>{
 
-    const query = 'SELECT id, name, img_path, author FROM strong_dish WHERE verified = 1;';
+    const query = `
 
+        SELECT s.id, s.name, s.img_path, u.username AS author
+        FROM strong_dish s
+        JOIN users u ON s.author = u.id
+        WHERE s.verified = 1;
+
+    `;
+    
     try {
 
         const [results] = await connection.query(query);
@@ -57,7 +71,14 @@ router.get('/category/strong_dish/list', async (req, res) =>{
 
 router.get('/category/desserts/list', async (req, res) =>{
 
-    const query = 'SELECT id, name, img_path, author FROM desserts WHERE verified = 1;';
+    const query = `
+
+        SELECT d.id, d.name, d.img_path, u.username AS author
+        FROM desserts d
+        JOIN users u ON d.author = u.id
+        WHERE d.verified = 1;
+
+    `;
 
     try {
 
@@ -75,7 +96,14 @@ router.get('/category/desserts/list', async (req, res) =>{
 
 router.get('/category/breakfast/list', async (req, res) =>{
 
-    const query = 'SELECT id, name, img_path, author FROM breakfast WHERE verified = 1;';
+    const query = `
+
+        SELECT b.id, b.name, b.img_path, u.username AS author
+        FROM breakfast b
+        JOIN users u ON b.author = u.id
+        WHERE b.verified = 1;
+
+    `;
 
     try {
 
