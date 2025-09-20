@@ -10,10 +10,77 @@ import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import { v2 as cloudinary } from 'cloudinary';
 import { randomUUID } from 'crypto';
+import { google } from 'googleapis';
 const router = express.Router();
 
 // Inicialización de variables de entorno
 dotenv.config()
+
+const CLIENT_ID = process.env.GMAIL_CLIENT_ID;
+const CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET;
+const REDIRECT_URI = process.env.GMAIL_REDIRECT_URI;
+
+const oauth2Client = new google.auth.OAuth2(
+
+    CLIENT_ID,
+    CLIENT_SECRET,
+    REDIRECT_URI
+
+);
+
+oauth2Client.setCredentials({
+
+    refresh_token: process.env.GMAIL_REFRESH_TOKEN
+
+});
+
+function makeRawMessage({ from, to, subject, html }) {
+
+    const messageParts = [
+
+        `From: ${from}`,
+        `To: ${to}`,
+        `Subject: ${subject}`,
+        'Content-Type: text/html; charset=UTF-8',
+        '',
+        html
+
+    ];
+
+    const message = messageParts.join('\n');
+
+    return Buffer.from(message)
+        .toString('base64')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+
+}
+
+export async function sendMail({to, subject, html}) {
+
+    const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
+    const raw = makeRawMessage({
+
+        from: process.env.GMAIL_USER_MAIL,
+        to,
+        subject,
+        html
+
+    });
+
+    const res = await gmail.users.messages.send({
+
+        userId: 'me',
+        requestBody: {
+            raw
+        }
+
+    });
+
+    return res;
+
+}
 
 // Configuración del multer para guardado de imagenes temporales en memoriq
 const storage = multer.memoryStorage();
@@ -114,6 +181,52 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 
 });
+
+router.get('/auth/google', (req, res) => {
+
+    const scopes = ['https://www.googleapis.com/auth/gmail.send'];
+
+    const url = oauth2Client.generateAuthUrl({
+
+        access_type: 'offline',
+        scope: scopes,
+        prompt: 'consent'
+
+    });
+
+    res.redirect(url);
+
+});
+
+router.get('/oauth2callback', async (req, res) => {
+
+    const code = req.query.code;
+
+    if (!code) return res.status(400).send('No code provided');
+
+    try {
+
+        const { tokens } = await oauth2Client.getToken(code);
+        console.log('TOKENS: ', tokens)
+
+        res.send(`
+
+            <h3>Tokens obtenidos (guárdalos como variables de entorno)</h3>
+            <pre>${JSON.stringify(tokens, null, 2)}</pre>
+            <p>Copia el <strong>refresh_token</strong> a Railway (GMAIL_REFRESH_TOKEN)</p>
+
+        `)
+
+    } catch (err) {
+
+        console.error('Error intercambiando code', err);
+        res.status(500).send('Error obteniendo tokens');
+
+    }
+
+});
+
+
 
 // Endpoint para el registro de usuarios nuevos
 router.post('/register_user', async function(req, res) {
@@ -411,26 +524,8 @@ router.post('/request_password_reset', async (req, res) => {
 
         );
 
-        // Creacion de transporte de correo electronico
-        const transporter = nodemailer.createTransport({
-
-            service: 'gmail',
-            auth: {
-
-                user: process.env.MAIL_HOST,
-                pass: process.env.MAIL_PASSWORD
-
-            }
-
-        });
-
-        // Envio de correo electronico al correo introducido por el cliente
-        await transporter.sendMail({
-
-            from: 'Flavorwell <agustin.mora.trinidad@gmail.com>',
-            to: recoverInfo,
-            subject: 'Recovery password code',
-            html: `
+        const subject = 'Recovery passowrd code'
+        const html = `
             <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
                 <div style="text-align: center;">
                     <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
@@ -457,12 +552,20 @@ router.post('/request_password_reset', async (req, res) => {
                 <p style="text-align: center; color: #aaa; font-size: 12px;">
                     &copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.
                 </p>
-            </div>`
+            </div>
+        `;
 
-        });
+        try {
 
-        // Respuesta existosa del servidor al cliente
-        res.status(200).json({ success: true, message: `Code sent to ${recoverInfo}`});
+            await sendMail({to: recoverInfo, subject, html })
+            res.status(200).json({ success: true, message: `Code sent to ${recoverInfo}`});
+
+        } catch (error) {
+
+            console.error('Error enviando codigo por Gmail API', err);
+            res.status(500).json({ success: false, message: 'Error sending email' });
+
+        }
 
     // Intercepción de errorres
     } catch(error){

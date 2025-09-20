@@ -8,7 +8,8 @@ const imgErrorModal = document.getElementById('img-context');
 const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
 
-var restHost = 'https://flavorwell.up.railway.app';
+// var restHost = 'https://flavorwell.up.railway.app';
+var restHost = 'http://localhost:3000';
 
 if (window.Capacitor && window.Capacitor.Plugins?.Keyboard) {
 
