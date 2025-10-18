@@ -1758,6 +1758,33 @@ router.post('/api/recipes/ai-generate', authenticateToken, async (req, res) => {
 
 });
 
+// Endpoint para recibir el actualizar 'refresh_token' de Google
+router.get('/oauth2callback', async (req, res) => {
+    const code = req.query.code;
+
+    if (!code) {
+        return res.status(400).send('No se recibió el parámetro "code"');
+    }
+
+    try {
+        // Intercambiamos el "code" por los tokens
+        const { tokens } = await oauth2Client.getToken(code);
+        console.log('✅ Tokens generados correctamente:', tokens);
+
+        // Opcional: guardar tokens en tu base de datos o archivo .env
+        // Ejemplo temporal:
+        res.send(`
+      <h2>Autorización completada correctamente ✅</h2>
+      <p>Guarda este refresh token en tu .env:</p>
+      <pre>${tokens.refresh_token}</pre>
+      <p>Access Token:</p>
+      <pre>${tokens.access_token}</pre>
+    `);
+    } catch (error) {
+        console.error('❌ Error obteniendo tokens:', error);
+        res.status(500).send('Error obteniendo los tokens.');
+    }
+});
 
 //---------------------------------------------------------NODE CRON JOBS ---------------------------------------------------------------------------------
 
