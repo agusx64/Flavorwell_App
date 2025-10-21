@@ -941,9 +941,15 @@ router.get('/api/saved_recipes', authenticateToken, async (req, res) => {
 
             const [rows] = await connection.query(
 
-                `SELECT r.id, r.name, r.img_path AS image_url, r.author AS author, ? AS category
+                `SELECT 
+                    r.id, 
+                    r.name, 
+                    r.img_path AS image_url, 
+                    u.username AS author, 
+                    ? AS category
                 FROM ${table} r
                 INNER JOIN saved_recipes s ON r.id = s.recipe_id
+                INNER JOIN users u ON r.author = u.id
                 WHERE s.user_id = ? AND s.category = ?`,
                 [table, userId, table]
 
