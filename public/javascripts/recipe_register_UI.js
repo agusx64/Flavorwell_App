@@ -441,7 +441,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         errorModal.classList.add('hidden');
                     
                     });
-                                
+
                 }
             
                 return data;

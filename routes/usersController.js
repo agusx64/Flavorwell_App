@@ -995,68 +995,46 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
         // Integración de dependencia 'crypto' para generar UUID
         const recipeId = randomUUID();
 
-        // Subir imagen a Cloudinary a traves de .upload_stream
-        const uploadResult = await cloudinary.uploader.upload_stream(
+        // Validar existencia del archivo
+        if (!req.file || !req.file.buffer) {
+            return res.status(400).json({ success: false, message: 'No image file received.' });
+        }
 
-            // Guardado de recetas en el folder especificado (Carpeta de destino)
-            { folder: 'image_recipes' },
+        // Subir imagen a Cloudinary correctamente usando la función de promesa
+        let imageUrl;
+        try {
+            const uploaded = await uploadToCloudinary(req.file.buffer, 'image_recipes');
+            imageUrl = uploaded.url;
+        } catch (err) {
+            console.error('Error uploading to Cloudinary:', err);
+            return res.status(500).json({ success: false, message: 'Image upload failed' });
+        }
 
-            // Creación que función anonima asicrona
-            async (error, result) => {
+        // Iteración de lista de ingredientes para inserción en tabla de relaciones
+        for (const ing of parsedIngredients) {
+            await connection.query(
+                `INSERT INTO recipe_ingredients (recipe_id, category, ingredient_id) VALUES (?, ?, ?)`,
+                [recipeId, category, ing]
+            );
+        }
 
-                // Intercepción de errores
-                if (error) {
+        // Inserción en tabla de recetas
+        await connection.query(
+            `INSERT INTO ${category} (id, name, description, instruction, img_path, author, items, verified)
+                VALUES (?, ?, ?, ?, ?, ?, ?, FALSE)`,
+            [recipeId, name, description, JSON.stringify(parsedInstructions), imageUrl, userId, parsedIngredients.length]
+        );
 
-                    // Depuración de errores
-                    console.error('Error uploading to Cloudinary:', error);
-                    // Envio de estatus al frontend
-                    return res.status(500).json({ success: false, message: 'Image upload failed' });
+        // Obtener nombres de los ingredientes
+        const [ingredientNamesResult] = await connection.query(
+            `SELECT name FROM ingredients_list WHERE id IN (?)`,
+            [parsedIngredients]
+        );
+        const ingredientNames = ingredientNamesResult.map(ing => ing.name);
 
-                }
-
-                // Obtención de link publico proporcionado por Cloudinary
-                const imageUrl = result.secure_url;
-
-                // Iteración de lista de ingredientes para inserción en tabla de relaciones
-                for (const ing of parsedIngredients) {
-
-                    // Conexión a la base de datos
-                    await connection.query(
-
-                        // Consulta SQL
-                        `INSERT INTO recipe_ingredients (recipe_id, category, ingredient_id) VALUES (?, ?, ?)`,
-                        // Parametros de consulta (identificador de la receta, categoria de la receta, nombre del ingrediente)
-                        [recipeId, category, ing]
-
-                    );
-
-                }
-
-                // Conexión a la base de datos
-                await connection.query(
-
-                    // Inserción de valores verificados
-                    `INSERT INTO ${category} (id, name, description, instruction, img_path, author, items, verified)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, FALSE)`,
-                    // Parametros de consulta SQL (ingredientes e instrucciones parseados en forma de lista)
-                    [recipeId, name, description, JSON.stringify(parsedInstructions), imageUrl, userId, parsedIngredients.length]
-
-                );
-
-                // Obtener los nombres de los ingredientes a partir de sus IDs
-                const [ingredientNamesResult] = await connection.query(
-
-                    `SELECT name FROM ingredients_list WHERE id IN (?)`,
-                    [parsedIngredients]
-                    
-                );
-
-                // Extraer solo los nombres en un array
-                const ingredientNames = ingredientNamesResult.map(ing => ing.name);
-
-                const subject = 'New recipe pending aproval'
-                // Template HTML de correo electronico
-                const html = `
+        // Enviar correo al admin
+        const subject = 'New recipe pending aproval';
+        const html = `
                     <div style="max-width: 700px;
                                 margin: auto;
                                 font-family: 'Poppins';
@@ -1136,43 +1114,19 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
                             </tr>
                         </table>
                     </div>
-                `;
+        `;
 
-                try {
-
-                    await sendMail({ to: process.env.MAIL_ADMIN, subject, html });
-                    // Envio de objeto JSON de confirmación 
-                    return res.json({ success: true });
-
-                } catch (error) {
-
-                    console.error('Error enviando codigo por Gmail API', error);
-                    res.status(500).json({ success: false, message: 'Error sending email' });
-
-                }
-
-            }
-
-        );
-
-        // Tranferencia de buffer a Cloudinary
-        if (req.file && req.file.buffer) {
-
-            // Inicia la carga al stream
-            const stream = uploadResult;
-            stream.end(req.file.buffer);
-
-        } else {
-
-            // Envio de estaus de error al cargar la imagen
-            return res.status(400).json({ success: false, message: 'No image file received.' });
-
+        try {
+            await sendMail({ to: process.env.MAIL_ADMIN, subject, html });
+            return res.json({ success: true });
+        } catch (error) {
+            console.error('Error enviando correo por Gmail API', error);
+            res.status(500).json({ success: false, message: 'Error sending email' });
         }
 
         function formatCategory(name) {
             return name.toLowerCase().replace(/\s+/g, '_');
         }
-
 
     // Intercepcion de errores
     } catch (error) {
