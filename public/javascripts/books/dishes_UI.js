@@ -1,7 +1,7 @@
 const recipeContainer = document.querySelector('.recipe-container');
 
 // Host backend
-const restHost = 'https://flavorwell.up.railway.app';
+const restHost = 'http://localhost:3000';
 
 async function getVeganList() {
 

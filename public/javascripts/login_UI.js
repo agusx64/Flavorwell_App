@@ -11,7 +11,7 @@ const tryAgainButton = document.getElementById('tryAgain');
 const togglePassword = document.getElementById('togglePassword');
 const passwordInput = document.getElementById('username_password');
 
-var restHost = 'https://flavorwell.up.railway.app';
+var restHost = 'http://localhost:3000';
 
 loginButton.addEventListener('click', function(event) {
 

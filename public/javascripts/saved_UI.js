@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const container = document.querySelector('.saved-recipes-container');
     const token = localStorage.getItem('token');
-    const restHost = 'https://flavorwell.up.railway.app';
+    const restHost = 'http://localhost:3000';
 
     async function fetchSavedRecipes() {
 

@@ -1,5 +1,5 @@
 const getStartedButton = document.getElementById('started-button');
-const restHost = 'https://flavorwell.up.railway.app';
+const restHost = 'http://localhost:3000';
 
 // Función para verificar si el token es válido
 async function checkSession() {
