@@ -124,6 +124,9 @@ router.get('/api/ingredients/search', async (req, res) => {
     // Obtener query proveniente del frontend
     const q = req.query.q;
 
+    // Obtención del lenguaje preferido por el usuario
+    const lang = req.query.lang || 'en';
+
     // Verificación de entrada vacia u objeto JSON vacio
     if (!q || q.trim() === '') {
 
@@ -134,14 +137,14 @@ router.get('/api/ingredients/search', async (req, res) => {
 
     try {
 
+        // Selección de columna dependiendo del idioma
+        const nameColumn = lang === 'es' ? 'name_es' : 'name';
+
+        // Selección y renombramiento de como name para enviar al frontend
+        const query = `SELECT id, ${nameColumn} as name, src_reference FROM ingredients_list WHERE ${nameColumn} LIKE ? LIMIT 10`;
+
         // Conexón SQL
-        const [results] = await connection.query(
-
-            // Consulta SQL para busqueda de coincidencias
-            `SELECT * FROM ingredients_list WHERE name LIKE ? LIMIT 10`, 
-            [`%${q}%`]
-
-        );
+        const [results] = await connection.query( query, [`%${q}%`]);
 
         // Envio de coincidencias al frontend
         res.json(results);
@@ -150,6 +153,7 @@ router.get('/api/ingredients/search', async (req, res) => {
     } catch (error) {
 
         console.error(error);
+        res.status(500).json({ error: 'Error searching ingredients' });
 
     }
 

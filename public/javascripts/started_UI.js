@@ -1,6 +1,13 @@
 const getStartedButton = document.getElementById('started-button');
 const restHost = 'http://localhost:3000';
 
+async function checkLanguage() {
+
+    const lang = localStorage.getItem('preferred_lang') || 'en';
+    if (!lang) return false;
+
+}
+
 // Función para verificar si el token es válido
 async function checkSession() {
 
@@ -42,15 +49,20 @@ async function checkSession() {
 getStartedButton.addEventListener('click', async () => {
 
     const loggedIn = await checkSession();
+    const languageIn = await checkLanguage();
 
-    if (loggedIn) {
+    if (loggedIn && languageIn) {
 
         window.location.href = '/html/user_dashboard.html';
 
-    } else {
+    } else if (!loggedIn && languageIn) {
 
         window.location.href = '/html/login.html';
 
+    } else {
+
+        window.location.href = '/html/choose_language.html';
+        
     }
     
 });
