@@ -3,8 +3,13 @@ const restHost = 'http://localhost:3000';
 
 async function checkLanguage() {
 
-    const lang = localStorage.getItem('preferred_lang') || 'en';
-    if (!lang) return false;
+    const lang = localStorage.getItem('preferred_lang');
+    
+    if (lang) {
+        return true;
+    } else {
+        return false;
+    }
 
 }
 
@@ -51,18 +56,22 @@ getStartedButton.addEventListener('click', async () => {
     const loggedIn = await checkSession();
     const languageIn = await checkLanguage();
 
-    if (loggedIn && languageIn) {
+    if (languageIn && loggedIn) {
 
         window.location.href = '/html/user_dashboard.html';
 
-    } else if (!loggedIn && languageIn) {
+    } else if (languageIn && !loggedIn) {
+
+        window.location.href = '/html/login.html';
+
+    } else if (!languageIn && loggedIn) {
 
         window.location.href = '/html/login.html';
 
     } else {
 
         window.location.href = '/html/choose_language.html';
-        
+
     }
     
 });

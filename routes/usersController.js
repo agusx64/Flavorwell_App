@@ -57,7 +57,7 @@ function makeRawMessage({ from, to, subject, html }) {
 
 }
 
-export async function sendMail({to, subject, html}) {
+export async function sendMail({ to, subject, html }) {
 
     const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
     const raw = makeRawMessage({
@@ -118,7 +118,7 @@ const connection = mysql.createPool({
 
 // Middleware para JWT (Función para auntenticar a traves de JWT)
 const authenticateToken = (req, res, next) => {
-    
+
     // Extracción del encabezado 'Authorization' de solicitud HTTP proveniente del formato 'Bearer <token>'
     const authHeader = req.headers['authorization'];
 
@@ -183,11 +183,12 @@ const openai = new OpenAI({
 });
 
 // Endpoint para el registro de usuarios nuevos
-router.post('/register_user', async function(req, res) {
+router.post('/register_user', async function (req, res) {
 
     const { username, mail, pass } = req.body;
+    const lang = req.query.lang || 'en';
 
-    try{
+    try {
 
         //Encriptación de contraseña
         const hashedPassword = await bcrypt.hash(pass, 10);
@@ -205,7 +206,7 @@ router.post('/register_user', async function(req, res) {
         `;
 
         // Ejecución de la consulta
-        connection.query(query, [username, mail, hashedPassword, token, expiresAt], function(err, result) {
+        connection.query(query, [username, mail, hashedPassword, token, expiresAt], function (err, result) {
 
             if (err) throw err;
             console.log("User registered successfully:", result);
@@ -214,44 +215,94 @@ router.post('/register_user', async function(req, res) {
 
         const verificationURL = `${process.env.FRONTEND_URL}/users/verify_email?token=${token}`
 
-        const subject = 'Verify your flavorwell account';
-        const html = `
-            <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
-                <div style="text-align: center;">
-                    <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
-                </div>
-                <h2 style="color: rgb(0, 0, 0);">Hi, ${username}!</h2>
-                <p style="color: #333; font-size: 16px;">
-                    Thank you for registering with <strong>Flavorwell</strong>. To complete your registration, please verify your email address by clicking the button below:
-                </p>
-                <div style="text-align: center; margin: 30px 0;">
-                    <a href="${verificationURL}" 
-                        style="background-color: #E3170A; color: white; padding: 15px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
-                        Verify Account
-                    </a>
-                </div>
-                <p style="color: #333; font-size: 14px;">
-                    If the button above doesn't work, copy and paste the following link into your browser:
-                </p>
-                <p style="word-break: break-all; color: #F7B32B; font-size: 14px;">
-                    <a href="${verificationURL}" style="color: #F7B32B;">${verificationURL}</a>
-                </p>
-                <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
-                <p style="text-align: center; color: #aaa; font-size: 12px;">
-                    &copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.
-                </p>
-            </div>
-        `;
+        let subject;
+        let html;
 
         try {
 
-            await sendMail({ to: mail, subject, html})
-            res.status(200).send({ success: true, message: "Success registered user. Please check your email." });
+            switch (lang) {
+                case 'en':
+
+                    subject = 'Verify your flavorwell account';
+                    html = `
+                        <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
+                            <div style="text-align: center;">
+                                <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
+                            </div>
+                            <h2 style="color: rgb(0, 0, 0);">Hi, ${username}!</h2>
+                            <p style="color: #333; font-size: 16px;">
+                                Thank you for registering with <strong>Flavorwell</strong>. To complete your registration, please verify your email address by clicking the button below:
+                            </p>
+                            <div style="text-align: center; margin: 30px 0;">
+                                <a href="${verificationURL}" 
+                                    style="background-color: #E3170A; color: white; padding: 15px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                                    Verify Account
+                                </a>
+                            </div>
+                            <p style="color: #333; font-size: 14px;">
+                                If the button above doesn't work, copy and paste the following link into your browser:
+                            </p>
+                            <p style="word-break: break-all; color: #F7B32B; font-size: 14px;">
+                                <a href="${verificationURL}" style="color: #F7B32B;">${verificationURL}</a>
+                            </p>
+                            <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
+                            <p style="text-align: center; color: #aaa; font-size: 12px;">
+                                &copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.
+                            </p>
+                        </div>
+                    `;
+
+                    await sendMail({ to: mail, subject, html })
+                    res.status(200).send({ success: true, message: "Success registered user. Please check your email." });
+                    break;
+                
+                case 'es':
+
+                    subject = 'Verifica tu cuenta de Flavorwell';
+                    html = `
+                        <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
+                            <div style="text-align: center;">
+                                <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
+                            </div>
+                            <h2 style="color: rgb(0, 0, 0);">Hi, ${username}!</h2>
+                            <p style="color: #333; font-size: 16px;">
+                                Gracias por registrarte en <strong>Flavorwell</strong>. Para completar tu registro, Por favor verifique su dirección de correo electrónico haciendo clic en el botón de abajo:
+                            </p>
+                            <div style="text-align: center; margin: 30px 0;">
+                                <a href="${verificationURL}" 
+                                    style="background-color: #E3170A; color: white; padding: 15px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                                    Verificar Cuenta
+                                </a>
+                            </div>
+                            <p style="color: #333; font-size: 14px;">
+                                Si el botón de arriba no funciona, copie y pegue el siguiente enlace en su navegador:
+                            </p>
+                            <p style="word-break: break-all; color: #F7B32B; font-size: 14px;">
+                                <a href="${verificationURL}" style="color: #F7B32B;">${verificationURL}</a>
+                            </p>
+                            <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
+                            <p style="text-align: center; color: #aaa; font-size: 12px;">
+                                &copy; ${new Date().getFullYear()} Flavorwell. Todos los derechos reservados.
+                            </p>
+                        </div>
+                    `;
+
+                    await sendMail({ to: mail, subject, html })
+                    res.status(200).send({ success: true, message: "Usuario registrado correctamente. Por favor, revise su correo electrónico." });
+                    break;
+            }
 
         } catch (error) {
 
             console.error('Error enviando codigo por Gmail API', error);
-            res.status(500).json({ success: false, message: 'Error sending email' });
+            switch (lang) {
+                case 'en':
+                    res.status(500).json({ success: false, message: 'Error sending email' });
+                    break;
+                case 'es':
+                    res.status(500).json({ success: false, message: 'Error enviando correo electronico' });
+                    break;
+            }
 
         }
 
@@ -259,7 +310,6 @@ router.post('/register_user', async function(req, res) {
     } catch (error) {
 
         console.error("Error al registrar:", error);
-        res.status(500).json({ success: false, error: 'Internal server error, try again later' });
 
     }
 
@@ -283,7 +333,7 @@ router.get('/verify_email', async (req, res) => {
         const [rows] = await connection.query(
 
             // Parametros de consulta
-            'SELECT * FROM users WHERE verification_token = ?', 
+            'SELECT * FROM users WHERE verification_token = ?',
             // Token de validacion
             [token]
 
@@ -319,7 +369,7 @@ router.get('/verify_email', async (req, res) => {
         // Redireccion a pagina de verificacion exitosa
         res.redirect(`${process.env.FRONTEND_URL}/users/verified_success`);
 
-    // Intercepción de errores
+        // Intercepción de errores
     } catch (error) {
 
         console.error('Error al verificar el correo:', error);
@@ -348,7 +398,7 @@ router.post('/login_user', async function (req, res) {
         const [rows] = await connection.query(
 
             // Consulta SQL
-            'SELECT * FROM users WHERE email = ?', 
+            'SELECT * FROM users WHERE email = ?',
             // Parametros de consulta
             [email]
 
@@ -357,9 +407,9 @@ router.post('/login_user', async function (req, res) {
         // Verificar existencia de correo en DB
         if (rows.length === 0) {
 
-            return res.status(401).json( 
+            return res.status(401).json(
 
-                { success: false, message: 'This email has not yet been registered'}
+                { success: false, message: 'This email has not yet been registered' }
 
             )
 
@@ -411,10 +461,10 @@ router.post('/login_user', async function (req, res) {
 
         });
 
-    // Intercepcion de errores en el servidor
+        // Intercepcion de errores en el servidor
     } catch (error) {
 
-        console.error('Error al iniciar sesión', error );
+        console.error('Error al iniciar sesión', error);
         res.status(500).json(
 
             { success: false, error: 'Internal server error, please try again later.' }
@@ -452,7 +502,7 @@ router.post('/request_password_reset', async (req, res) => {
         );
 
         // Verificación de existencia de resultados
-        if(rows.length === 0) {
+        if (rows.length === 0) {
 
             return res.status(404).json({ success: false, message: 'This email is not registered, check your information' });
 
@@ -506,8 +556,8 @@ router.post('/request_password_reset', async (req, res) => {
 
         try {
 
-            await sendMail({to: recoverInfo, subject, html })
-            res.status(200).json({ success: true, message: `Code sent to ${recoverInfo}`});
+            await sendMail({ to: recoverInfo, subject, html })
+            res.status(200).json({ success: true, message: `Code sent to ${recoverInfo}` });
 
         } catch (error) {
 
@@ -516,8 +566,8 @@ router.post('/request_password_reset', async (req, res) => {
 
         }
 
-    // Intercepción de errorres
-    } catch(error){
+        // Intercepción de errorres
+    } catch (error) {
 
         console.error('Error enviando codigo de verificacion', error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
@@ -544,7 +594,7 @@ router.post('/set_new_password', async (req, res) => {
         );
 
         // Verificacion de existencia de correo electronico
-        if(rows.length === 0) {
+        if (rows.length === 0) {
 
             // Devolución de status
             return res.status(400).json({ success: false, message: 'Correo electronico o codigo invalido' });
@@ -555,7 +605,7 @@ router.post('/set_new_password', async (req, res) => {
         const user = rows[0];
 
         // Verificacion de validez de codigo de seguridad
-        if(new Date() > new Date(user.reset_expires_at)) {
+        if (new Date() > new Date(user.reset_expires_at)) {
 
             // Devolución de status
             return res.status(400).json({ success: false, message: 'El código ha expirado' });
@@ -577,8 +627,8 @@ router.post('/set_new_password', async (req, res) => {
 
         // Devolución de estatus
         res.status(200).json({ success: true, message: 'Contraseña actualizada correctamente' });
-    
-    // Intercepción de errores
+
+        // Intercepción de errores
     } catch (error) {
 
         console.error("Error al actualizar contraseña:", error);
@@ -589,7 +639,7 @@ router.post('/set_new_password', async (req, res) => {
 });
 
 // Selector de recetas para mural de posteos de la comunidad
-router.get('/api/recent_posts', authenticateToken, async (req, res) => { 
+router.get('/api/recent_posts', authenticateToken, async (req, res) => {
 
     // Extraccion del 'userId' que esta contenido dentro del 'req.user' asignado en el middleware de JWT
     const userId = req.user.userId;
@@ -622,7 +672,7 @@ router.get('/api/recent_posts', authenticateToken, async (req, res) => {
 
                     // Consulta de tabla likes para identificar likes correspondientes a la receta.
                     `SELECT 1 FROM likes WHERE user_id=? AND recipe_id=? AND category=?`,
-                    [userId,rec.id,table]
+                    [userId, rec.id, table]
 
                 );
 
@@ -631,7 +681,7 @@ router.get('/api/recent_posts', authenticateToken, async (req, res) => {
 
                     // Consulta de tabla saved para identificar recetas guardadas por el usuario.
                     `SELECT 1 FROM saved_recipes WHERE user_id=? AND recipe_id=? AND category=?`,
-                    [userId,rec.id,table]
+                    [userId, rec.id, table]
 
                 );
 
@@ -666,7 +716,7 @@ router.get('/api/recent_posts', authenticateToken, async (req, res) => {
         // Envio de array al frontend.
         res.json(combined);
 
-    // Intercepción de errores
+        // Intercepción de errores
     } catch (error) {
 
         // Mensaje de error en consola y envio de estatus del servidor.
@@ -714,7 +764,7 @@ router.post('/api/user_posts', authenticateToken, async (req, res) => {
 
                     // Consulta de tabla likes para identificar likes correspondientes a la receta.
                     `SELECT 1 FROM likes WHERE user_id=? AND recipe_id=? AND category=?`,
-                    [userId,rec.id,table]
+                    [userId, rec.id, table]
 
                 );
 
@@ -723,7 +773,7 @@ router.post('/api/user_posts', authenticateToken, async (req, res) => {
 
                     // Consulta de tabla saved para identificar recetas guardadas por el usuario.
                     `SELECT 1 FROM saved_recipes WHERE user_id=? AND recipe_id=? AND category=?`,
-                    [userId,rec.id,table]
+                    [userId, rec.id, table]
 
                 );
 
@@ -758,7 +808,7 @@ router.post('/api/user_posts', authenticateToken, async (req, res) => {
         // Envio de array al frontend.
         res.json(combined);
 
-    // Intercepción de errores
+        // Intercepción de errores
     } catch (error) {
 
         // Mensaje de error en consola y envio de estatus del servidor.
@@ -780,7 +830,7 @@ router.post('/api/toggle_like', authenticateToken, async (req, res) => {
         const [[exists]] = await connection.query(
 
             `SELECT id FROM likes WHERE user_id=? AND recipe_id=? AND category=?`,
-            [userId,recipeId,category]
+            [userId, recipeId, category]
 
         );
 
@@ -801,7 +851,7 @@ router.post('/api/toggle_like', authenticateToken, async (req, res) => {
             [userId, recipeId, category]
 
         );
-        res.json({ success: true, liked: true});
+        res.json({ success: true, liked: true });
 
     } catch (error) {
 
@@ -844,7 +894,7 @@ router.post('/api/toggle_save', authenticateToken, async (req, res) => {
     } catch (error) {
 
         console.error(error);
-        res.status(500).json({ success: false, message: 'Internal server error '});
+        res.status(500).json({ success: false, message: 'Internal server error ' });
 
     }
 
@@ -961,7 +1011,7 @@ router.get('/api/saved_recipes', authenticateToken, async (req, res) => {
 
         res.json(savedRecipes);
 
-    } catch(error) {
+    } catch (error) {
 
         console.error(error);
         res.status(500).json({ success: true, message: 'Internal server error' });
@@ -984,7 +1034,7 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
         const { name, description, ingredients, instructions } = req.body;
 
         console.log(name, description, category, ingredients, instructions);
-        
+
 
         // Alistamiento de instrucciones
         const parsedInstructions = JSON.parse(instructions);
@@ -1128,7 +1178,7 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
             return name.toLowerCase().replace(/\s+/g, '_');
         }
 
-    // Intercepcion de errores
+        // Intercepcion de errores
     } catch (error) {
 
         // Depuracion de errores
@@ -1158,8 +1208,8 @@ router.get('/admin/recipes/verify', async (req, res) => {
         );
 
         res.redirect(`${process.env.FRONTEND_URL}/users/update/status/recipe`);
-    
-    // Intercepción de errores
+
+        // Intercepción de errores
     } catch (err) {
 
         // Depuracion de errores
@@ -1246,7 +1296,7 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
 
         // Obtener ingredientes relacionados
         const [ingredients] = await connection.query(
-            
+
             // Consulta SQL
             `
             SELECT i.name AS ingredient_name, i.src_reference
@@ -1268,11 +1318,11 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
             ingredients,
             author: author,
             likeCount,
-            savedCount, 
+            savedCount,
             authorId: authorId
         });
 
-    // Intercepcion de errores y envio de mensaje de error al frontend
+        // Intercepcion de errores y envio de mensaje de error al frontend
     } catch (error) {
 
         console.error('Error fetching recipe:', error);
@@ -1347,8 +1397,8 @@ router.post('/get_user_by_id', authenticateToken, async (req, res) => {
 
         })
 
-    // Intercepción de errores y envio de respuesta de error al frontend
-    } catch(error) {
+        // Intercepción de errores y envio de respuesta de error al frontend
+    } catch (error) {
 
         console.error('Error fetching recipe:', error);
         res.status(500).json({ success: false, message: 'Server error' });
@@ -1399,7 +1449,7 @@ router.get('/api/user_recipes', authenticateToken, async (req, res) => {
         // Envió de datos al frontend
         res.json({ success: true, recipes: results });
 
-    // Intercepción de errores y envio de mensaje de error al frontend
+        // Intercepción de errores y envio de mensaje de error al frontend
     } catch (error) {
 
         console.error('Error executing query:', error);
@@ -1577,13 +1627,13 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
                 res.status(500).json({ success: false, message: 'Error sending email' });
 
             }
-            
+
         }
 
         // Respuesta de confirmacion de envio de correo electronico al frontend
         return res.status(200).json({ success: true, message: 'If you changed your username or email address, a confirmation email has been sent. Please check your inbox.' });
 
-    // Intercepción de errores
+        // Intercepción de errores
     } catch (error) {
 
         console.error('Error actualizando perfil:', error);
@@ -1696,7 +1746,7 @@ router.post('/api/recipes/ai-generate', authenticateToken, async (req, res) => {
             // Parseo de la respuesta de la inteligenia artificial y guardado en la variable 'parsed'
             parsed = JSON.parse(responseText);
 
-        // Intercepción de errores
+            // Intercepción de errores
         } catch (err) {
 
             // Envio de mensaje de error al frontend
@@ -1707,9 +1757,9 @@ router.post('/api/recipes/ai-generate', authenticateToken, async (req, res) => {
 
         // Envio de mensaje de exito al frontend y datos de la receta generada por el modelo de AI
         console.log(parsed);
-        return res.json({success: true, data: parsed, message: 'Recipe generated'});
+        return res.json({ success: true, data: parsed, message: 'Recipe generated' });
 
-    // Intercepción de errores
+        // Intercepción de errores
     } catch (error) {
 
         console.error("Internal server error", error);
@@ -1783,7 +1833,7 @@ cron.schedule('*/15 * * * *', async () => {
             'UPDATE users SET reset_code = NULL, reset_expires_at = NULL WHERE reset_expires_at < ?',
             // Parametro de sonsulta (fecha instanciada)
             [now]
-            
+
         );
 
         // Depuracion de codigos de seguridad
@@ -1849,10 +1899,10 @@ cron.schedule('*/15 * * * *', async () => {
                 console.log(`[CRON] No hay recetas no verificadas para eliminar en ${category}.`);
 
             }
-            
+
         }
 
-    // Intercepción de errores 
+        // Intercepción de errores 
     } catch (err) {
 
         console.error("[CRON] Error en la tarea programada:", err);

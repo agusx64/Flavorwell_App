@@ -1,7 +1,7 @@
-var signupButton = document.getElementById('signupButton');
-var usernameInput = document.getElementById('input_username');
-var usernameMail = document.getElementById('input_mail');
-var usernamePassword = document.getElementById('input_password');
+let signupButton = document.getElementById('signupButton');
+let usernameInput = document.getElementById('input_username');
+let usernameMail = document.getElementById('input_mail');
+let usernamePassword = document.getElementById('input_password');
 const modal = document.getElementById('successModal');
 const passwordWarning = document.getElementById('passwordWarning');
 
@@ -11,7 +11,8 @@ const imgErrorModal = document.getElementById('img-context');
 const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
 
-var restHost = 'http://localhost:3000';
+let restHost = 'http://localhost:3000';
+let lang = localStorage.getItem('preferred_lang');
 
 signupButton.addEventListener('click', function(event) {
 
@@ -32,7 +33,7 @@ signupButton.addEventListener('click', function(event) {
         
     }
 
-    fetch(restHost + '/users/register_user', {
+    fetch(restHost + `/users/register_user?lang=${lang}`, {
 
         method: 'POST',
         headers: {
@@ -127,7 +128,15 @@ function validateEmailFormat() {
 
     if (!emailRegex.test(email)) {
 
-        textErrorModal.textContent = 'Please enter a email valid address';
+        switch (lang) {
+            case 'es':
+                textErrorModal.textContent = 'Por favor ingresa un correo valido';
+                break;   
+            
+            case 'en':
+                textErrorModal.textContent = 'Please enter a email valid address';
+                break;
+        }
         imgErrorModal.src = '/images/_UI_img/error.webp';
 
         errorModal.classList.remove('hidden');
@@ -157,25 +166,50 @@ function validatePasswordStrength(password) {
     if (password.length === 0) {
 
         passwordWarning.className = 'password-warning';
-        passwordWarning.innerHTML = `<i class="bi bi-info-circle-fill"></i> Type your password`;
+        switch(lang) {
+            case 'es':
+                passwordWarning.innerHTML = `<i class="bi bi-info-circle-fill"></i> Escribe tu contraseña`;
+                break;
+            case 'en':
+                passwordWarning.innerHTML = `<i class="bi bi-info-circle-fill"></i> Type your password`;
+                break;
+        }
         passwordWarning.classList.add('password-warning', 'grey');
         return;
 
     }
 
     if (password.length < 8) {
-
-        passwordWarning.innerHTML = `<i class="bi bi-x-circle-fill"></i> Password is too weak`;
+        switch(lang) {
+            case 'es':
+                passwordWarning.innerHTML = `<i class="bi bi-x-circle-fill"></i> Contraseña débil`;
+                break;
+            case 'en':
+                passwordWarning.innerHTML = `<i class="bi bi-x-circle-fill"></i> Password is too weak`;
+                break;
+        }
         passwordWarning.className = 'password-warning red';
 
     } else if (!hasSpecialChar) {
-
-        passwordWarning.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Add at least one special character`;
+        switch(lang) {
+            case 'es':
+                passwordWarning.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Añade al menos un carácter especial`;
+                break;
+            case 'en':
+                passwordWarning.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Add at least one special character`;
+                break;
+        }
         passwordWarning.className = 'password-warning yellow';
 
-    } else {
-
-        passwordWarning.innerHTML = `<i class="bi bi-check-circle-fill"></i> Strong password`;
+    } else if (isStrong) {
+        switch(lang) {
+            case 'es':
+                passwordWarning.innerHTML = `<i class="bi bi-check-circle-fill"></i> Contraseña segura`;
+                break;
+            case 'en':
+                passwordWarning.innerHTML = `<i class="bi bi-check-circle-fill"></i> Strong password`;
+                break;
+        }
         passwordWarning.className = 'password-warning green';
         signupButton.disabled = false;
 

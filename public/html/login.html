@@ -17,8 +17,8 @@
     <div class="login_screen">
 
         <header>
-            <h1 class="poppins-semibold">Welcome</h1>
-            <p>Your favorite dishes at your <br>fingertips</p>
+            <h1 class="poppins-semibold" data-i18n="welcome">Welcome</h1>
+            <p data-i18n="begin_exploring">To begin exploring, <br>let's log in</p>
         </header>
 
         <div class="login-img-container">
@@ -28,21 +28,21 @@
         <form class="form_container" id="form_login">
         
             <div class="div_input">
-                <label class="label_text poppins-semibold">Email</label>
-                <input id="username_email" class="inputs" type="email" placeholder="Enter your email address">
+                <label class="label_text poppins-semibold" data-i18n="login_email_label">Email</label>
+                <input id="username_email" class="inputs" type="email" placeholder="Enter your email address" data-i18n="login_email_placeholder">
             </div>
         
             <div class="div_input" style="position: relative;">
-                <label class="label_text poppins-semibold" for="username_password">Password</label>
-                <input id="username_password" class="inputs" type="password" placeholder="Type a secure password">
+                <label class="label_text poppins-semibold" for="username_password" data-i18n="login_password_label">Password</label>
+                <input id="username_password" class="inputs" type="password" placeholder="Type your password" data-i18n="login_password_placeholder">
                 <i id="togglePassword" class="bi bi-eye"
                     style="position: absolute; right: 20px; top: 65%; transform: translateY(-50%); cursor: pointer; color: var(--Xhantous); font-size: 5vw;"></i>
             </div>  
         
             <div class="div_buttons">
-                <a class="a_signUp" href="/html/sign_up.html">Sign Up</a>
-                <button id="loginButton" class="login_button poppins-semibold" disabled>Log In</button>
-                <a class="a_forwotP" href="/html/forgot_password.html">Forgot Password?</a>
+                <a class="a_signUp" href="/html/sign_up.html" data-i18n="sign_up_link">Sign Up</a>
+                <button id="loginButton" class="login_button poppins-semibold" disabled data-i18n="log_in_button">Log In</button>
+                <a class="a_forwotP" href="/html/forgot_password.html" data-i18n="forgot_password_link">Forgot Password ?</a>
             </div>
         
         </form>
@@ -57,6 +57,7 @@
         </div>
     </div>
 
+    <script src="/javascripts/translations.js"></script>
     <script src="/javascripts/login_UI.js"></script>
 </body>
 </html>
