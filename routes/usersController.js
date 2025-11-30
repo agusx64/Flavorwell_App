@@ -297,7 +297,7 @@ router.post('/register_user', async function (req, res) {
             console.error('Error enviando codigo por Gmail API', error);
             switch (lang) {
                 case 'en':
-                    res.status(500).json({ success: false, message: 'Error sending email' });
+                    res.status(500).json({ success: false, message: 'Error sending email',  });
                     break;
                 case 'es':
                     res.status(500).json({ success: false, message: 'Error enviando correo electronico' });
@@ -1784,11 +1784,11 @@ router.get('/oauth2callback', async (req, res) => {
         // Opcional: guardar tokens en tu base de datos o archivo .env
         // Ejemplo temporal:
         res.send(`
-      <h2>Autorización completada correctamente ✅</h2>
-      <p>Guarda este refresh token en tu .env:</p>
-      <pre>${tokens.refresh_token}</pre>
-      <p>Access Token:</p>
-      <pre>${tokens.access_token}</pre>
+            <h2>Autorización completada correctamente ✅</h2>
+            <p>Guarda este refresh token en tu .env:</p>
+            <pre>${tokens.refresh_token}</pre>
+            <p>Access Token:</p>
+            <pre>${tokens.access_token}</pre>
     `);
     } catch (error) {
         console.error('❌ Error obteniendo tokens:', error);

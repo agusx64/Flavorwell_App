@@ -11,6 +11,9 @@ const imgErrorModal = document.getElementById('img-context');
 const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
 
+// Variables del modal Success
+const successfullyModalText = document.getElementById('successfully-message');
+
 let restHost = 'http://localhost:3000';
 let lang = localStorage.getItem('preferred_lang');
 
@@ -72,6 +75,7 @@ signupButton.addEventListener('click', function(event) {
 
             // Mostrar modal
             modal.classList.remove('hidden');
+            successfullyModalText.textContent = data.message;
 
             // Acción del botón "Back to login"
             document.getElementById('backToLoginBtn').addEventListener('click', () => {
