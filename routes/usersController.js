@@ -213,7 +213,7 @@ router.post('/register_user', async function (req, res) {
 
         });
 
-        const verificationURL = `${process.env.FRONTEND_URL}/users/verify_email?token=${token}`
+        const verificationURL = `${process.env.FRONTEND_URL}/users/verify_email?token=${token}&lang=${lang}`
 
         let subject;
         let html;
@@ -221,6 +221,7 @@ router.post('/register_user', async function (req, res) {
         try {
 
             switch (lang) {
+                
                 case 'en':
 
                     subject = 'Verify your flavorwell account';
@@ -290,18 +291,22 @@ router.post('/register_user', async function (req, res) {
                     await sendMail({ to: mail, subject, html })
                     res.status(200).send({ success: true, message: "Usuario registrado correctamente. Por favor, revise su correo electrónico." });
                     break;
+            
             }
 
         } catch (error) {
 
             console.error('Error enviando codigo por Gmail API', error);
             switch (lang) {
+
                 case 'en':
                     res.status(500).json({ success: false, message: 'Error sending email',  });
                     break;
+
                 case 'es':
                     res.status(500).json({ success: false, message: 'Error enviando correo electronico' });
                     break;
+
             }
 
         }
@@ -319,6 +324,7 @@ router.post('/register_user', async function (req, res) {
 router.get('/verify_email', async (req, res) => {
 
     const { token } = req.query;
+    const lang = req.query.lang || 'en';
 
     // Verificación de existencia de tokan
     if (!token) {
@@ -367,7 +373,7 @@ router.get('/verify_email', async (req, res) => {
         );
 
         // Redireccion a pagina de verificacion exitosa
-        res.redirect(`${process.env.FRONTEND_URL}/users/verified_success`);
+        res.redirect(`${process.env.FRONTEND_URL}/users/verified_success?lang=${lang}`);
 
         // Intercepción de errores
     } catch (error) {
@@ -382,9 +388,19 @@ router.get('/verify_email', async (req, res) => {
 // Renderizado de pagina de verificacion exitosa
 router.get('/verified_success', (req, res) => {
 
-    res.render('verified');
+    const lang = req.query.lang || 'en';
+    switch (lang) {
 
-})
+        case 'es':
+            res.render('es/verified_es');
+            break;
+        
+        case 'en':
+            res.render('en/verified_en');
+            break;
+    }
+
+});
 
 // Inicio de sesión y generación de JWT
 router.post('/login_user', async function (req, res) {
@@ -488,6 +504,7 @@ router.post('/request_password_reset', async (req, res) => {
 
     // Intercepcion de datos
     const { recoverInfo } = req.body;
+    const lang = req.query.lang || 'en';
 
     try {
 
@@ -504,7 +521,18 @@ router.post('/request_password_reset', async (req, res) => {
         // Verificación de existencia de resultados
         if (rows.length === 0) {
 
-            return res.status(404).json({ success: false, message: 'This email is not registered, check your information' });
+            switch (lang) {
+
+                case 'en':
+                    return res.status(404).json({ success: false, message: 'This email is not registered, check your information' });
+                    break;
+
+                case 'es':
+                    return res.status(404).json({ success: false, message: 'Este correo no está registrado, revisa tus datos' });
+                    break;
+
+            }
+
 
         }
 
@@ -523,46 +551,101 @@ router.post('/request_password_reset', async (req, res) => {
 
         );
 
-        const subject = 'Recovery passowrd code'
-        const html = `
-            <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
-                <div style="text-align: center;">
-                    <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
-                </div>
-                <h2 style="color: rgb(0, 0, 0); text-align: center;">Reset your password</h2>
-                <p style="color: #333; font-size: 16px;">
-                    We received a request to reset your <strong>Flavorwell</strong> account password.
-                </p>
-                <p style="color: #333; font-size: 16px;">
-                    Use the following code to reset your password:
-                </p>
-                <div style="text-align: center; margin: 30px 0;">
-                    <span style="font-size: 32px; font-weight: bold; background-color: #F7B32B; color: rgb(0, 0, 0); padding: 12px 24px; border-radius: 8px; display: inline-block;">
-                        ${resetCode}
-                    </span>
-                </div>
-                <p style="color: #E3170A; font-size: 14px; text-align: center;">
-                    This code will expire in 10 minutes.
-                </p>
-                <p style="color: #999; font-size: 13px; text-align: center; margin-top: 40px;">
-                    If you didn't request this, you can safely ignore this email.
-                </p>
-                <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
-                <p style="text-align: center; color: #aaa; font-size: 12px;">
-                    &copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.
-                </p>
-            </div>
-        `;
+        let subject;
+        let html;
 
         try {
 
-            await sendMail({ to: recoverInfo, subject, html })
-            res.status(200).json({ success: true, message: `Code sent to ${recoverInfo}` });
+            switch (lang) {
+
+                case 'en':
+                    subject = 'Recovery password code'
+                    html = `
+                    <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
+                        <div style="text-align: center;">
+                            <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
+                        </div>
+                        <h2 style="color: rgb(0, 0, 0); text-align: center;">Reset your password</h2>
+                        <p style="color: #333; font-size: 16px;">
+                            We received a request to reset your <strong>Flavorwell</strong> account password.
+                        </p>
+                        <p style="color: #333; font-size: 16px;">
+                            Use the following code to reset your password:
+                        </p>
+                        <div style="text-align: center; margin: 30px 0;">
+                            <span style="font-size: 32px; font-weight: bold; background-color: #F7B32B; color: rgb(0, 0, 0); padding: 12px 24px; border-radius: 8px; display: inline-block;">
+                                ${resetCode}
+                            </span>
+                        </div>
+                        <p style="color: #E3170A; font-size: 14px; text-align: center;">
+                            This code will expire in 10 minutes.
+                        </p>
+                        <p style="color: #999; font-size: 13px; text-align: center; margin-top: 40px;">
+                            If you didn't request this, you can safely ignore this email.
+                        </p>
+                        <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
+                        <p style="text-align: center; color: #aaa; font-size: 12px;">
+                            &copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.
+                        </p>
+                    </div>
+                    `;
+                    await sendMail({ to: recoverInfo, subject, html })
+                    res.status(200).json({ success: true, message: `Code sent to: ${recoverInfo}` });
+                    break;
+                
+                case 'es':
+                subject = 'Codigo de recuperación'
+                html = `
+                    <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
+                        <div style="text-align: center;">
+                            <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
+                        </div>
+                        <h2 style="color: rgb(0, 0, 0); text-align: center;">Restablecer su contraseña</h2>
+                        <p style="color: #333; font-size: 16px;">
+                            Recibimos una solicitud para restablecer la contraseña de su cuenta <strong>Flavorwell</strong>
+                        </p>
+                        <p style="color: #333; font-size: 16px;">
+                            Utilice el siguiente código para restablecer su contraseña:
+                        </p>
+                        <div style="text-align: center; margin: 30px 0;">
+                            <span style="font-size: 32px; font-weight: bold; background-color: #F7B32B; color: rgb(0, 0, 0); padding: 12px 24px; border-radius: 8px; display: inline-block;">
+                                ${resetCode}
+                            </span>
+                        </div>
+                        <p style="color: #E3170A; font-size: 14px; text-align: center;">
+                            Este código expirará en 10 minutos.
+                        </p>
+                        <p style="color: #999; font-size: 13px; text-align: center; margin-top: 40px;">
+                            Si no solicitó esto, puede ignorar este correo electrónico con seguridad.
+                        </p>
+                        <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
+                        <p style="text-align: center; color: #aaa; font-size: 12px;">
+                            &copy; ${new Date().getFullYear()} Flavorwell. Todos los derechos reservados.
+                        </p>
+                    </div>
+                    `;
+                    await sendMail({ to: recoverInfo, subject, html })
+                    res.status(200).json({ success: true, message: `Código enviado a: ${recoverInfo}` });
+                break;
+
+            }
+
 
         } catch (error) {
 
+            switch (lang) {
+
+                case 'en':
+                    res.status(500).json({ success: false, message: 'Error sending email',  });
+                    break;
+
+                case 'es':
+                    res.status(500).json({ success: false, message: 'Error enviando correo electronico' });
+                    break;
+
+            }
+
             console.error('Error enviando codigo por Gmail API', error);
-            res.status(500).json({ success: false, message: 'Error sending email' });
 
         }
 

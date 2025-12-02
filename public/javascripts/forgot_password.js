@@ -9,6 +9,7 @@ const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
 
 var restHost = 'http://localhost:3000';
+let lang = localStorage.getItem('preferred_lang');
 
 if (window.Capacitor && window.Capacitor.Plugins?.Keyboard) {
 
@@ -19,7 +20,19 @@ if (window.Capacitor && window.Capacitor.Plugins?.Keyboard) {
 recoverButton.addEventListener('click', function(event) {
 
     event.preventDefault();
-    recoverButton.textContent = 'Sending email...'
+
+    switch (lang) {
+
+        case 'en':
+            recoverButton.textContent = 'Sending email...'
+            break;
+
+        case 'es':
+            recoverButton.textContent = 'Enviando correo electrónico...'
+            break;
+
+    }
+
     recoverButton.disabled = true;
 
     // Validacion de formato de correo electronico
@@ -33,7 +46,7 @@ recoverButton.addEventListener('click', function(event) {
 
     };
 
-    fetch(restHost + '/users/request_password_reset', {
+    fetch(restHost + `/users/request_password_reset?lang=${lang}`, {
 
         method: 'POST',
         headers: {
@@ -59,7 +72,18 @@ recoverButton.addEventListener('click', function(event) {
             });
 
             recoverButton.disabled = false;
-            recoverButton.textContent = 'Send email';
+
+            switch (lang) {
+
+                case 'en':
+                    recoverButton.textContent = 'Send email';
+                    break;
+
+                case 'es':
+                    recoverButton.textContent = 'Enviar correo electrónico';
+                    break;
+
+            }
 
         }
 
@@ -93,7 +117,17 @@ recoverButton.addEventListener('click', function(event) {
     .finally(() => {
 
         recoverButton.disabled = false;
-        recoverButton.textContent = 'Send email';
+        switch (lang) {
+
+            case 'en':
+                recoverButton.textContent = 'Send email';
+                break;
+
+            case 'es':
+                recoverButton.textContent = 'Enviar correo electrónico';
+                break;
+
+        };
 
     })
 
@@ -127,7 +161,18 @@ function validateEmailFormat() {
     if (!emailRegex.test(email)) {
 
         imgErrorModal.src = '/images/_UI_img/error.webp';
-        textErrorModal.textContent = 'Please enter a email valid address';
+
+        switch (lang) {
+
+            case 'en':
+                textErrorModal.textContent = 'Please enter a email valid address';
+                break;
+
+            case 'es':
+                textErrorModal.textContent = 'Por favor ingresa un correo electrónico valido';
+                break;
+
+        }
 
         errorModal.classList.remove('hidden');
         document.getElementById('tryAgain').addEventListener('click', () => {
@@ -135,9 +180,19 @@ function validateEmailFormat() {
         });
 
         recoverButton.disabled = false;
-        recoverButton.textContent = 'Send Email';
+        
+        switch (lang) {
 
-        // Valor logico
+            case 'en':
+                recoverButton.textContent = 'Send email';
+                break;
+
+            case 'es':
+                recoverButton.textContent = 'Enviar correo electrónico';
+                break;
+
+        };
+
         return false;
 
     } else {

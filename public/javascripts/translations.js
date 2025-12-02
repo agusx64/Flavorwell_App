@@ -35,6 +35,16 @@ const translations = {
         su_back_login: "Back to login",
         su_try_again: "Try Again",
 
+        // Recuperación de contraseña
+        rc_recover_account: "Recover account",
+        rc_forgot_password: "Forgot password ?",
+        rc_reset_quickly: "Enter your email to reset your password quickly",
+        rc_email: "Email",
+        rc_enter_your_email: "Enter your email",
+        rc_send_mail: "Send email",
+        rc_success: "The recovery email has been sent successfully",
+        rc_set_new: "Set new password",
+        rc_try_again: "Try again"
 
     },
 
@@ -70,8 +80,19 @@ const translations = {
         su_back_login: "Volver al inicio de sesión",
         su_try_again: "Intentar de nuevo",
 
+        // Recuperación de contraseña
+        rc_recover_account: "Recuperar contraseña",
+        rc_forgot_password: "¿Olvidó su contraseña?",
+        rc_reset_quickly: "Ingresa tu correo electrónico para restablecer tu contraseña rápidamente",
+        rc_email: "Correo electronico",
+        rc_enter_your_email: "Escribe tu correo electronico",
+        rc_send_mail: "Enviar correo electronico",
+        rc_success: "El correo electrónico de recuperación se ha enviado correctamente",
+        rc_set_new: "Establecer nueva contraseña",
+        rc_try_again: "Intentar de nuevo"
 
     }
+
 }
 
 function setLanguage() {

@@ -20,7 +20,19 @@ let lang = localStorage.getItem('preferred_lang');
 signupButton.addEventListener('click', function(event) {
 
     event.preventDefault();
-    signupButton.textContent = 'Loading...';
+
+    switch (lang) {
+
+        case 'en':
+            signupButton.textContent = 'Loading...';
+            break;
+
+        case 'es':
+            signupButton.textContent = 'Cargando...';
+            break;
+            
+    };
+
     signupButton.disabled = true;
 
     // Verificacion de formato de correo electronico correcto
@@ -62,7 +74,18 @@ signupButton.addEventListener('click', function(event) {
             });
 
             signupButton.disabled = false;
-            signupButton.textContent = 'Sign Up';
+
+            switch (lang) {
+
+                case 'en':
+                    signupButton.textContent = 'Sign Up';
+                    break;
+                    
+                case 'es':
+                    signupButton.textContent = 'Registrarse';
+                    break;
+
+            }
 
         }
 
@@ -96,8 +119,19 @@ signupButton.addEventListener('click', function(event) {
     })
     .finally(() => {
 
+        switch (lang) {
+
+            case 'en':
+                signupButton.textContent = 'Sign Up';
+                break;
+                
+            case 'es':
+                signupButton.textContent = 'Registrarse';
+                break;
+
+            }
+
         signupButton.disabled = false;
-        signupButton.textContent = 'Sign Up';
 
     })
 
@@ -133,6 +167,7 @@ function validateEmailFormat() {
     if (!emailRegex.test(email)) {
 
         switch (lang) {
+
             case 'es':
                 textErrorModal.textContent = 'Por favor ingresa un correo valido';
                 break;   
@@ -140,7 +175,9 @@ function validateEmailFormat() {
             case 'en':
                 textErrorModal.textContent = 'Please enter a email valid address';
                 break;
+
         }
+
         imgErrorModal.src = '/images/_UI_img/error.webp';
 
         errorModal.classList.remove('hidden');
@@ -149,9 +186,19 @@ function validateEmailFormat() {
         });
 
         signupButton.disabled = false;
-        signupButton.textContent = 'Sign Up';
+        
+        switch (lang) {
 
-        // Valor logico
+            case 'en':
+                signupButton.textContent = 'Sign Up';
+                break;
+                
+            case 'es':
+                signupButton.textContent = 'Registrarse';
+                break;
+
+        };
+
         return false;
 
     } else {
@@ -171,49 +218,66 @@ function validatePasswordStrength(password) {
 
         passwordWarning.className = 'password-warning';
         switch(lang) {
+
             case 'es':
                 passwordWarning.innerHTML = `<i class="bi bi-info-circle-fill"></i> Escribe tu contraseña`;
                 break;
+
             case 'en':
                 passwordWarning.innerHTML = `<i class="bi bi-info-circle-fill"></i> Type your password`;
                 break;
-        }
+
+        };
+
         passwordWarning.classList.add('password-warning', 'grey');
         return;
 
     }
 
     if (password.length < 8) {
+
         switch(lang) {
+
             case 'es':
                 passwordWarning.innerHTML = `<i class="bi bi-x-circle-fill"></i> Contraseña débil`;
                 break;
+
             case 'en':
                 passwordWarning.innerHTML = `<i class="bi bi-x-circle-fill"></i> Password is too weak`;
                 break;
+
         }
+
         passwordWarning.className = 'password-warning red';
 
     } else if (!hasSpecialChar) {
         switch(lang) {
+
             case 'es':
                 passwordWarning.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Añade al menos un carácter especial`;
                 break;
+
             case 'en':
                 passwordWarning.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Add at least one special character`;
                 break;
-        }
+
+        };
+
         passwordWarning.className = 'password-warning yellow';
 
     } else if (isStrong) {
         switch(lang) {
+
             case 'es':
                 passwordWarning.innerHTML = `<i class="bi bi-check-circle-fill"></i> Contraseña segura`;
                 break;
+
             case 'en':
                 passwordWarning.innerHTML = `<i class="bi bi-check-circle-fill"></i> Strong password`;
                 break;
+
         }
+
         passwordWarning.className = 'password-warning green';
         signupButton.disabled = false;
 
@@ -252,8 +316,10 @@ usernameInput.addEventListener('input', (e) => {
 //Funciones de prevencion de errores de entrada
 
 usernamePassword.addEventListener('input', () => {
+
     validatePasswordStrength(usernamePassword.value);
     checkInputs();
+
 });
 
 usernameInput.addEventListener('input', checkInputs);
