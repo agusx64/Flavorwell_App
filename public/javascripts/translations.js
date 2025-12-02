@@ -44,7 +44,18 @@ const translations = {
         rc_send_mail: "Send email",
         rc_success: "The recovery email has been sent successfully",
         rc_set_new: "Set new password",
-        rc_try_again: "Try again"
+        rc_try_again: "Try again",
+
+        // Password reset
+        pr_recover_account: "Recover password",
+        pr_password_reset: "Password reset",
+        pr_security_code: "Please enter the security code and your new password to confirm the change.",
+        pr_type_code: "Type your security code",
+        pr_confirm_email: "Confirm your email",
+        pr_enter_email: "Enter your email",
+        pr_type_new_password: "Type your new password",
+        pr_new_password: "Enter your new password",
+        pr_update_password: "Update password"
 
     },
 
@@ -89,7 +100,18 @@ const translations = {
         rc_send_mail: "Enviar correo electronico",
         rc_success: "El correo electrónico de recuperación se ha enviado correctamente",
         rc_set_new: "Establecer nueva contraseña",
-        rc_try_again: "Intentar de nuevo"
+        rc_try_again: "Intentar de nuevo",
+
+        // Password reset
+        pr_recover_account: "Recuperar cuenta",
+        pr_password_reset: "Restablecer contraseña",
+        pr_security_code: "Ingrese el código de seguridad y su nueva contraseña para confirmar el cambio.",
+        pr_type_code: "Escriba su código de seguridad",
+        pr_confirm_email: "Confirma tu correo electrónico",
+        pr_enter_email: "Escribe tu correo electrónico",
+        pr_type_new_password: "Escribe tu nueva contraseña ",
+        pr_new_password: "Escribe tu nueva contraseña",
+        pr_update_password: "Actualizar contraseña"
 
     }
 

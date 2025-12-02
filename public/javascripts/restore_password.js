@@ -23,7 +23,8 @@ const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
 
 // Direccion del Back-End
-var restHost = 'http://localhost:3000'
+let restHost = 'http://localhost:3000';
+let lang = localStorage.getItem('preferred_lang');
 
 restorePasswordButton.disabled = true;
 
@@ -35,7 +36,19 @@ function validatePasswordStrength(password) {
     if (password.length === 0) {
 
         passwordWarning.className = 'password-warning';
-        passwordWarning.innerHTML = `<i class="bi bi-info-circle-fill"></i> Type your password`;
+
+        switch (lang) {
+
+            case 'en':
+                passwordWarning.innerHTML = `<i class="bi bi-info-circle-fill"></i> Type your password`;
+                break;
+            
+            case 'es':
+                passwordWarning.innerHTML = `<i class="bi bi-info-circle-fill"></i> Escribe tu contraseña`;
+                break;
+
+        };
+        
         passwordWarning.classList.add('password-warning', 'grey');
         return;
 
@@ -43,17 +56,49 @@ function validatePasswordStrength(password) {
 
     if (password.length < 8) {
 
-        passwordWarning.innerHTML = `<i class="bi bi-x-circle-fill"></i> Password is too weak`;
+        switch (lang) {
+
+            case 'en':
+                passwordWarning.innerHTML = `<i class="bi bi-x-circle-fill"></i> Password is too weak`;
+                break;
+
+            case 'es':
+                passwordWarning.innerHTML = `<i class="bi bi-x-circle-fill"></i> Contraseña demasiado débil`;
+                break;
+
+        }
         passwordWarning.className = 'password-warning red';
 
     } else if (!hasSpecialChar) {
 
-        passwordWarning.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Add at least one special character`;
+        switch (lang) {
+
+            case 'en':
+                passwordWarning.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Add at least one special character`;
+                break;
+
+            case 'es':
+                passwordWarning.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Añade al menos un carácter especial`;
+                break;
+
+        }
+
         passwordWarning.className = 'password-warning yellow';
 
-    } else {
+    } else if (isStrong) {
 
-        passwordWarning.innerHTML = `<i class="bi bi-check-circle-fill"></i> Strong password`;
+        switch (lang) {
+            
+            case 'en':
+                passwordWarning.innerHTML = `<i class="bi bi-check-circle-fill"></i> Strong password`;
+                break;
+            
+            case 'es':
+                passwordWarning.innerHTML = `<i class="bi bi-check-circle-fill"></i> Contraseña segura`;
+                break;
+
+        }
+        
         passwordWarning.className = 'password-warning green';
         restorePasswordButton.disabled = false;
 
