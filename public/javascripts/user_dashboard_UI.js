@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Host backend
 const restHost = 'http://localhost:3000';
+let lang = localStorage.getItem('preferred_lang');
 
 // Variables del componente de busqueda
 const searchInput = document.querySelector('.input_search');
@@ -127,6 +128,19 @@ function renderRecipeCard(recipe) {
     const container = document.querySelector('.recipe_post_container');
     const { icon, color } = categoryIcons[recipe.category] || {};
     const card = document.createElement('div');
+    let textButton;
+
+    switch (lang) {
+
+        case 'en':
+            textButton = "View Recipe";
+            break;
+
+        case 'es':
+            textButton = "Ver receta";
+            break;
+
+    }
 
     card.classList.add('card-post-container');
     card.innerHTML = `
@@ -153,7 +167,7 @@ function renderRecipeCard(recipe) {
             </div>
         </div>
         <button class="card-post-main-button" data-id="${recipe.id}" data-category="${recipe.category}">
-            View Recipe <i class="bi bi-fork-knife"></i>
+            ${textButton} <i class="bi bi-fork-knife"></i>
         </button>
     `;
     container.appendChild(card);

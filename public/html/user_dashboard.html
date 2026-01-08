@@ -15,7 +15,7 @@
     <!-- Header container -->
     <header class="header_dashboard">
         <div class="flv_div">
-            <span class="welcome-label">Welcome</span>
+            <span data-i18n="ds_welcome" class="welcome-label">Welcome</span>
             <h1 class="header_text poppins-semibold"></h1>
         </div>
         <div class="profile_header"></div>
@@ -23,7 +23,7 @@
 
     <!-- Etiqueta del componente de busqueda -->
     <div class="label_carousel">
-        <p class="label_carousel_search poppins-bold">Are you looking for a dish? ?</p>
+        <p data-i18n="ds_looking" class="label_carousel_search poppins-bold">Are you looking for a dish? ?</p>
     </div>
 
     <!-- Buscador (componente) -->
@@ -32,7 +32,7 @@
             <div class="icon_search">
                 <i class="bi bi-search"></i>
             </div>
-            <input type="search" name="" id="" placeholder="Search recipes" class="input_search">
+            <input data-i18n="ds_search" type="search" name="" id="" placeholder="Search recipes" class="input_search">
         </div>
         <!-- Contenedor de resultados -->
         <div id="search_results_container" class="search-modal hidden">
@@ -42,7 +42,7 @@
 
     <!-- Etiqueta del carrusel de recetas -->
     <div class="label_carousel">
-        <p class="label_carousel_new poppins-bold">Explore new recipes</p>
+        <p data-i18n="ds_explore" class="label_carousel_new poppins-bold">Explore new recipes</p>
     </div>
 
     <!-- Componente carrusel de imagenes -->
@@ -84,32 +84,32 @@
 
     <!-- Etiqueta de botones para categorias -->
     <div class="label_carousel">
-        <p class="label_carousel_search poppins-bold">Food categories</p>
+        <p data-i18n="ds_categories" class="label_carousel_search poppins-bold">Food categories</p>
     </div>
 
     <!-- Botones de listas de recetas por categoria -->
     <div class="category_buttons">
         <button class="cat_button btn_vegan" id="vegan_button">
             <img class="img_button_cat" src="/images/_img_recipe/vegan_cat.jpg">
-            <span class="text_category poppins-medium">Vegan</span>
+            <span data-i18n="ds_vegan" class="text_category poppins-medium">Vegan</span>
         </button>
         <button class="cat_button btn_desserts" id="desserts_button">
             <img class="img_button_cat" src="/images/_img_recipe/dessert_cat.jpg">
-            <span class="text_category poppins-medium">Desserts</span>
+            <span data-i18n="ds_desserts" class="text_category poppins-medium">Desserts</span>
         </button>
         <button class="cat_button btn_drinks" id="dishes_button">
             <img class="img_button_cat" src="/images/_img_recipe/strong_dish_cat.jpg">
-            <span class="text_category poppins-medium">Dishes</span>
+            <span data-i18n="ds_dishes" class="text_category poppins-medium">Dishes</span>
         </button>
         <button class="cat_button btn_breakfast" id="breakfast_button">
             <img class="img_button_cat" src="/images/_img_recipe/breakfast_cat.jpg">
-            <span class="text_category poppins-medium">Breakfast</span>
+            <span data-i18n="ds_breakfast" class="text_category poppins-medium">Breakfast</span>
         </button>
     </div>
 
     <!-- Etiqueta de recomendaciones -->
     <div class="label_carousel">
-        <p class="label_carousel_search poppins-bold label_food_day">Recommended for you</p>
+        <p data-i18n="ds_recommended" class="label_carousel_search poppins-bold label_food_day">Recommended for you</p>
     </div>
     
     <!-- Componente de comida recomendada -->
@@ -157,7 +157,7 @@
 
     </section>
 
-    <span class="recipe-posts-label">Explore community dishes</span>
+    <span data-i18n="ds_community" class="recipe-posts-label">Explore community dishes</span>
 
     <!-- Posteos de recetas recientes -->
     <section class="recipe_post_container">
@@ -182,6 +182,7 @@
         </div>
     </nav>
 
+    <script src="/javascripts/translations.js"></script>
     <script src="/javascripts/user_dashboard_UI.js"></script>
     <script src="/javascripts/navbar_UI.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

@@ -58,7 +58,20 @@ const translations = {
         pr_update_password: "Update password",
         pr_try_again: "Try again",
         pr_success_text: "Your password has been succesfully updated",
-        pr_login: "Back to login"
+        pr_login: "Back to login",
+
+        // Main dashboard
+        ds_welcome: "Welcome",
+        ds_looking: "Are you looking for a dish ?",
+        ds_search: "Search recipes",
+        ds_explore: "Explore new recipes",
+        ds_categories: "Food categories",
+        ds_recommended: "Recommended for you",
+        ds_community: "Explore community dishes",
+        ds_vegan: "Vegan",
+        ds_desserts: "Desserts",
+        ds_dishes: "Dishes",
+        ds_breakfast: "Breakfasts",
 
     },
 
@@ -117,7 +130,20 @@ const translations = {
         pr_update_password: "Actualizar contraseña",
         pr_try_again: "Intentar de nuevo",
         pr_success_text: "Tu contraseña ha sido actualizada correctamente",
-        pr_login: "Iniciar sesión"
+        pr_login: "Iniciar sesión",
+
+        // Main dashboard
+        ds_welcome: "Bienvenido",
+        ds_looking: "¿Estas buscando un plato?",
+        ds_search: "Buscar recetas",
+        ds_explore: "Explora las nuevas recetas",
+        ds_categories: "Categorias",
+        ds_recommended: "Recomendado para ti",
+        ds_community: "Explora los platillos de la comunidad",
+        ds_vegan: "Veganos",
+        ds_desserts: "Postres",
+        ds_dishes: "Fuertes",
+        ds_breakfast: "Desayunos",
 
     }
 
