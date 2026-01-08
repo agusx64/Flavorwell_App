@@ -111,7 +111,8 @@ const translations = {
         pr_enter_email: "Escribe tu correo electrónico",
         pr_type_new_password: "Escribe tu nueva contraseña ",
         pr_new_password: "Escribe tu nueva contraseña",
-        pr_update_password: "Actualizar contraseña"
+        pr_update_password: "Actualizar contraseña",
+        pr_try_again: "Intentar de nuevo"
 
     }
 

@@ -88,7 +88,7 @@ function validatePasswordStrength(password) {
     } else if (isStrong) {
 
         switch (lang) {
-            
+
             case 'en':
                 passwordWarning.innerHTML = `<i class="bi bi-check-circle-fill"></i> Strong password`;
                 break;
@@ -161,7 +161,19 @@ inputs.forEach((input, index) => {
 restorePasswordButton.addEventListener('click', function(event){
 
     event.preventDefault();
-    restorePasswordButton.textContent = 'Reestableciendo contraseña...'
+
+    switch (lang) {
+
+        case 'en':
+            restorePasswordButton.textContent = 'Reestableciendo contraseña...';
+            break;
+
+        case 'es':
+            restorePasswordButton.textContent = 'Resetting password...'
+            break;
+
+    }
+    
     restorePasswordButton.disabled = true;
 
     // Validar formato de correo electronico
@@ -204,8 +216,19 @@ restorePasswordButton.addEventListener('click', function(event){
 
             });
 
+            switch (lang) {
+
+                case 'en':
+                    restorePasswordButton.textContent = 'Update password';
+                    break;
+
+                case 'es':
+                    restorePasswordButton.textContent = 'Actualizar contraseña';
+                    break;
+
+            }
+
             restorePasswordButton.disabled = false;
-            restorePasswordButton.textContent = 'Update password';
 
         }
 
@@ -224,8 +247,6 @@ restorePasswordButton.addEventListener('click', function(event){
 
             });
 
-            console.log(data);
-
         } else {
 
             console.error("Ocurrio un error al restaurar la contraseña", data.message);
@@ -241,7 +262,19 @@ restorePasswordButton.addEventListener('click', function(event){
     .finally(() => {
 
         restorePasswordButton.disabled = false;
-        restorePasswordButton.textContent = 'Send email';
+
+        switch (lang) {
+
+            case 'en':
+                restorePasswordButton.textContent = 'Update password';
+                break;
+
+            case 'es':
+                restorePasswordButton.textContent = 'Actualizar contraseña';
+                break;
+
+        }
+        
 
     })
 
@@ -273,7 +306,18 @@ function validateEmailFormat() {
     if (!emailRegex.test(email)) {
 
         imgErrorModal.src = '/images/_UI_img/error.webp';
-        textErrorModal.textContent = 'Please enter a valid email address';
+
+        switch (lang) {
+
+            case 'en':
+                textErrorModal.textContent = 'Please enter a valid email address';
+                break;
+
+            case 'es':
+                textErrorModal.textContent = 'Por favor escribe un correo electónico valido';
+                break;
+
+        }
 
         errorModal.classList.remove('hidden');
         tryAgainButton.addEventListener('click', () => {
@@ -282,8 +326,19 @@ function validateEmailFormat() {
 
         });
 
+        switch (lang) {
+
+            case 'en':
+                restorePasswordButton.textContent = 'Update password';
+                break;
+
+            case 'es':
+                restorePasswordButton.textContent = 'Actualizar contraseña';
+                break;
+
+                
+        }
         restorePasswordButton.disabled = false;
-        restorePasswordButton.textContent = 'Update password';
 
         // Valor logico
         return false;
