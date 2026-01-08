@@ -55,7 +55,10 @@ const translations = {
         pr_enter_email: "Enter your email",
         pr_type_new_password: "Type your new password",
         pr_new_password: "Enter your new password",
-        pr_update_password: "Update password"
+        pr_update_password: "Update password",
+        pr_try_again: "Try again",
+        pr_success_text: "Your password has been succesfully updated",
+        pr_login: "Back to login"
 
     },
 
@@ -112,7 +115,9 @@ const translations = {
         pr_type_new_password: "Escribe tu nueva contraseña ",
         pr_new_password: "Escribe tu nueva contraseña",
         pr_update_password: "Actualizar contraseña",
-        pr_try_again: "Intentar de nuevo"
+        pr_try_again: "Intentar de nuevo",
+        pr_success_text: "Tu contraseña ha sido actualizada correctamente",
+        pr_login: "Iniciar sesión"
 
     }
 

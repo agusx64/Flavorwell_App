@@ -664,6 +664,8 @@ router.post('/set_new_password', async (req, res) => {
 
     // Recolección de datos del cliente
     const { email, newPassword, securityCode } = req.body;
+    const lang = req.query.lang || 'en';
+
     try {
 
         // Ejecucion de consulta
@@ -679,8 +681,18 @@ router.post('/set_new_password', async (req, res) => {
         // Verificacion de existencia de correo electronico
         if (rows.length === 0) {
 
-            // Devolución de status
-            return res.status(400).json({ success: false, message: 'Correo electronico o codigo invalido' });
+            switch (lang) {
+
+                case 'en':
+                    res.status(400).json({ success: false, message: 'Invalid email or code' });
+                    break;
+
+                case 'es':
+                    res.status(400).json({ success: false, message: 'Correo electronico o codigo invalido' });
+                    break;
+
+            }
+            
 
         }
 
@@ -690,8 +702,18 @@ router.post('/set_new_password', async (req, res) => {
         // Verificacion de validez de codigo de seguridad
         if (new Date() > new Date(user.reset_expires_at)) {
 
-            // Devolución de status
-            return res.status(400).json({ success: false, message: 'El código ha expirado' });
+            switch (lang) {
+
+                case 'es':
+                    res.status(400).json({ success: false, message: 'El código ha expirado' });
+                    break;
+
+                case 'en':
+                    res.status(400).json({ success: false, message: 'The code has expired' });
+                    break;
+
+            }
+            
 
         }
 
@@ -708,14 +730,33 @@ router.post('/set_new_password', async (req, res) => {
 
         );
 
-        // Devolución de estatus
-        res.status(200).json({ success: true, message: 'Contraseña actualizada correctamente' });
+        switch (lang) {
+
+            case 'es':
+                res.status(200).json({ success: true, message: 'Contraseña actualizada correctamente' });
+                break;
+                
+            case 'en':
+                res.status(200).json({ success: true, message: 'Password updated succesfully' });
+                break;
+
+        }
 
         // Intercepción de errores
     } catch (error) {
 
         console.error("Error al actualizar contraseña:", error);
-        res.status(500).json({ success: false, message: 'Error interno del servidor' });
+        switch (lang) {
+
+            case 'es':
+                res.status(500).json({ success: false, message: 'Error interno del servidor' });
+                break;
+                
+            case 'en':
+                res.status(500).json({ success: false, message: 'Internal server error' });
+                break;
+
+        }
 
     }
 
