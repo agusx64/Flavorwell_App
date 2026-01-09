@@ -4,6 +4,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const restHost = 'http://localhost:3000';
 
+    let lang = localStorage.getItem('preferred_lang');
+
+    let author = "";
+
+    switch (lang) {
+
+        case 'en':
+            author = "Author"
+            break;
+
+        case 'es':
+            author = "Autor"
+            break;
+
+    }
+
     async function fetchSavedRecipes() {
 
         try {
@@ -35,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.innerHTML = `
                     <img src="${recipe.image_url}" alt="${recipe.name}" class="recipe-card-img" data-id="${recipe.id}" data-category="${recipe.category}">
                     <p class="recipe-card-author">
-                        <span class="recipe-tempalte-text">Author: </span>
+                        <span class="recipe-tempalte-text">${author}: </span>
                         <span class="recipe-template-name">${recipe.author || 'Unknown'}</span>
                     </p>
                     <h2 class="recipe-card-text">

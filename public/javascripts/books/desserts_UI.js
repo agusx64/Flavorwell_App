@@ -1,4 +1,19 @@
 const recipeContainer = document.querySelector('.recipe-container');
+let lang = localStorage.getItem('preferred_lang');
+
+let author = "";
+
+switch (lang) {
+
+    case 'en':
+        author = "Author"
+        break;
+
+    case 'es':
+        author = "Autor"
+        break;
+
+}
 
 // Host backend
 const restHost = 'http://localhost:3000';
@@ -22,7 +37,7 @@ async function getVeganList() {
                     card.innerHTML = `
                     <img src="${recipe.img_path}" alt="${recipe.name}" class="recipe-card-img" data-id="${recipe.id}">
                     <p class="recipe-card-author">
-                        <span class="recipe-tempalte-text">Author: </span>
+                        <span class="recipe-tempalte-text">${author}: </span>
                         <span class="recipe-template-name">${recipe.author || 'Unknown'}</span>
                     </p>
                     <h2 class="recipe-card-text">

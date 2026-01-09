@@ -73,6 +73,21 @@ const translations = {
         ds_dishes: "Dishes",
         ds_breakfast: "Breakfasts",
 
+        // Vegan list
+        vl_title: "Vegan recipes",
+
+        // Desserts list
+        dss_list: "Desserts",
+
+        // Dishes list
+        md_list: "Main dishes",
+
+        // Breakfast list
+        brk_list: "Breakfasts",
+
+        // Saved list
+        saved_list: "Saved recipes"
+
     },
 
     es: {
@@ -144,6 +159,21 @@ const translations = {
         ds_desserts: "Postres",
         ds_dishes: "Fuertes",
         ds_breakfast: "Desayunos",
+
+        // Vegan list
+        vl_title: "Recetas veganas",
+
+        // Desserts list
+        dss_list: "Postres",
+
+        // Dishes list
+        md_list: "Platillos fuertes",
+
+        // Breakfast list
+        brk_list: "Desayunos",
+
+        // Saved list
+        saved_list: "Recetas guardadas"
 
     }
 
