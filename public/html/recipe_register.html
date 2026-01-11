@@ -81,7 +81,7 @@
             <!-- Contenedor de input para nombre de receta -->
             <div class="name-recipe-input-container">
                 <label data-i18n="rg_name" for="name_recipe" class="label_text_form poppins-semibold">Type the name of the recipe</label>
-                <input data-i18n="rg_example" id="name-recipe-text" name="name_recipe" type="text" class="input_text" placeholder="Example: Chesse fingers">
+                <input data-i18n-placeholder="rg_example" id="name-recipe-text" name="name_recipe" type="text" class="input_text" placeholder="Example: Chesse fingers">
             </div>
             
             <!-- Contenedor de input para descripción de recetas -->
@@ -90,14 +90,14 @@
                     <i class="bi bi-stars"></i>
                 </button>
                 <label data-i18n="rg_description_r" for="recipe_description" class="label_text_form poppins-semibold">Recipe description</label>
-                <textarea data-i18n="rg_type_d" name="recipe_description" maxlength="400" id="recipe-description-text" cols="30" rows="10" class="input_text description_recipe" placeholder="Type a description (max. 150 words)"></textarea>
+                <textarea data-i18n-placeholder="rg_type_d" name="recipe_description" maxlength="400" id="recipe-description-text" cols="30" rows="10" class="input_text description_recipe" placeholder="Type a description (max. 150 words)"></textarea>
             </div>
 
             <!-- Buscador de ingredientes -->
             <div class="ingredient-section">
                 <label data-i18n="rg_find" for="ingredient-search" class="label_text_form poppins-semibold">Find your ingredients </label>
                 <div class="search-box">
-                    <input data-i18n="rg_search" class="input_text" type="text" id="ingredient-search" placeholder="Search ingredients...">
+                    <input data-i18n-placeholder="rg_search" class="input_text" type="text" id="ingredient-search" placeholder="Search ingredients...">
                     <ul id="ingredient-results" class="results-list hidden"></ul>
                 </div>
                 <ul id="selected-ingredients" class="selected-ingredients-list"></ul>
@@ -108,7 +108,7 @@
                 <label data-i18n="rg_add" for="step_input" class="steps-label label_text_form poppins-semibold">Add steps to your recipe</label>
             
                 <div class="step-search-bar">
-                    <input data-i18n="rg_describe_i" type="text" id="step_input" class="step-input input_text" placeholder="Describe the next step...">
+                    <input data-i18n-placeholder="rg_describe_i" type="text" id="step_input" class="step-input input_text" placeholder="Describe the next step...">
                     <button class="add-step-btn" id="add_step_btn">
                         <i class="bi bi-plus"></i>
                     </button>

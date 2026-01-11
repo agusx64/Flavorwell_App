@@ -1,5 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-    setLanguage();
+
+    // Texto normal
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        i18n.register(el, el.dataset.i18n);
+    });
+
+    // Placeholders (input y textarea)
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        i18n.register(el, el.dataset.i18nPlaceholder, 'placeholder');
+    });
+
 })
 
 const translations = {
@@ -90,24 +100,24 @@ const translations = {
 
         // Recipe register
         rg_header: "Recipe publisher",
-        rg_title: "",
-        rg_description: "",
-        rg_choose: "",
-        rg_select: "",
-        rg_option1: "",
-        rg_option2: "",
-        rg_option3: "",
-        rg_option4: "",
-        rg_name: "",
-        rg_example: "",
-        rg_description: "",
-        rg_type_d: "",
-        rg_find: "",
-        rg_search: "",
-        rg_add: "",
-        rg_describe_i: "",
-        rg_upload: "",
-        rg_share_now: ""
+        rg_title: "Up & Share",
+        rg_description: "Share your own recipes with the flavorwell community",
+        rg_choose: "Choose the category of your recipe",
+        rg_select: "Select a category",
+        rg_option1: "Breakfast",
+        rg_option2: "Desserts",
+        rg_option3: "Main Dish",
+        rg_option4: "Vegan",
+        rg_name: "Type the name of your recipe",
+        rg_example: "Example: Cheese fingers",
+        rg_description: "Recipe description",
+        rg_type_d: "Write your description (max. 150 words)",
+        rg_find: "Find your ingredients",
+        rg_search: "Search your ingredients",
+        rg_add: "Add your recipe steps",
+        rg_describe_i: "Type your steps",
+        rg_upload: "Upload your image recipe",
+        rg_share_now: "Share recipe"
 
     },
 
@@ -221,27 +231,52 @@ const translations = {
 
 }
 
-function setLanguage() {
+const i18n = {
 
-    const lang = localStorage.getItem('preferred_lang');
-    const elements = document.querySelectorAll('[data-i18n]');
-    elements.forEach(element => {
+    lang: localStorage.getItem('preferred_lang') || 'en',
+    elements: new Map(),
 
-        const key = element.getAttribute('data-i18n');
-        if (translations[lang][key]) {
+    t(key) {
 
-            if (element.tagName === 'INPUT') {
+        return translations[this.lang]?.[key] ?? key;
 
-                element.placeholder = translations[lang][key]
+    },
 
-            } else {
+    register(element, key, type = 'text') {
 
-                element.textContent = translations[lang][key]
+        this.elements.set(element, { key, type });
+        this.apply(element);
 
-            }
+    },
+
+    apply(element) {
+
+        const { key, type } = this.elements.get(element);
+        const value = this.t(key);
+
+        if (type === 'placeholder') {
+
+            element.placeholder = value;
+
+        } else {
+
+            element.textContent = value;
 
         }
 
-    });
+    },
 
-}
+    setLanguage(lang) {
+
+        this.lang = lang;
+        localStorage.setItem('preferred_lang', lang);
+
+        this.elements.forEach((_, element) => {
+
+            this.apply(element);
+
+        });
+
+    }
+
+};
