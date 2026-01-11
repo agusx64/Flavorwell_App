@@ -225,7 +225,9 @@ const translations = {
         rg_add: "Agrega los pasos de tu receta",
         rg_describe_i: "Escribe aqui los pasos",
         rg_upload: "Sube la imagen de tu receta",
-        rg_share_now: "Compartir receta"
+        rg_share_now: "Compartir receta",
+        rg_thanks: "Gracias por compartir tu receta. La revisaremos para su publicación.",
+        rg_dashboard: "Ir a inicio"
 
     }
 

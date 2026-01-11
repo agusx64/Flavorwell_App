@@ -1153,13 +1153,23 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
         const userId = req.user.userId;
         const username = req.user.username;
         const category = req.body.category;
+        const lang = req.query.lang;
+        const ALLOWED_CATEGORIES = new Set([
+            'breakfast',
+            'desserts',
+            'strong_dish',
+            'vegan'
+        ]);
 
         // Filtro de inyecciones SQL
         if (!checkCategory(category)) {
             return res.status(400).json({
+
                 success: false,
                 message: 'Invalid category'
+
             });
+            
         }
 
         // Obtención de valores de recetas
@@ -1176,39 +1186,64 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
 
         // Validar existencia del archivo
         if (!req.file || !req.file.buffer) {
+
             return res.status(400).json({ success: false, message: 'No image file received.' });
+
         }
 
         // Subir imagen a Cloudinary correctamente usando la función de promesa
         let imageUrl;
         try {
+
             const uploaded = await uploadToCloudinary(req.file.buffer, 'image_recipes');
             imageUrl = uploaded.url;
+
         } catch (err) {
+
             console.error('Error uploading to Cloudinary:', err);
-            return res.status(500).json({ success: false, message: 'Image upload failed' });
+
+            switch (lang) {
+
+                case 'es':
+                    res.status(500).json({ success: false, message: 'Image upload failed' });
+                    break;
+                    
+                case 'en':
+                    res.status(500).json({ success: false, message: 'Error al cargar la imagen' });
+                    break;
+
+            }
         }
 
         // Iteración de lista de ingredientes para inserción en tabla de relaciones
         for (const ing of parsedIngredients) {
+
             await connection.query(
+
                 `INSERT INTO recipe_ingredients (recipe_id, category, ingredient_id) VALUES (?, ?, ?)`,
                 [recipeId, category, ing]
+
             );
+
         }
 
         // Inserción en tabla de recetas
         await connection.query(
+
             `INSERT INTO ${category} (id, name, description, instruction, img_path, author, items, verified)
                 VALUES (?, ?, ?, ?, ?, ?, ?, FALSE)`,
             [recipeId, name, description, JSON.stringify(parsedInstructions), imageUrl, userId, parsedIngredients.length]
+
         );
 
         // Obtener nombres de los ingredientes
         const [ingredientNamesResult] = await connection.query(
+
             `SELECT name FROM ingredients_list WHERE id IN (?)`,
             [parsedIngredients]
+
         );
+
         const ingredientNames = ingredientNamesResult.map(ing => ing.name);
 
         // Enviar correo al admin
@@ -1296,19 +1331,27 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
         `;
 
         try {
+
             await sendMail({ to: process.env.MAIL_ADMIN, subject, html });
             return res.json({ success: true });
-        } catch (error) {
-            console.error('Error enviando correo por Gmail API', error);
-            res.status(500).json({ success: false, message: 'Error sending email' });
-        }
 
-        const ALLOWED_CATEGORIES = new Set([
-            'breakfast',
-            'desserts',
-            'strong_dish',
-            'vegan'
-        ]);
+        } catch (error) {
+
+            console.error('Error enviando correo por Gmail API', error);
+            
+            switch (lang) {
+                
+                case 'es':
+                    res.status(500).json({ success: false, message: 'Error enviando correo eletrónico' });
+                    break;
+                    
+                case 'en':
+                    res.status(500).json({ success: false, message: 'Error sending email' });
+                    break;
+
+            }
+
+        }
 
         function checkCategory(category) {
             return ALLOWED_CATEGORIES.has(category);
