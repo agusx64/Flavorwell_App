@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const res = await fetch(restHost +`/lists/api/ingredients/search?q=${encodeURIComponent(query)}`);
+            const res = await fetch(restHost +`/lists/api/ingredients/search?q=${encodeURIComponent(query)}&lang=${lang}`);
             suggestions = await res.json();
             renderSuggestions();
         } catch (err) {
@@ -345,7 +345,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
-            await fetch(restHost + `/users/recipes/register`, {
+            await fetch(restHost + `/users/recipes/register?lang=${lang}`, {
 
                 method: 'POST',
                 headers: {

@@ -1165,9 +1165,6 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
         // Obtención de valores de recetas
         const { name, description, ingredients, instructions } = req.body;
 
-        console.log(name, description, category, ingredients, instructions);
-
-
         // Alistamiento de instrucciones
         const parsedInstructions = JSON.parse(instructions);
 
@@ -1318,7 +1315,7 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
         }
 
 
-        // Intercepcion de errores
+    // Intercepcion de errores
     } catch (error) {
 
         // Depuracion de errores
