@@ -10,7 +10,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const realSelect = document.getElementById('real-select');
     const sendRecipeButton = document.getElementById('send-recipe');
     const sendPromptRecipeButton = document.getElementById('generate-description-button');
-    let text_category;
+    
+    let categoryKey;
+    let categoryLabel;
 
     // Host backend
     const restHost = 'http://localhost:3000';
@@ -34,6 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const imgErrorModal = document.getElementById('img-context');
     const textErrorModal = document.getElementById('text-context');
     const tryAgainButton = document.getElementById('tryAgain');
+
+    // Lenguaje del UI
+    const lang = localStorage.getItem('preferred_lang');
 
     // Buscar en tiempo real
     input.addEventListener('input', async () => {
@@ -227,10 +232,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Obtención del valor seleccionado 
     customOptionsItems.forEach(option => {
+
         option.addEventListener('click', () => {
-            text_category = option.textContent.trim();
-            selectTrigger.querySelector('span').textContent = text_category;
+
+            categoryKey = option.dataset.value;
+            categoryLabel = option.textContent.trim();
+
+            selectTrigger.querySelector('span').textContent = categoryLabel;
             customOptions.classList.remove('open');
+
             validateForm();
             validatePromptButton();
         });
@@ -247,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const name = document.getElementById('name-recipe-text');
         const description = document.getElementById('recipe-description-text');
-        const category = text_category;
+        const category = categoryLabel;
         const ingredients = selectedList.querySelectorAll('.ingredient-item');
         const instructions = stepList.querySelectorAll('.step-item');
         const image = document.getElementById('formFile').files[0];
@@ -268,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const name = document.getElementById('name-recipe-text').value.trim();
 
-        if (name !== '' && text_category) {
+        if (name !== '' && categoryLabel) {
 
             sendPromptRecipeButton.disabled = false;
 
@@ -312,6 +322,7 @@ document.addEventListener("DOMContentLoaded", function () {
     observer.observe(selectedList, configObserver);
     observer.observe(stepList, configObserver);
 
+    // Envio de datos de receta al servidor
     sendRecipeButton.addEventListener('click', async (event) => {
 
         event.preventDefault();
@@ -320,7 +331,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const name = document.getElementById('name-recipe-text').value.trim();
         const description = document.getElementById('recipe-description-text').value.trim();
-        const category = text_category;
         const ingredients = [...selectedList.querySelectorAll('.ingredient-item')].map(i => i.dataset.id);
         const instructions = [...stepList.querySelectorAll('.step-instruction-name')].map(i => i.textContent.trim());
         const image = document.getElementById('formFile').files[0];
@@ -328,14 +338,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const formData = new FormData();
         formData.append('name', name);
         formData.append('description', description);
-        formData.append('category', category);
+        formData.append('category', categoryKey);
         formData.append('ingredients', JSON.stringify(ingredients));
         formData.append('instructions', JSON.stringify(instructions));
         formData.append('image', image);
 
         try {
 
-            await fetch(restHost + '/users/recipes/register', {
+            await fetch(restHost + `/users/recipes/register`, {
 
                 method: 'POST',
                 headers: {
@@ -406,6 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
+    // Envio de prompt a API Open AI
     sendPromptRecipeButton.addEventListener('click', async (event) => {
 
         event.preventDefault();

@@ -86,7 +86,28 @@ const translations = {
         brk_list: "Breakfasts",
 
         // Saved list
-        saved_list: "Saved recipes"
+        saved_list: "Saved recipes",
+
+        // Recipe register
+        rg_header: "Recipe publisher",
+        rg_title: "",
+        rg_description: "",
+        rg_choose: "",
+        rg_select: "",
+        rg_option1: "",
+        rg_option2: "",
+        rg_option3: "",
+        rg_option4: "",
+        rg_name: "",
+        rg_example: "",
+        rg_description: "",
+        rg_type_d: "",
+        rg_find: "",
+        rg_search: "",
+        rg_add: "",
+        rg_describe_i: "",
+        rg_upload: "",
+        rg_share_now: ""
 
     },
 
@@ -173,7 +194,28 @@ const translations = {
         brk_list: "Desayunos",
 
         // Saved list
-        saved_list: "Recetas guardadas"
+        saved_list: "Recetas guardadas",
+
+        // Recipe register
+        rg_header: "Publicador de recetas",
+        rg_title: "Sube y comparte",
+        rg_description: "Comparte tus propias recetas con la comunidad de flavorwell",
+        rg_choose: "Elije la categoria de tu receta",
+        rg_select: "Selecciona una categoria",
+        rg_option1: "Desayuno",
+        rg_option2: "Postre",
+        rg_option3: "Plato fuerte",
+        rg_option4: "Vegano",
+        rg_name: "Escribe el nombre de tu receta",
+        rg_example: "Ejemplo: Pozole de lavadero",
+        rg_description_r: "Descripción de la receta",
+        rg_type_d: "Escribe tu descripción (max. 150 palabras)",
+        rg_find: "Encuentra tus ingredientes",
+        rg_search: "Buscar ingredientes...",
+        rg_add: "Agrega los pasos de tu receta",
+        rg_describe_i: "Escribe aqui los pasos",
+        rg_upload: "Sube la imagen de tu receta",
+        rg_share_now: "Compartir receta"
 
     }
 
@@ -181,7 +223,7 @@ const translations = {
 
 function setLanguage() {
 
-    const lang = localStorage.getItem('preferred_lang')
+    const lang = localStorage.getItem('preferred_lang');
     const elements = document.querySelectorAll('[data-i18n]');
     elements.forEach(element => {
 

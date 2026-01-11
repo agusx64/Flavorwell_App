@@ -20,7 +20,7 @@
                 <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
             </svg>
         </button>
-        <h2 class="header_text poppins-semibold">Recipe sharer</h2>
+        <h2 data-i18n="rg_header" class="header_text poppins-semibold">Recipe publisher</h2>
         <div class="svg_icon">
             <i class="bi bi-cloud-arrow-up-fill"></i>
         </div>
@@ -30,8 +30,8 @@
     <div class="screen_recipe_register">
         <!-- Contenedor de titulo de sección -->
         <section class="title_text_container">
-            <h1 class="title poppins-semibold">Up & Share</h1>
-            <h3 class="desc_text poppins-medium">Share your own recipes with the community of flavorwell</h3>
+            <h1 data-i18n="rg_title" class="title poppins-semibold">Up & Share</h1>
+            <h3 data-i18n="rg_description" class="desc_text poppins-medium">Share your own recipes with the community of flavorwell</h3>
         </section>
 
         <!-- Componentes de formulario -->
@@ -39,30 +39,33 @@
 
             <!-- Contenedor de selector de ingredientes -->
             <div class="select-wrapper-container">
-                <label for="category_dish" class="label_text_form poppins-semibold">Choose a category for your dish</label>
+                <label data-i18n="rg_choose" for="category_dish" class="label_text_form poppins-semibold">Choose a category for your recipe</label>
             
                 <div class="custom-select-wrapper">
                     <div class="custom-select">
                         <div class="custom-select-trigger">
-                            <span class="poppins-semibold text_trigger">Select a category</span>
+                            <span data-i18n="rg_select" class="poppins-semibold text_trigger">Select a category</span>
                             <div class="arrow"></div>
                         </div>
                         <div class="custom-options">
-                            <span class="custom-option" data-value="opcion1">
+                            <span class="custom-option" data-value="breakfast">
                                 <i class="bi bi-cup-hot-fill option_icon breakfast"></i>
-                                Breakfast
+                                <span data-i18n="rg_option1">Breakfast</span>
                             </span>
-                            <span class="custom-option" data-value="opcion2">
+
+                            <span class="custom-option" data-value="desserts">
                                 <i class="bi bi-cake-fill option_icon dessert"></i>
-                                Desserts
+                                <span data-i18n="rg_option2">Desserts</span>
                             </span>
-                            <span class="custom-option" data-value="opcion3">
+
+                            <span class="custom-option" data-value="strong_dish">
                                 <i class="bi bi-fork-knife option_icon dish"></i>
-                                Strong Dish
+                                <span data-i18n="rg_option3">Strong Dish</span>
                             </span>
-                            <span class="custom-option" data-value="opcion3">
+
+                            <span class="custom-option" data-value="vegan">
                                 <i class="bi bi-leaf-fill option_icon vegan"></i>
-                                Vegan
+                                <span data-i18n="rg_option4">Vegan</span>
                             </span>
                         </div>
                     </div>
@@ -77,8 +80,8 @@
 
             <!-- Contenedor de input para nombre de receta -->
             <div class="name-recipe-input-container">
-                <label for="name_recipe" class="label_text_form poppins-semibold">Type the name of the recipe</label>
-                <input id="name-recipe-text" name="name_recipe" type="text" class="input_text" placeholder="Example: Chesse fingers">
+                <label data-i18n="rg_name" for="name_recipe" class="label_text_form poppins-semibold">Type the name of the recipe</label>
+                <input data-i18n="rg_example" id="name-recipe-text" name="name_recipe" type="text" class="input_text" placeholder="Example: Chesse fingers">
             </div>
             
             <!-- Contenedor de input para descripción de recetas -->
@@ -86,15 +89,15 @@
                 <button id="generate-description-button" class="generate-description-button" disabled>
                     <i class="bi bi-stars"></i>
                 </button>
-                <label for="recipe_description" class="label_text_form poppins-semibold">Recipe description</label>
-                <textarea name="recipe_description" maxlength="400" id="recipe-description-text" cols="30" rows="10" class="input_text description_recipe" placeholder="Type a description (max. 150 words)"></textarea>
+                <label data-i18n="rg_description_r" for="recipe_description" class="label_text_form poppins-semibold">Recipe description</label>
+                <textarea data-i18n="rg_type_d" name="recipe_description" maxlength="400" id="recipe-description-text" cols="30" rows="10" class="input_text description_recipe" placeholder="Type a description (max. 150 words)"></textarea>
             </div>
 
             <!-- Buscador de ingredientes -->
             <div class="ingredient-section">
-                <label for="ingredient-search" class="label_text_form poppins-semibold">Find your ingredients </label>
+                <label data-i18n="rg_find" for="ingredient-search" class="label_text_form poppins-semibold">Find your ingredients </label>
                 <div class="search-box">
-                    <input class="input_text" type="text" id="ingredient-search" placeholder="Search ingredients...">
+                    <input data-i18n="rg_search" class="input_text" type="text" id="ingredient-search" placeholder="Search ingredients...">
                     <ul id="ingredient-results" class="results-list hidden"></ul>
                 </div>
                 <ul id="selected-ingredients" class="selected-ingredients-list"></ul>
@@ -102,10 +105,10 @@
 
             <!-- Componente para agregar pasos a la receta -->
             <section class="steps-section">
-                <label for="step_input" class="steps-label label_text_form poppins-semibold">Add steps to your recipe</label>
+                <label data-i18n="rg_add" for="step_input" class="steps-label label_text_form poppins-semibold">Add steps to your recipe</label>
             
                 <div class="step-search-bar">
-                    <input type="text" id="step_input" class="step-input input_text" placeholder="Describe the next step...">
+                    <input data-i18n="rg_describe_i" type="text" id="step_input" class="step-input input_text" placeholder="Describe the next step...">
                     <button class="add-step-btn" id="add_step_btn">
                         <i class="bi bi-plus"></i>
                     </button>
@@ -116,7 +119,7 @@
 
             <!-- Input para subir imagen de receta -->
             <div class="recipe-register-img-input-container">
-                <label class="label_text_form poppins-semibold">Upload your recipe image</label>
+                <label data-i18n="rg_upload" class="label_text_form poppins-semibold">Upload your recipe image</label>
                 <label id="label-recipe-register-img" for="formFile" class="file-input-label-style poppins-semibold">
                     <i class="bi bi-upload"></i>
                 </label>
@@ -124,7 +127,7 @@
             </div>
 
             <!-- Boton de envio de datos -->
-            <button class="post_button_recipe poppins-semibold" id="send-recipe" disabled>Share your dish now</button>
+            <button data-i18n="rg_share_now" class="post_button_recipe poppins-semibold" id="send-recipe" disabled>Share your dish now</button>
 
         </section>
     </div>
@@ -168,6 +171,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="/javascripts/recipe_register_UI.js"></script>
+    <script src="/javascripts/translations.js"></script>
     <script src="/javascripts/navbar_UI.js"></script>
 </body>
 </html>

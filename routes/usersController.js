@@ -1152,7 +1152,15 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
         // Obtención de valores de sesión
         const userId = req.user.userId;
         const username = req.user.username;
-        const category = formatCategory(req.body.category);
+        const category = req.body.category;
+
+        // Filtro de inyecciones SQL
+        if (!checkCategory(category)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid category'
+            });
+        }
 
         // Obtención de valores de recetas
         const { name, description, ingredients, instructions } = req.body;
@@ -1298,9 +1306,17 @@ router.post('/recipes/register', authenticateToken, upload.single('image'), asyn
             res.status(500).json({ success: false, message: 'Error sending email' });
         }
 
-        function formatCategory(name) {
-            return name.toLowerCase().replace(/\s+/g, '_');
+        const ALLOWED_CATEGORIES = new Set([
+            'breakfast',
+            'desserts',
+            'strong_dish',
+            'vegan'
+        ]);
+
+        function checkCategory(category) {
+            return ALLOWED_CATEGORIES.has(category);
         }
+
 
         // Intercepcion de errores
     } catch (error) {
