@@ -117,7 +117,19 @@ const translations = {
         rg_add: "Add your recipe steps",
         rg_describe_i: "Type your steps",
         rg_upload: "Upload your image recipe",
-        rg_share_now: "Share recipe"
+        rg_share_now: "Share recipe",
+        rg_thanks: "Thank you for sharing your recipe. We will review it for publication.",
+        rg_dashboard: "Got to dashboard",
+
+        // Account viewer
+        av_title: "",
+        av_edit: "",
+        av_footprint: "",
+        av_saved: "",
+        av_my: "",
+        av_preferences: "",
+        av_profile: "",
+        av_log: ""
 
     },
 
@@ -227,7 +239,26 @@ const translations = {
         rg_upload: "Sube la imagen de tu receta",
         rg_share_now: "Compartir receta",
         rg_thanks: "Gracias por compartir tu receta. La revisaremos para su publicación.",
-        rg_dashboard: "Ir a inicio"
+        rg_dashboard: "Ir a inicio",
+
+        // Account viewer
+        av_title: "Mi cuenta",
+        av_edit: "Editar perfil",
+        av_footprint: "Mi huella en flavorwell",
+        av_saved: "Recetas guardadas",
+        av_my: "Mis recetas",
+        av_preferences: "Preferencias",
+        av_profile: "Mi perfil",
+        av_log: "Cerrar sesión",
+        av_shure: "¿Estas seguro de cerrar sesión?",
+        av_yes: "Si",
+        av_no: "No",
+        av_username: "Nombre de usuario",
+        av_email: "Correo electrónico",
+        av_picture: "Foto de perfil",
+        av_cover: "Foto de portada",
+        av_save_changes: "Guardar cambios",
+        av_cancel_changes: "Cancelar cambios"
 
     }
 

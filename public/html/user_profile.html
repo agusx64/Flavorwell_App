@@ -19,7 +19,7 @@
                 <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
             </svg>
         </button>
-        <h2 class="header_text poppins-semibold">My account</h2>
+        <h2 data-i18n="av_title" class="header_text poppins-semibold">My account</h2>
         <div class="svg_icon" id="svg-icon-profile">
         </div>
     </header>
@@ -38,30 +38,30 @@
         <div class="user-profile-info-container">
             <h1 class="user-profile-name" id="user-profile-name"></h1>
             <p class="user-profile-email" id="user-profile-email"></p>
-            <button class="user-profile-edit" id="user-profile-edit">
+            <button data-i18n="av_edit" class="user-profile-edit" id="user-profile-edit">
                 Edit Profile
             </button>
         </div>
 
         <!-- Contenedor de botones -->
         <div class="user-profile-menu">
-            <p class="user-profile-button-label">My footprint at flavorwell</p>
+            <p data-i18n="av_footprint" class="user-profile-button-label">My footprint at flavorwell</p>
             <button class="user-profile-button" id="user-profile-saved-recipes">
                 <i class="bi bi-bookmark-fill user-profile-icon-button"></i>
-                <h2>Saved Recipes</h2>
+                <h2 data-i18n="av_saved">Saved Recipes</h2>
             </button>
             <button class="user-profile-button" id="user-profile-my-recipes">
                 <i class="bi bi-arrow-up-circle-fill user-profile-icon-button"></i>
-                <h2>My recipes</h2>
+                <h2 data-i18n="av_my">My recipes</h2>
             </button>
-            <p class="user-profile-button-label">Preferences</p>
+            <p data-i18n="av_preferences" class="user-profile-button-label">Preferences</p>
             <button class="user-profile-button" id="user-profile-me">
                 <i class="bi bi-person-circle user-profile-icon-button"></i>
-                <h2>My profile</h2>
+                <h2 data-i18n="av_profile">My profile</h2>
             </button>
             <button class="user-profile-button log-out" id="user-profile-log-out">
                 <i class="bi bi-door-open-fill user-profile-icon-button"></i>
-                <h2>Log Out</h2>
+                <h2 data-i18n="av_log">Log Out</h2>
             </button>
         </div>
 
@@ -90,10 +90,10 @@
     <div id="confirmationModal" class="modal hidden">
         <div class="modal-content modalLogOut">
             <img src="/images/_UI_img/error.webp" class="check_img" alt="error_img">
-            <p>Are you sure you want to log out?</p>
+            <p data-i18n="av_shure">Are you sure you want to log out?</p>
             <div class="buttons-confirmation-container">
-                <button class="aprove" id="aprove">Yes</button>
-                <button class="decline" id="decline">No</button>
+                <button data-i18n="av_yes" class="aprove" id="aprove">Yes</button>
+                <button data-i18n="av_no" class="decline" id="decline">No</button>
             </div>
         </div>
     </div>
@@ -101,29 +101,29 @@
     <!-- Modal para editar perfil de usuario -->
     <div id="edit-profile-modal" class="modal hidden">
         <div class="modal-content">
-            <h2 class="modal-edit-title">Edit profile</h2>
+            <h2 data-i18n="av_edit" class="modal-edit-title">Edit profile</h2>
         
-            <label>Username</label>
+            <label data-i18n="av_username">Username</label>
             <input class="input-edit-modal" type="text" id="edit-username" />
         
-            <label>Email</label>
+            <label data-i18n="av_email">Email</label>
             <input class="input-edit-modal" type="email" id="edit-email" />
         
-            <label>Profile picture</label>
+            <label data-i18n="av_picture">Profile picture</label>
             <label for="edit-profile-img" class="custom-file-upload">
                 <i class="bi bi-upload"></i>
             </label>
             <input class="user-input-image" type="file" id="edit-profile-img" accept="image/*" />
 
-            <label>Cover picture</label>
+            <label data-i18n="av_cover">Cover picture</label>
             <label for="edit-cover-img" class="custom-file-upload cover-upload">
                 <i class="bi bi-upload"></i>
             </label>
             <input class="user-input-image" type="file" id="edit-cover-img" accept="image/*" />
         
             <div class="user-profile-button-modal-container">
-                <button id="save-profile-changes" class="user-profile-modal-button disabled" disabled>Save changes</button>
-                <button id="cancel-edit" class="user-profile-modal-button cancel">Cancel changes</button>
+                <button data-i18n="av_save_changes" id="save-profile-changes" class="user-profile-modal-button disabled" disabled>Save changes</button>
+                <button data-i18n="av_cancel_changes" id="cancel-edit" class="user-profile-modal-button cancel">Cancel changes</button>
             </div>
             <div class="message-validation-container">
             </div>
@@ -132,6 +132,7 @@
 
 
     <script src="/javascripts/user_profile_UI.js"></script>
+    <script src="/javascripts/translations.js"></script>
     <script src="/javascripts/navbar_UI.js"></script>
 </body>
 </html>
