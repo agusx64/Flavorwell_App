@@ -402,6 +402,23 @@ router.get('/verified_success', (req, res) => {
 
 });
 
+// Renderizado de pagina de verificacion exitosa
+router.get('/verified_profile', (req, res) => {
+
+    const lang = req.query.lang || 'en';
+    switch (lang) {
+
+        case 'es':
+            res.render('es/verified_profile_es');
+            break;
+        
+        case 'en':
+            res.render('en/verified_profile_en');
+            break;
+    }
+
+});
+
 // Inicio de sesión y generación de JWT
 router.post('/login_user', async function (req, res) {
 
@@ -1656,6 +1673,10 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
         // Datos provenientes del frontend
         const { username, email } = req.body;
 
+        // Lenguaje del frontend
+        const lang = req.query.lang || 'en';
+        console.log(lang);
+
         // Extracción de imagenes 
         const profileImg = req.files?.profile_img?.[0];
         const coverImg = req.files?.cover_img?.[0];
@@ -1673,7 +1694,17 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
         // Envio de mensaje de error al frontend en caso de inexistencia de usuario
         if (userResult.length === 0) {
 
-            return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+            switch (lang) {
+
+                case 'es':
+                    res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+                    break;
+                    
+                case 'en':
+                    res.status(404).json({ success: false, message: 'User not found' });
+                    break;
+
+            }
 
         }
 
@@ -1766,36 +1797,76 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
         if (emailChanged || usernameChanged) {
 
             // Creación de link de verificación de cambios
-            const verifyLink = `${process.env.FRONTEND_URL}/users/api/verify_profile?token=${newVerificationToken}`;
+            const verifyLink = `${process.env.FRONTEND_URL}/users/api/verify_profile?token=${newVerificationToken}&lang=${lang}`;
 
-            const subject = 'Verify your profile changes';
-            const html = `
-                <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
-                        <div style="text-align: center;">
-                            <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
-                        </div>
-                        <h2 style="color: rgb(0, 0, 0);">Hi, ${username}!</h2>
-                        <p style="color: #333; font-size: 16px;">
-                            This is a verification email for changes to your <strong>Flavorwell</strong> profile. Please verify the changes to your profile by clicking the button or link.
-                        </p>
-                        <div style="text-align: center; margin: 30px 0;">
-                            <a href="${verifyLink}" 
-                                style="background-color: #E3170A; color: white; padding: 15px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
-                                Verify changes
-                            </a>
-                        </div>
-                        <p style="color: #333; font-size: 14px;">
-                            If the button above doesn't work, copy and paste the following link into your browser:
-                        </p>
-                        <p style="word-break: break-all; color: #F7B32B; font-size: 14px;">
-                            <a href="${verifyLink}" style="color: #F7B32B;">${verifyLink}</a>
-                        </p>
-                        <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
-                        <p style="text-align: center; color: #aaa; font-size: 12px;">
-                            &copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.
-                        </p>
-                    </div>
-            `;
+            let subject;
+            let  html;
+
+            switch (lang) {
+
+                case 'en':
+                    subject = 'Verify your profile changes';
+                    html = `
+                        <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
+                                <div style="text-align: center;">
+                                    <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
+                                </div>
+                                <h2 style="color: rgb(0, 0, 0);">Hi, ${username}!</h2>
+                                <p style="color: #333; font-size: 16px;">
+                                    This is a verification email for changes to your <strong>Flavorwell</strong> profile. Please verify the changes to your profile by clicking the button or link.
+                                </p>
+                                <div style="text-align: center; margin: 30px 0;">
+                                    <a href="${verifyLink}" 
+                                        style="background-color: #E3170A; color: white; padding: 15px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                                        Verify changes
+                                    </a>
+                                </div>
+                                <p style="color: #333; font-size: 14px;">
+                                    If the button above doesn't work, copy and paste the following link into your browser:
+                                </p>
+                                <p style="word-break: break-all; color: #F7B32B; font-size: 14px;">
+                                    <a href="${verifyLink}" style="color: #F7B32B;">${verifyLink}</a>
+                                </p>
+                                <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
+                                <p style="text-align: center; color: #aaa; font-size: 12px;">
+                                    &copy; ${new Date().getFullYear()} Flavorwell. All rights reserved.
+                                </p>
+                            </div>
+                    `;
+                    break;
+
+                case 'es':
+                    subject = 'Verifica los cambios en tu perfil';
+                    html = `
+                        <div style="max-width: 600px; margin: auto; font-family: 'Poppins', sans-serif; border: 1px solid #eee; padding: 30px; background-color: #fff;">
+                                <div style="text-align: center;">
+                                    <img src="https://res.cloudinary.com/dqizoxubr/image/upload/v1750291657/logo_small_bsfqxw.png" alt="Flavorwell Logo" style="max-width: 120px; margin-bottom: 20px;">
+                                </div>
+                                <h2 style="color: rgb(0, 0, 0);">Hi, ${username}!</h2>
+                                <p style="color: #333; font-size: 16px;">
+                                    Este es un correo electrónico de verificación para cambios en su perfil de <strong>Flavorwell.</strong> Por favor verifique los cambios en su perfil haciendo clic en el botón o enlace.
+                                </p>
+                                <div style="text-align: center; margin: 30px 0;">
+                                    <a href="${verifyLink}" 
+                                        style="background-color: #E3170A; color: white; padding: 15px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                                        Verificar cambios
+                                    </a>
+                                </div>
+                                <p style="color: #333; font-size: 14px;">
+                                    Si el botón de arriba no funciona, copie y pegue el siguiente enlace en su navegador:
+                                </p>
+                                <p style="word-break: break-all; color: #F7B32B; font-size: 14px;">
+                                    <a href="${verifyLink}" style="color: #F7B32B;">${verifyLink}</a>
+                                </p>
+                                <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
+                                <p style="text-align: center; color: #aaa; font-size: 12px;">
+                                    &copy; ${new Date().getFullYear()} Flavorwell. Todos los derechos reservados.
+                                </p>
+                            </div>
+                    `;
+                    break;
+
+            }
 
             try {
 
@@ -1804,20 +1875,50 @@ router.post('/api/update_profile', authenticateToken, upload.fields([
             } catch (error) {
 
                 console.error('Error enviando codigo por Gmail API', error);
-                res.status(500).json({ success: false, message: 'Error sending email' });
+
+                switch (lang) {
+
+                    case 'es':
+                        res.status(500).json({ success: false, message: 'Error enviando correo electronico' });
+                        break;
+
+                    case 'en':
+                        res.status(500).json({ success: false, message: 'Error sending email' });
+                        break;
+
+                }
 
             }
 
         }
 
-        // Respuesta de confirmacion de envio de correo electronico al frontend
-        return res.status(200).json({ success: true, message: 'If you changed your username or email address, a confirmation email has been sent. Please check your inbox.' });
+        switch (lang) {
+
+            case 'es':
+                res.status(200).json({ success: true, message: 'Si cambió su nombre de usuario o dirección de correo electrónico, se le envió un correo electrónico de confirmación. Por favor, revise su bandeja de entrada.' });
+                break;
+
+            case 'en':
+                res.status(200).json({ success: true, message: 'If you changed your username or email address, a confirmation email has been sent. Please check your inbox.' });
+                break;
+
+        }
 
         // Intercepción de errores
     } catch (error) {
 
+        switch (lang) {
+
+            case 'es':
+                res.status(500).json({ success: false, message: 'Error del servidor' });
+                break;
+                
+            case 'en':
+                res.status(500).json({ success: false, message: 'Internal server error' });
+                break;
+
+        }
         console.error('Error actualizando perfil:', error);
-        return res.status(500).json({ success: false, message: 'Error del servidor' });
 
     }
 
@@ -1828,6 +1929,7 @@ router.get('/api/verify_profile', async (req, res) => {
 
     // Token proveniente del correo electronico
     const { token } = req.query;
+    const lang = req.query.lang;
 
     // Intercepción de intento de consulta sin token
     if (!token) return res.status(400).json({ success: false, message: 'Token requerido' });
@@ -1845,7 +1947,17 @@ router.get('/api/verify_profile', async (req, res) => {
     // Envio de mensaje de error en caso de que el usuario no exista o el token sea invalido
     if (result.length === 0) {
 
-        return res.status(400).json({ success: false, message: 'Token inválido' });
+        switch (lang) {
+
+            case 'es':
+                res.status(400).json({ success: false, message: 'Token inválido' });
+                break;
+                
+            case 'en':
+                res.status(400).json({ success: false, message: 'Invalid token' });
+                break;
+
+        }
 
     }
 
@@ -1857,8 +1969,17 @@ router.get('/api/verify_profile', async (req, res) => {
     // Verificación de validez de token
     if (now > user.expires_at) {
 
-        // Envió de mensaje al frontend
-        return res.status(400).json({ success: false, message: 'El token ha expirado' });
+        switch (lang) {
+
+            case 'es':
+                res.status(400).json({ success: false, message: 'El token ha expirado' });
+                break;
+                
+            case 'en':
+                res.status(400).json({ success: false, message: 'Token expired' });
+                break;
+
+        }
 
     }
 
@@ -1871,7 +1992,7 @@ router.get('/api/verify_profile', async (req, res) => {
     `, [user.id]);
 
     // Redireccion a pagina de verificacion exitosa
-    res.redirect(`${process.env.FRONTEND_URL}/users/verified_success`);
+    res.redirect(`${process.env.FRONTEND_URL}/users/verified_profile?lang=${lang}`);
 
 });
 

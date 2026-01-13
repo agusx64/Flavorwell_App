@@ -28,12 +28,13 @@ const labelCover = document.querySelector('.cover-upload');
 
 const token = localStorage.getItem('token');
 const restHost = 'http://localhost:3000';
+const lang = localStorage.getItem('preferred_lang');
 
 async function getUserInfo(userToken) {
 
     try {
 
-        await fetch(restHost + '/users/api/user_profile', {
+        await fetch(restHost + `/users/api/user_profile`, {
 
             headers: {
                 'Authorization': `Bearer ${userToken}`
@@ -168,7 +169,7 @@ saveButton.addEventListener('click', async (event) => {
 
     try {
 
-        await fetch(restHost + '/users/api/update_profile', {
+        await fetch(restHost + `/users/api/update_profile?lang=${lang}`, {
 
             method: 'POST',
             headers: {
