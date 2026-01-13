@@ -19,7 +19,7 @@
                 <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
             </svg>
         </button>
-        <h2 class="header_text poppins-semibold">Settings</h2>
+        <h2 data-i18n="set_title" class="header_text poppins-semibold">Settings</h2>
         <div class="svg_icon" id="svg-icon-profile">
             <i class="bi bi-gear-wide-connected"></i>
         </div>
@@ -34,8 +34,8 @@
                 <i class="bi bi-person-circle user-settings-icon-header"></i>
             </div>
             <div class="user-settings-username-container">
-                <h1 class="user-settings-username">Agus.js</h1>
-                <p class="user-settings-email">agusm1253@gmail.com</p>
+                <h1 class="user-settings-username"></h1>
+                <p class="user-settings-email"></p>
             </div>
         </div>
 
@@ -48,19 +48,19 @@
         <div class="user-settings-options-container">
             <div class="user-settings-option" id="about-button">
                 <i class="bi bi-info-circle-fill user-settings-option-icon"></i>
-                <span class="user-settings-option-text">About flavorwell</span>
+                <span data-i18n="set_about" class="user-settings-option-text">About flavorwell</span>
             </div>
             <div class="user-settings-option" id="my-profile-button">
                 <i class="bi bi-person-circle user-settings-option-icon"></i>
-                <span class="user-settings-option-text">My profile</span>
+                <span data-i18n="set_profile" class="user-settings-option-text">My profile</span>
             </div>
             <div class="user-settings-option donate-button" id="donate-button">
                 <i class="bi bi-paypal user-settings-option-icon paypal"></i>
-                <span class="user-settings-option-text">Donate</span>
+                <span data-i18n="set_don" class="user-settings-option-text">Donate</span>
             </div>
             <div class="user-settings-option" id="log-out-button">
                 <i class="bi bi-box-arrow-right user-settings-option-icon"></i>
-                <span class="user-settings-option-text">Log out</span>
+                <span data-i18n="set_logout" class="user-settings-option-text">Log out</span>
             </div>
         </div>
 
@@ -89,15 +89,16 @@
     <div id="confirmationModal" class="modal hidden">
         <div class="modal-content modalLogOut">
             <img src="/images/_UI_img/error.webp" class="check_img" alt="error_img">
-            <p>Are you sure you want to log out?</p>
+            <p data-i18n="set_shure">Are you sure you want to log out?</p>
             <div class="buttons-confirmation-container">
-                <button class="aprove" id="aprove-log-out">Yes</button>
-                <button class="decline" id="decline-log-out">No</button>
+                <button data-i18n="av_yes" class="aprove" id="aprove-log-out">Yes</button>
+                <button data-i18n="av_no" class="decline" id="decline-log-out">No</button>
             </div>
         </div>
     </div>
     
     <script src="/javascripts/settings_UI.js"></script>
+    <script src="/javascripts/translations.js"></script>
     <script src="/javascripts/navbar_UI.js"></script>
 </body>
 </html>

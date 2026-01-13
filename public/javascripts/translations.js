@@ -122,14 +122,23 @@ const translations = {
         rg_dashboard: "Got to dashboard",
 
         // Account viewer
-        av_title: "",
-        av_edit: "",
-        av_footprint: "",
-        av_saved: "",
-        av_my: "",
-        av_preferences: "",
-        av_profile: "",
-        av_log: ""
+        av_title: "My account",
+        av_edit: "Edit profile",
+        av_footprint: "My footprint at flavorwell",
+        av_saved: "Saved recipes",
+        av_my: "My recipes",
+        av_preferences: "Preferences",
+        av_profile: "My profile",
+        av_log: "Log out",
+        av_shure: "Are you sure you want to log out?",
+        av_yes: "Yes",
+        av_no: "No",
+        av_username: "Username",
+        av_email: "Email",
+        av_picture: "Profile picture",
+        av_cover: "Cover picture",
+        av_save_changes: "Save changes",
+        av_cancel_changes: "Cancel changes"
 
     },
 
@@ -258,7 +267,15 @@ const translations = {
         av_picture: "Foto de perfil",
         av_cover: "Foto de portada",
         av_save_changes: "Guardar cambios",
-        av_cancel_changes: "Cancelar cambios"
+        av_cancel_changes: "Cancelar cambios",
+
+        // Settings
+        set_title: "Ajustes",
+        set_about: "Acerca de flavorwell",
+        set_profile: "Mi perfil",
+        set_don: "Donar",
+        set_logout: "Cerrar sesión",
+        set_shure: "¿Cerrar sesión?"
 
     }
 

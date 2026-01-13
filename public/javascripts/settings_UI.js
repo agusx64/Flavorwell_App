@@ -25,12 +25,13 @@ document.addEventListener('DOMContentLoaded', async function() {
             })
 
             const data = await res.json();
-            const id = data.id;
             if (!data.success) return;
 
             // Seteo de nombre de usuario
             const headerText = document.querySelector('.user-settings-username');
+            const emailText = document.querySelector('.user-settings-email');
             headerText.textContent = data.name;
+            emailText.textContent = data.email;
 
             // Seteo de foto de perfil
             const profileHeader = document.querySelector('.user-settings-img-container');
