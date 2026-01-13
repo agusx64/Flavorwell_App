@@ -137,8 +137,22 @@ router.get('/api/ingredients/search', async (req, res) => {
 
     try {
 
-        // Selección de columna dependiendo del idioma
-        const nameColumn = lang === 'es' ? 'name_es' : 'name';
+        let nameColumn;
+        switch (lang) {
+
+            case 'es':
+                nameColumn = 'name_es';
+                break;
+
+            case 'en':
+                nameColumn = 'name';
+                break;
+
+            default:
+                nameColumn = 'name';
+                break;
+
+        }
 
         // Selección y renombramiento de como name para enviar al frontend
         const query = `SELECT id, ${nameColumn} as name, src_reference FROM ingredients_list WHERE ${nameColumn} LIKE ? LIMIT 10`;

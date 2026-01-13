@@ -1429,8 +1429,26 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
 
     // Valores requeridos para el funcionamiento del endpoint (id de receta, tabla de proveniencia)
     const { id, table } = req.body;
+    const lang = req.query.lang || 'en';
+    let nameColumn;
 
     try {
+
+        switch (lang) {
+
+            case 'es':
+                nameColumn = 'name_es';
+                break;
+
+            case 'en':
+                nameColumn = 'name';
+                break;
+
+            default:
+                nameColumn = 'name';
+                break;
+
+        }
 
         // Obtener receta a traves de id y categoria
         const [results] = await connection.query(
@@ -1496,7 +1514,7 @@ router.post('/get_recipe_by_id', authenticateToken, async (req, res) => {
 
             // Consulta SQL
             `
-            SELECT i.name AS ingredient_name, i.src_reference
+            SELECT i.${nameColumn} AS ingredient_name, i.src_reference
             FROM recipe_ingredients r
             JOIN ingredients_list i ON r.ingredient_id = i.id
             WHERE r.recipe_id = ? AND r.category = ?;

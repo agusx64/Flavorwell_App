@@ -20,7 +20,7 @@
                 <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
             </svg>
         </button>
-        <h2 class="header_text poppins-semibold">Recipe viewer</h2>
+        <h2 data-i18n="rv_title" class="header_text poppins-semibold">Recipe viewer</h2>
         <div class="svg_icon">
             <i class="bi bi-cookie"></i>
         </div>
@@ -33,7 +33,7 @@
         <div class="recipe-viewer-title-container">
             <h1 class="recipe-viewer-title" id="recipe-viewer-title"></h1>
             <span class="recipe-viewer-author">
-                <strong class="recipe-viewer-prefix">By: </strong>
+                <strong data-i18n="rv_by" class="recipe-viewer-prefix">By: </strong>
                 <p id="recipe-viewer-author" class="recipe-viewer-author"></p>
             </span>
         </div>
@@ -63,7 +63,7 @@
 
         <!-- Contenedor de descripcion de receta -->
         <div class="recipe-viewer-description-container">
-            <h3 class="recipe-viewer-description-title">Description</h3>
+            <h3 data-i18n="rv_description" class="recipe-viewer-description-title">Description</h3>
             <p id="recipe-viewer-description" class="recipe-viewer-description"></p>
         </div>
 
@@ -72,21 +72,21 @@
             <div class="recipe-viewer-recipe-data">
                 <i class="bi bi-calendar4-week recipe-viewer-icon"></i>
                 <span class="recipe-viewer-details">
-                    <strong>Date:</strong>
+                    <strong data-i18n="rv_date">Date:</strong>
                     <p id="recipe-viewer-details-date"></p>
                 </span>
             </div>
             <div class="recipe-viewer-recipe-data">
                 <i class="bi bi-tags-fill recipe-viewer-icon"></i>
                 <span class="recipe-viewer-details">
-                    <strong>Category:</strong>
+                    <strong data-i18n="rv_category">Category:</strong>
                     <p id="recipe-viewer-details-category"></p>
                 </span>
             </div>
             <div class="recipe-viewer-recipe-data">
                 <i class="bi bi-box-fill recipe-viewer-icon"></i>
                 <span class="recipe-viewer-details">
-                    <strong>Items:</strong>
+                    <strong data-i18n="rv_items">Items:</strong>
                     <p id="recipe-viewer-details-items"></p>
                 </span>
             </div>
@@ -94,7 +94,7 @@
 
         <!-- Contenedor de titulo de ingredientes -->
         <div class="recipe-viewer-ingredients-title-container">
-            <h3 class="recipe-viewer-ingredients-title">Ingredients</h3>
+            <h3 data-i18n="rv_ingr" class="recipe-viewer-ingredients-title">Ingredients</h3>
         </div>
 
         <!-- Componente contenedor de lista de ingredientes -->
@@ -107,7 +107,7 @@
 
         <!-- Contenedor de titulo de ingredientes -->
         <div class="recipe-viewer-instructions-title-container">
-            <h3 class="recipe-viewer-instructions-title">Instructions</h3>
+            <h3 data-i18n="rv_ins" class="recipe-viewer-instructions-title">Instructions</h3>
         </div>
 
         <!-- Componente dinamico de instrucciones -->
@@ -118,7 +118,7 @@
 
         <!-- Componente de derechos de autor sobre la receta -->
         <div class="recipe-viewer-copyright-container">
-            <p class="recipe-viewer-copyright-text" id="recipe-viewer-copyright-text">&copy; new Date().getFullYear() Flavorwell. All rights reserved.</p>
+            <p class="recipe-viewer-copyright-text" id="recipe-viewer-copyright-text"></p>
         </div>
 
     </div>

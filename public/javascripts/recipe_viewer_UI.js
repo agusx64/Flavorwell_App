@@ -18,18 +18,64 @@ document.addEventListener('DOMContentLoaded',async () => {
     const saveButton = document.querySelector('.recipe-viewer-status-counter-container .bi-bookmark-fill'); 
 
     const token = localStorage.getItem('token');
+    let lang = localStorage.getItem('preferred_lang');
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
     const table = urlParams.get('table');
     const restHost = 'http://localhost:3000';
+    let copy;
+
+    switch (lang) {
+
+        case 'en':
+            copy = 'Flavorwell. All rights reserved to Flavorwell Team and'
+            break;
+
+        case 'es':
+            copy = 'Flavorwell. Todos los derechos reservados a Flavorwell y'
+            break;
+
+    }
+
+    const category = {
+
+        en: {
+            breakfast: "Breakfast",
+            vegan: "Vegan",
+            strong_dish: "Strong dish",
+            desserts: "Desserts"
+        },
+
+        es: {
+            breakfast: "Desayuno",
+            vegan: "Vegano",
+            strong_dish: "Plato fuerte",
+            desserts: "Postre"
+        }
+
+    }
+
+    function getCategory(cat, data) {
+
+        for (let setLang in cat) {
+
+            if (setLang === lang) {
+
+                return cat[setLang][data];
+
+            }
+
+        }
+
+    }
 
     if (!id || !table) {
         console.error('Missing ID or Table in URL.');
         return;
     }
 
-    await fetch(restHost + '/users/get_recipe_by_id', {
+    await fetch(restHost + `/users/get_recipe_by_id?lang=${lang}`, {
 
         method: 'POST',
         headers: { 
@@ -53,14 +99,15 @@ document.addEventListener('DOMContentLoaded',async () => {
     })
     .then(data => {
 
+        console.log(data)
         recipeTitle.textContent = data.data.name;
         recipeAuthor.textContent = data.author[0].username;
         recipeImage.src = data.data.img_path;
         recipeDescription.textContent = data.data.description;
         recipeDate.textContent =  new Date(data.data.created_at).toLocaleDateString();
-        recipeCategory.textContent = table.charAt(0).toUpperCase() + table.slice(1);
+        recipeCategory.textContent = getCategory(category, table)
         recipeItems.textContent = data.data.items;
-        recipeCopyright.textContent = `© ${new Date().getFullYear()} Flavorwell. All rights reserved to Flavorwell Team and ${data.author[0].username}.`;
+        recipeCopyright.textContent = `© ${new Date().getFullYear()} ${copy} ${data.author[0].username}.`;
         recipeLikedCounter.textContent = data.likeCount[0].total || '0'; 
         recipeSavedCounter.textContent = data.savedCount[0].total || '0';
         let ingredients = data.ingredients || [];

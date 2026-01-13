@@ -138,7 +138,15 @@ const translations = {
         av_picture: "Profile picture",
         av_cover: "Cover picture",
         av_save_changes: "Save changes",
-        av_cancel_changes: "Cancel changes"
+        av_cancel_changes: "Cancel changes",
+
+        // Settings
+        set_title: "Settings",
+        set_about: "About Flavorwell",
+        set_profile: "My profile",
+        set_don: "Donate",
+        set_logout: "Log out",
+        set_shure: "Are you shure you want to log out?"
 
     },
 
@@ -275,7 +283,17 @@ const translations = {
         set_profile: "Mi perfil",
         set_don: "Donar",
         set_logout: "Cerrar sesión",
-        set_shure: "¿Cerrar sesión?"
+        set_shure: "¿Cerrar sesión?",
+
+        // Recipe viewer
+        rv_title: "Visor de recetas",
+        rv_by: "Por:",
+        rv_description: "Descripción",
+        rv_date: "Fecha:",
+        rv_category: "Categoria:",
+        rv_items: "Items:",
+        rv_ingr: "Ingredientes",
+        rv_ins: "Instrucciones"
 
     }
 
