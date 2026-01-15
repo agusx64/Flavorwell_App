@@ -1,15 +1,29 @@
 const recipeContainer = document.querySelector('.recipe-container');
 const recipeViewerButton = document.querySelectorAll('.user-recipe-button-viewer');
 const token = localStorage.getItem('token');
+let lang = localStorage.getItem('preferred_lang');
+// Host backend
+const restHost = 'http://localhost:3000';
+
+let viewRecipeText;
+
+    switch (lang) {
+
+        case 'es':
+            viewRecipeText = "Ver Receta"
+            break;
+
+        case 'en':
+            viewRecipeText = "View Recipe"
+            break;
+
+    }
 
 document.addEventListener('DOMContentLoaded', function() {
 
     getUserRecipes(token);
 
 })
-
-// Host backend
-const restHost = 'http://localhost:3000';
 
 async function getUserRecipes(userToken) {
 
@@ -72,7 +86,7 @@ async function getUserRecipes(userToken) {
                             </div>
                         </div>
                         <button class="user-recipe-button-viewer" id="user-recipe-button-viewer">
-                            View recipe
+                            ${viewRecipeText}
                             <i class="bi bi-fork-knife"></i>
                         </button>
                     </div>

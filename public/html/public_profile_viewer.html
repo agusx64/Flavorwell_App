@@ -31,9 +31,9 @@
 
         <!-- Componente de imagenes del usuario -->
         <div class="public-profile-viewer-img-container">
-            <img id="public-profile-viewer-img-cover" src="/images/_UI_img/default.jpg" alt="" class="public-profile-viewer-img-cover">
+            <img id="public-profile-viewer-img-cover" src="" alt="" class="public-profile-viewer-img-cover">
             <div class="public-profile-viewer-img-user-container">
-                <img id="public-profile-viewer-img-user" src="/images/_UI_img/default.jpg" alt="" class="public-profile-viewer-img-user">
+                <img id="public-profile-viewer-img-user" src="" alt="" class="public-profile-viewer-img-user">
             </div>
         </div>
 
@@ -48,21 +48,21 @@
             <div class="recipe-viewer-recipe-data">
                 <i class="bi bi-calendar4-week recipe-viewer-icon"></i>
                 <span class="recipe-viewer-details">
-                    <strong>Income date:</strong>
+                    <strong data-i18n="pv_income">Income date:</strong>
                     <p id="public-profile-viewer-income-date"></p>
                 </span>
             </div>
             <div class="recipe-viewer-recipe-data">
                 <i class="bi bi-arrow-up-circle-fill recipe-viewer-icon"></i>
                 <span class="recipe-viewer-details">
-                    <strong>Uploaded recipes:</strong>
+                    <strong data-i18n="pv_upload">Uploaded recipes:</strong>
                     <p id="public-profile-viewer-uploaded-recipes"></p>
                 </span>
             </div>
             <div class="recipe-viewer-recipe-data">
                 <i class="bi bi-bookmark-fill recipe-viewer-icon"></i>
                 <span class="recipe-viewer-details">
-                    <strong>Saved recipes:</strong>
+                    <strong data-i18n="pv_saved">Saved recipes:</strong>
                     <p id="public-profile-viewer-saved-recipes"></p>
                 </span>
             </div>
@@ -70,7 +70,7 @@
 
         <!-- Contenedor de etiqueta de recetas del usuario -->
         <div class="public-profile-viewer-label-container">
-            <p class="public-profile-viewer-label">Explore my recipes</p>
+            <p data-i18n="pv_explore" class="public-profile-viewer-label">Explore my recipes</p>
         </div>
 
         <!-- Contenedor de recetas del usuario -->
@@ -99,6 +99,7 @@
     </nav>
     
     <script src="/javascripts/public_profile_viewer_UI.js"></script>
+    <script src="/javascripts/translations.js"></script>
     <script src="/javascripts/navbar_UI.js"></script>
 </body>
 </html>

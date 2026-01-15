@@ -7,6 +7,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     const restHost = 'http://localhost:3000';
     // Variables para sistema de scrolleo
     let offset = 0, limit = 10, loading = false, allRecipes = [];
+    let lang = localStorage.getItem('preferred_lang');
+    let viewRecipeText;
+
+    switch (lang) {
+
+        case 'es':
+            viewRecipeText = "Ver Receta"
+            break;
+
+        case 'en':
+            viewRecipeText = "View Recipe"
+            break;
+
+    }
 
     const userImgCover = document.getElementById('public-profile-viewer-img-cover');
     const userImgProfile = document.getElementById('public-profile-viewer-img-user');
@@ -16,6 +30,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const userUploadedRecipes = document.getElementById('public-profile-viewer-uploaded-recipes');
     const userSavedRecipes = document.getElementById('public-profile-viewer-saved-recipes');
     const headerTextName = document.querySelector('.header_text');
+
+    function truncateString(text, maxLength) {
+
+        if (text.length <= maxLength) {
+
+            return text;
+
+        }
+
+        return text.slice(0, maxLength) + "...";
+
+    }
 
     if (!id) {
 
@@ -147,7 +173,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             </div>
                         </div>
                         <button class="card-post-main-button" data-id="${recipe.id}" data-category="${recipe.category}">
-                            View Recipe <i class="bi bi-fork-knife"></i>
+                            ${viewRecipeText} <i class="bi bi-fork-knife"></i>
                         </button>
                     `;
                     container.appendChild(card);
@@ -234,12 +260,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ? userImgProfile.src = data.user.img_profile_path
                 : userImgProfile.src = '/images/_UI_img/default.jpg';
 
-            userName.textContent = data.user.username;
+            userName.textContent = truncateString(data.user.username, 10);
             userEmail.textContent = data.user.email;
             userIncomeDate.textContent = new Date(data.user.created_at).toLocaleDateString();
             userUploadedRecipes.textContent = data.total_recipes;
             userSavedRecipes.textContent = data.total_saved;
-            headerTextName.textContent = `${data.user.username}'s recipes`;
+
+            switch (lang) {
+
+                case 'es':
+                    headerTextName.textContent = `Recetas de ${truncateString(data.user.username, 8)}`;
+                    break;
+                    
+                case 'en':
+                    headerTextName.textContent = `${data.user.username}'s recipes`;
+                    break;
+
+            }
 
         })
         .catch(error => {

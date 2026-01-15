@@ -146,7 +146,23 @@ const translations = {
         set_profile: "My profile",
         set_don: "Donate",
         set_logout: "Log out",
-        set_shure: "Are you shure you want to log out?"
+        set_shure: "Are you shure you want to log out?",
+
+        // Recipe viewer
+        rv_title: "Recipe viewer",
+        rv_by: "By:",
+        rv_description: "Description",
+        rv_date: "Date:",
+        rv_category: "Category:",
+        rv_items: "Items:",
+        rv_ingr: "Ingredients",
+        rv_ins: "Instructions",
+
+        // Profile viewer
+        pv_income: "Income date",
+        pv_upload: "Published recipes",
+        pv_saved: "Saved recipes",
+        pv_explore: "Explore my recipes",
 
     },
 
@@ -293,7 +309,16 @@ const translations = {
         rv_category: "Categoria:",
         rv_items: "Items:",
         rv_ingr: "Ingredientes",
-        rv_ins: "Instrucciones"
+        rv_ins: "Instrucciones",
+
+        // Profile viewer
+        pv_income: "Fecha de ingreso",
+        pv_upload: "Recetas publicadas",
+        pv_saved: "Recetas guardadas",
+        pv_explore: "Explora mis recetas",
+
+        // My recipes
+        mr_title: "Mis recetas"
 
     }
 
