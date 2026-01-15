@@ -1,5 +1,5 @@
 const getStartedButton = document.getElementById('started-button');
-const restHost = 'http://localhost:3000';
+import CONFIG from "./config.js";
 
 async function checkLanguage() {
 
@@ -22,7 +22,7 @@ async function checkSession() {
     try {
 
         // Petición de validación de token
-        const res = await fetch(`${restHost}/users/verify_token`, {
+        const res = await fetch(`${CONFIG.API_BASE_URL}/users/verify_token`, {
 
             method: 'GET',
             headers: {

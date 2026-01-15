@@ -23,7 +23,7 @@ const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
 
 // Direccion del Back-End
-let restHost = 'http://localhost:3000';
+import CONFIG from "./config.js";
 let lang = localStorage.getItem('preferred_lang');
 
 restorePasswordButton.disabled = true;
@@ -191,7 +191,7 @@ restorePasswordButton.addEventListener('click', function(event){
 
     };
 
-    fetch(restHost + '/users/set_new_password', {
+    fetch(CONFIG.API_BASE_URL + '/users/set_new_password', {
 
         method: 'POST',
         headers: {

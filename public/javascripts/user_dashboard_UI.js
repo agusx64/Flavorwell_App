@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Host backend
-const restHost = 'http://localhost:3000';
+import CONFIG from "./config.js";
 let lang = localStorage.getItem('preferred_lang');
 
 // Variables del componente de busqueda
@@ -34,7 +34,7 @@ async function getUserInfo() {
 
     try {
 
-        const res = await fetch(restHost + '/users/api/user_profile', {
+        const res = await fetch(CONFIG.API_BASE_URL + '/users/api/user_profile', {
 
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -76,7 +76,7 @@ async function loadRecipes() {
 
         if (!allRecipes.length) {
 
-            const res = await fetch(restHost + '/users/api/recent_posts', {
+            const res = await fetch(CONFIG.API_BASE_URL + '/users/api/recent_posts', {
 
                 headers: { 'Authorization': `Bearer ${token}` }
 
@@ -183,7 +183,7 @@ document.addEventListener('click', async (e) => {
     if (btnLike) {
 
         const id = btnLike.dataset.id, cat = btnLike.dataset.category;
-        const res = await fetch (restHost + '/users/api/toggle_like', {
+        const res = await fetch (CONFIG.API_BASE_URL + '/users/api/toggle_like', {
 
             method: 'POST',
             headers: {
@@ -213,7 +213,7 @@ document.addEventListener('click', async (e) => {
     if (btnSave) {
 
         const id = btnSave.dataset.id, cat = btnSave.dataset.category;
-        const res = await fetch(restHost + '/users/api/toggle_save', {
+        const res = await fetch(CONFIG.API_BASE_URL + '/users/api/toggle_save', {
 
             method:'POST',
             headers:{
@@ -258,7 +258,7 @@ searchInput.addEventListener('input', async () => {
 
     try {
 
-        const response = await fetch(restHost + '/dashboard/search_recipes', {
+        const response = await fetch(CONFIG.API_BASE_URL + '/dashboard/search_recipes', {
 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -332,7 +332,7 @@ function dynamicGetRecentRecipe() {
 
             try {
 
-                await fetch(restHost + '/users/get_recipe_by_id', {
+                await fetch(CONFIG.API_BASE_URL + '/users/get_recipe_by_id', {
 
                     method: 'POST',
                     headers: {
@@ -394,7 +394,7 @@ function dynamicGetRender() {
 
             try {
 
-                await fetch(restHost + '/users/get_recipe_by_id', {
+                await fetch(CONFIG.API_BASE_URL + '/users/get_recipe_by_id', {
 
                     method: 'POST',
                     headers: {
@@ -444,7 +444,7 @@ function dynamicGetRender() {
 
 async function fetchNewRecipes() {
 
-    await fetch(restHost + '/dashboard/new_food')
+    await fetch(CONFIG.API_BASE_URL + '/dashboard/new_food')
 
     .then(response => response.json())
     .then(data => {
@@ -508,7 +508,7 @@ async function fetchNewRecipes() {
 
 async function fetchGetDayFood() {
 
-    await fetch(restHost + '/dashboard/day_food')
+    await fetch(CONFIG.API_BASE_URL + '/dashboard/day_food')
 
     .then(response => response.json())
     .then(data => {

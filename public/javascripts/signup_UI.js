@@ -14,7 +14,7 @@ const tryAgainButton = document.getElementById('tryAgain');
 // Variables del modal Success
 const successfullyModalText = document.getElementById('successfully-message');
 
-let restHost = 'http://localhost:3000';
+import CONFIG from "./config.js";
 let lang = localStorage.getItem('preferred_lang');
 
 signupButton.addEventListener('click', function(event) {
@@ -48,7 +48,7 @@ signupButton.addEventListener('click', function(event) {
         
     }
 
-    fetch(restHost + `/users/register_user?lang=${lang}`, {
+    fetch(CONFIG.API_BASE_URL + `/users/register_user?lang=${lang}`, {
 
         method: 'POST',
         headers: {

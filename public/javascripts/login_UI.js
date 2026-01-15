@@ -11,7 +11,7 @@ const tryAgainButton = document.getElementById('tryAgain');
 const togglePassword = document.getElementById('togglePassword');
 const passwordInput = document.getElementById('username_password');
 
-var restHost = 'http://localhost:3000';
+import CONFIG from "./config.js";
 
 loginButton.addEventListener('click', function(event) {
 
@@ -31,7 +31,7 @@ loginButton.addEventListener('click', function(event) {
 
     };
 
-    fetch(restHost + '/users/login_user', {
+    fetch(CONFIG.API_BASE_URL + '/users/login_user', {
 
         method: 'POST',
         headers: {

@@ -1,7 +1,7 @@
+import CONFIG from "./config.js";
 document.addEventListener('DOMContentLoaded', async function() {
 
     const token = localStorage.getItem('token');
-    const restHost = 'http://localhost:3000';
     const paypalLink = 'https://www.paypal.com/donate/?hosted_button_id=PDZDH957EZBEG';
     const myProfileButton = document.getElementById('my-profile-button');
     const logOutButton = document.getElementById('log-out-button');
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         try {
 
-            const res = await fetch(restHost + '/users/api/user_profile', {
+            const res = await fetch(CONFIG.API_BASE_URL + '/users/api/user_profile', {
 
                 headers: {
                     'Authorization': `Bearer ${token}`

@@ -7,8 +7,8 @@ const errorModal = document.getElementById('errorModal');
 const imgErrorModal = document.getElementById('img-context');
 const textErrorModal = document.getElementById('text-context');
 const tryAgainButton = document.getElementById('tryAgain');
+import CONFIG from "./config.js";
 
-var restHost = 'http://localhost:3000';
 let lang = localStorage.getItem('preferred_lang');
 
 if (window.Capacitor && window.Capacitor.Plugins?.Keyboard) {
@@ -46,7 +46,7 @@ recoverButton.addEventListener('click', function(event) {
 
     };
 
-    fetch(restHost + `/users/request_password_reset?lang=${lang}`, {
+    fetch(CONFIG.API_BASE_URL + `/users/request_password_reset?lang=${lang}`, {
 
         method: 'POST',
         headers: {

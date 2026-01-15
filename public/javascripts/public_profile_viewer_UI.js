@@ -1,10 +1,10 @@
+import CONFIG from "./config.js";
 document.addEventListener('DOMContentLoaded', async () => {
 
     const token = localStorage.getItem('token');
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
-    const restHost = 'http://localhost:3000';
     // Variables para sistema de scrolleo
     let offset = 0, limit = 10, loading = false, allRecipes = [];
     let lang = localStorage.getItem('preferred_lang');
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
 
-        await fetch(restHost + '/users/get_user_by_id', {
+        await fetch(CONFIG.API_BASE_URL + '/users/get_user_by_id', {
 
             method: 'POST',
             headers: { 
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     
                         if (!allRecipes.length) {
                         
-                            const res = await fetch(restHost + '/users/api/user_posts', {
+                            const res = await fetch(CONFIG.API_BASE_URL + '/users/api/user_posts', {
                             
                                 method: 'POST',
                                 headers: { 
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (btnLike) {
                     
                         const id = btnLike.dataset.id, cat = btnLike.dataset.category;
-                        const res = await fetch (restHost + '/users/api/toggle_like', {
+                        const res = await fetch (CONFIG.API_BASE_URL + '/users/api/toggle_like', {
                         
                             method: 'POST',
                             headers: {
@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (btnSave) {
                     
                         const id = btnSave.dataset.id, cat = btnSave.dataset.category;
-                        const res = await fetch(restHost + '/users/api/toggle_save', {
+                        const res = await fetch(CONFIG.API_BASE_URL + '/users/api/toggle_save', {
                         
                             method:'POST',
                             headers:{

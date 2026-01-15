@@ -1,8 +1,8 @@
+import CONFIG from "./config.js";
 document.addEventListener('DOMContentLoaded', () => {
 
     const container = document.querySelector('.saved-recipes-container');
     const token = localStorage.getItem('token');
-    const restHost = 'http://localhost:3000';
 
     let lang = localStorage.getItem('preferred_lang');
 
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
 
-            const res = await fetch(restHost + '/users/api/saved_recipes', {
+            const res = await fetch(CONFIG.API_BASE_URL + '/users/api/saved_recipes', {
 
                 headers: {
                     'Authorization': `Bearer ${token}`

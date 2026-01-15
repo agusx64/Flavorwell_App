@@ -4,6 +4,7 @@ const token = localStorage.getItem('token');
 let lang = localStorage.getItem('preferred_lang');
 // Host backend
 const restHost = 'http://localhost:3000';
+import CONFIG from "./config.js";
 
 let viewRecipeText;
 
@@ -29,7 +30,7 @@ async function getUserRecipes(userToken) {
 
     try {
 
-        await fetch(restHost + '/users/api/user_recipes', {
+        await fetch(CONFIG.API_BASE_URL + '/users/api/user_recipes', {
 
             headers: {
                 'Authorization': `Bearer ${userToken}`

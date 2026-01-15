@@ -1,3 +1,4 @@
+import CONFIG from "./config.js";
 document.addEventListener("DOMContentLoaded", function () {
 
     const token = localStorage.getItem('token');
@@ -13,9 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
     
     let categoryKey;
     let categoryLabel;
-
-    // Host backend
-    const restHost = 'http://localhost:3000';
 
     // Variables para el buscador de ingredientes
     const input = document.getElementById('ingredient-search');
@@ -51,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const res = await fetch(restHost +`/lists/api/ingredients/search?q=${encodeURIComponent(query)}&lang=${lang}`);
+            const res = await fetch(CONFIG.API_BASE_URL +`/lists/api/ingredients/search?q=${encodeURIComponent(query)}&lang=${lang}`);
             suggestions = await res.json();
             renderSuggestions();
         } catch (err) {
@@ -345,7 +343,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
-            await fetch(restHost + `/users/recipes/register?lang=${lang}`, {
+            await fetch(CONFIG.API_BASE_URL + `/users/recipes/register?lang=${lang}`, {
 
                 method: 'POST',
                 headers: {
@@ -427,7 +425,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
-            await fetch(restHost + '/users/api/recipes/ai-generate', {
+            await fetch(CONFIG.API_BASE_URL + '/users/api/recipes/ai-generate', {
 
                 method: 'POST',
                 headers: {
@@ -473,7 +471,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         try {
 
-                            const res = await fetch(restHost + `/lists/api/ingredients/search?q=${encodeURIComponent(ingredientName)}`);
+                            const res = await fetch(CONFIG.API_BASE_URL + `/lists/api/ingredients/search?q=${encodeURIComponent(ingredientName)}`);
                             const results = await res.json();
 
                             if (results.length > 0) {

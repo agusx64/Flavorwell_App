@@ -1,3 +1,4 @@
+import CONFIG from "./config.js";
 document.addEventListener('DOMContentLoaded',async () => {
 
     // Elementos para la inserción de información de receta
@@ -23,7 +24,6 @@ document.addEventListener('DOMContentLoaded',async () => {
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
     const table = urlParams.get('table');
-    const restHost = 'http://localhost:3000';
     let copy;
 
     function truncateString(text, maxLength) {
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded',async () => {
         return;
     }
 
-    await fetch(restHost + `/users/get_recipe_by_id?lang=${lang}`, {
+    await fetch(CONFIG.API_BASE_URL + `/users/get_recipe_by_id?lang=${lang}`, {
 
         method: 'POST',
         headers: { 
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded',async () => {
     })
 
     // Verificador de like a la receta
-    const checkLike = await fetch(restHost + '/users/api/check_like', {
+    const checkLike = await fetch(CONFIG.API_BASE_URL + '/users/api/check_like', {
 
         method: 'POST',
         headers: {
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded',async () => {
     }
 
     // Verificar si el usuario ya guardó
-    const checkSave = await fetch(restHost + '/users/api/check_save', {
+    const checkSave = await fetch(CONFIG.API_BASE_URL + '/users/api/check_save', {
 
         method: 'POST',
         headers: {
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded',async () => {
     // Toggle like
     likeButton.addEventListener('click', async () => {
 
-        const res = await fetch(restHost + '/users/api/toggle_like', {
+        const res = await fetch(CONFIG.API_BASE_URL + '/users/api/toggle_like', {
 
             method: 'POST',
             headers: {
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded',async () => {
     // Toggle save
     saveButton.addEventListener('click', async () => {
 
-        const res = await fetch(restHost + '/users/api/toggle_save', {
+        const res = await fetch(CONFIG.API_BASE_URL + '/users/api/toggle_save', {
 
             method: 'POST',
             headers: {
