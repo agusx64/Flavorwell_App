@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/stylesheets/choose_language_settings.css">
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <title>Language settings</title>
+</head>
+<body>
+
+    <!-- Template for another UI -->
+    <header class="header_menu" onclick="history.back()">
+        <div class="svg_icon return">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
+            </svg>
+        </div>
+        <h2 data-i18n="chl_title" class="header_text poppins-semibold">Language</h2>
+        <div class="svg_icon" id="svg-icon-profile">
+            <i class="bi bi-translate"></i>
+        </div>
+    </header>
+
+    <section class="main-container">
+        <div class="options-container">
+            <span class="header-text-container">
+                <img class="logo_samll_img" src="/images/_UI_img/logo_small.png" alt="Logo">
+                <h1 data-i18n="chl_new">Set a new language</h1>
+                <p data-i18n="chl_your">Choose your language</p>
+            </span>
+            <div class="button-container-options">
+                <button id="english-button">
+                    English
+                    <div class="check-icon-container english">
+                        <i class="bi bi-check2"></i>
+                    </div>
+                </button>
+                <button id="spanish-button">
+                    Español
+                    <div class="check-icon-container spanish">
+                        <i class="bi bi-check2"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+        <div class="options-container">
+            <div class="description-text-container">
+                <p data-i18n="chl_any">Your language preference can be changed at any time in Settings</p>
+                <button data-i18n="chl_cont" class="choose-button-style" id="set-changes-button" disabled>Continue</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Barra de navegación -->
+    <nav class="bottom_navbar">
+        <div class="nav_icons" id="start">
+            <i class="bi bi-house-door-fill"></i>
+        </div>
+        <div class="nav_icons" id="saved">
+            <i class="bi bi-bookmark-fill"></i>
+        </div>
+        <div class="nav_icons" id="add">
+            <i class="bi bi-plus-circle-fill"></i>
+        </div>
+        <div class="nav_icons" id="profile">
+            <i class="bi bi-person-circle"></i>
+        </div>
+        <div class="nav_icons" id="settings">
+            <i class="bi bi-gear-fill"></i>
+        </div>
+    </nav>
+    
+    <script src="/javascripts/translations.js"></script>
+    <script src="/javascripts/choose_language_settings.js"></script>
+    <script src="/javascripts/navbar_UI.js"></script>
+</body>
+</html>

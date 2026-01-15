@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const aproveButtonLogOut = document.getElementById('aprove-log-out');
     const declineButtonLogOut = document.getElementById('decline-log-out');
     const aboutButton = document.getElementById('about-button');
+    const languageButton = document.getElementById('choose-language-button');
 
     // Funcion para obtener nombre y foto de perfil
     async function getUserInfo() {
@@ -87,6 +88,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         window.location.href = '/html/about.html';
 
-    })
+    });
+
+    languageButton.addEventListener('click', function() {
+
+        window.location.href = '/html/choose_language_settings.html';
+
+    });
 
 });

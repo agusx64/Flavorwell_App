@@ -1,0 +1,104 @@
+.main-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 25%;
+    padding-bottom: 20%;
+}
+
+.logo_samll_img {
+    width: 18%;
+    margin-bottom: 1vh;
+}
+
+.options-container {
+    width: 100%;
+    height: auto;
+    padding: 3vh;
+}
+
+.header-text-container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    text-align: center;
+    color: var(--ChiliRed);
+}
+
+h1 {
+    font-size: 4vh;
+}
+
+p {
+    font-size: 2vh;
+}
+
+.button-container-options{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15%;
+}
+
+button {
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1vh 2vh 1vh 2vh;
+    border-radius: 50vh;
+    border-style: solid;
+    border-color: var(--ChiliRed);
+    border-width: 3px;
+    color: var(--ChiliRed);
+    margin: 1vh;
+    background-color: var(--WhiteBaseColor);
+    font-weight: 600;
+}
+
+.check-icon-container {
+    color: var(--WhiteBaseColor);
+    border: var(--Xhantous) solid 2px;
+    border-radius: 50%;
+    width: 3vh;
+    height: 3vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2vh;
+}
+
+.description-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    text-align: center;
+}
+
+.choose-button-style {
+    background-color: var(--ChiliRed);
+    color: var(--WhiteBaseColor);
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 6vh;
+    font-size: 1.8vh;
+    font-weight: 700;
+    margin-top: 5vh;
+}
+
+.choose-button-style:disabled {
+    background-color: var(--ChiliRedDisabled);
+    border-style: none;
+}

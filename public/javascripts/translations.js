@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 const translations = {
-    
+
     en: {
 
         // Pantalla 'Get Started
@@ -112,6 +112,7 @@ const translations = {
         rg_name: "Type the name of your recipe",
         rg_example: "Example: Cheese fingers",
         rg_description: "Recipe description",
+        rg_description_r: "Recipe description",
         rg_type_d: "Write your description (max. 150 words)",
         rg_find: "Find your ingredients",
         rg_search: "Search your ingredients",
@@ -148,6 +149,7 @@ const translations = {
         set_don: "Donate",
         set_logout: "Log out",
         set_shure: "Are you shure you want to log out?",
+        set_lang: "Choose language",
 
         // Recipe viewer
         rv_title: "Recipe viewer",
@@ -184,7 +186,14 @@ const translations = {
         ab_behind_text: "Flavorwell is a project developed by Agustin Mora, a computer systems engineer with experience in full-stack web development. This project represents the fusion of two passions: technology and gastronomy, and seeks to continue evolving as a useful solution with a real impact on users' lives.",
         ab_collab: "Shall we collaborate?",
         ab_collab_text: "Do you have a recipe you'd like to share? Are you a food content creator or developer interested in contributing?",
-        ab_collab_call: "We're open to collaborations!"
+        ab_collab_call: "We're open to collaborations!",
+
+        // Choose language
+        chl_title: "Language",
+        chl_new: "Set a new language",
+        chl_your: "Choose your language",
+        chl_any: "Your language preference can be changed at any time in Settings",
+        chl_cont: "Continue"
 
     },
 
@@ -322,6 +331,7 @@ const translations = {
         set_don: "Donar",
         set_logout: "Cerrar sesión",
         set_shure: "¿Cerrar sesión?",
+        set_lang: "Cambiar idioma",
 
         // Recipe viewer
         rv_title: "Visor de recetas",
@@ -358,7 +368,14 @@ const translations = {
         ab_behind_text: "Flavorwell es un proyecto desarrollado por Agustín Mora, ingeniero de sistemas informáticos con experiencia en desarrollo web full-stack. Este proyecto representa la fusión de dos pasiones: la tecnología y la gastronomía, y busca seguir evolucionando como una solución útil con un impacto real en la vida de los usuarios.",
         ab_collab: "¿Te gustaria colaborar?",
         ab_collab_text: "¿Tienes una receta que te gustaría compartir? ¿Eres creador o desarrollador de contenido gastronómico y te interesa colaborar?",
-        ab_collab_call: "Estoy abierto a colaboraciones!"
+        ab_collab_call: "Estoy abierto a colaboraciones!",
+
+        // Choose language
+        chl_title: "Idioma",
+        chl_new: "Establece un nuevo idioma",
+        chl_your: "Elije un nuevo idioma",
+        chl_any: "Tu preferencia de idioma se puede cambiar en cualquier momento en Configuración",
+        chl_cont: "Continuar"
 
     }
 
