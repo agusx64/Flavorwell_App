@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     break;
                     
                 case 'en':
-                    headerTextName.textContent = `${data.user.username}'s recipes`;
+                    headerTextName.textContent = `${truncateString(data.user.username, 8)}'s recipes`;
                     break;
 
             }

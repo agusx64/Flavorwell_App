@@ -26,6 +26,18 @@ document.addEventListener('DOMContentLoaded',async () => {
     const restHost = 'http://localhost:3000';
     let copy;
 
+    function truncateString(text, maxLength) {
+
+        if (text.length <= maxLength) {
+
+            return text;
+
+        }
+
+        return text.slice(0, maxLength) + "...";
+
+    }
+
     switch (lang) {
 
         case 'en':
@@ -101,7 +113,7 @@ document.addEventListener('DOMContentLoaded',async () => {
 
         console.log(data)
         recipeTitle.textContent = data.data.name;
-        recipeAuthor.textContent = data.author[0].username;
+        recipeAuthor.textContent = truncateString(data.author[0].username, 16);
         recipeImage.src = data.data.img_path;
         recipeDescription.textContent = data.data.description;
         recipeDate.textContent =  new Date(data.data.created_at).toLocaleDateString();
@@ -116,10 +128,10 @@ document.addEventListener('DOMContentLoaded',async () => {
         recipeAuthorContainer.innerHTML = data.author[0].img_profile_path
             // Si existe una foto de perfilinsertan este componente
             ? `<img src="${data.author[0].img_profile_path}" alt="image_of_author" class="recipe-viewer-status-img">
-                <p id="recipe-viewer-view-user-profile" class="recipe-viewer-status-author">${data.author[0].username}</p>`
+                <p id="recipe-viewer-view-user-profile" class="recipe-viewer-status-author">${truncateString(data.author[0].username, 13)}</p>`
             // Si no existe insertan este componente
             : `<i class="bi bi-person-circle svg_profile"></i>
-                <p id="recipe-viewer-view-user-profile" class="recipe-viewer-status-author">${data.author[0].username}</p>`;
+                <p id="recipe-viewer-view-user-profile" class="recipe-viewer-status-author">${truncateString(data.author[0].username, 13)}</p>`;
 
         const recipeViewerViewUserProfile = document.getElementById('recipe-viewer-view-user-profile');
         recipeViewerViewUserProfile.addEventListener('click', function() {
