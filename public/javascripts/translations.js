@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 const translations = {
+    
     en: {
 
         // Pantalla 'Get Started
@@ -163,6 +164,27 @@ const translations = {
         pv_upload: "Published recipes",
         pv_saved: "Saved recipes",
         pv_explore: "Explore my recipes",
+
+        // My recipes
+        mr_title: "My recipes",
+
+        // About
+        ab_title: "About Us",
+        ab_about: "About Flavorwell",
+        ab_ab_text: "Flavorwell is a digital platform designed to transform the way people discover, prepare, and enjoy their everyday meals. Combining modern technology with an intuitive cooking experience, Flavorwell offers a diverse library of recipes organized by dish type, dietary preferences, and preparation time, all in a single app.",
+        ab_mision: "Mision",
+        ab_mision_text: "Our mission is to democratize access to delicious, healthy, and personalized food through a practical, accessible, and user-friendly digital solution for everyone, from cooking novices to more experienced cooks.",
+        ab_approach: "Approach and values",
+        ab_promote: "Flavorwell promotes",
+        ab_promote_1: "Access to quality food regardless of culinary experience or time constraints.",
+        ab_promote_2: "Inclusive options, such as vegan, vegetarian, or low-calorie recipes.",
+        ab_promote_3: "Continuously updated, with new recipes and improvements based on user feedback.",
+        ab_promote_4: "Sustainable and scalable development, following good programming and web architecture practices.",
+        ab_behind: "Who's behind it?",
+        ab_behind_text: "Flavorwell is a project developed by Agustin Mora, a computer systems engineer with experience in full-stack web development. This project represents the fusion of two passions: technology and gastronomy, and seeks to continue evolving as a useful solution with a real impact on users' lives.",
+        ab_collab: "Shall we collaborate?",
+        ab_collab_text: "Do you have a recipe you'd like to share? Are you a food content creator or developer interested in contributing?",
+        ab_collab_call: "We're open to collaborations!"
 
     },
 
@@ -318,7 +340,25 @@ const translations = {
         pv_explore: "Explora mis recetas",
 
         // My recipes
-        mr_title: "Mis recetas"
+        mr_title: "Mis recetas",
+
+        // About
+        ab_title: "Acerca de",
+        ab_about: "Sobre Flavorwell",
+        ab_ab_text: "Flavorwell es una plataforma digital diseñada para transformar la forma en que las personas descubren, preparan y disfrutan sus comidas diarias. Combinando tecnología moderna con una experiencia culinaria intuitiva, Flavorwell ofrece una variada biblioteca de recetas organizadas por tipo de plato, preferencias dietéticas y tiempo de preparación, todo en una sola aplicación.",
+        ab_mision: "Misión",
+        ab_mision_text: "La misión principal es democratizar el acceso a una alimentación deliciosa, saludable y personalizada a través de una solución digital práctica, accesible y fácil de usar para todos, desde los principiantes en la cocina hasta los cocineros más experimentados.",
+        ab_approach: "Enfoque y valores",
+        ab_promote: "Flavorwell promueve...",
+        ab_promote_1: "Acceso a alimentos de calidad independientemente de la experiencia culinaria o las limitaciones de tiempo.",
+        ab_promote_2: "Opciones inclusivas, como recetas veganas, vegetarianas o bajas en calorías.",
+        ab_promote_3: "Continuamente actualizado, con nuevas recetas y mejoras basadas en el feedback de los usuarios.",
+        ab_promote_4: "Desarrollo sustentable y escalable, siguiendo buenas prácticas de programación y arquitectura web.",
+        ab_behind: "¿Quien esta detras?",
+        ab_behind_text: "Flavorwell es un proyecto desarrollado por Agustín Mora, ingeniero de sistemas informáticos con experiencia en desarrollo web full-stack. Este proyecto representa la fusión de dos pasiones: la tecnología y la gastronomía, y busca seguir evolucionando como una solución útil con un impacto real en la vida de los usuarios.",
+        ab_collab: "¿Te gustaria colaborar?",
+        ab_collab_text: "¿Tienes una receta que te gustaría compartir? ¿Eres creador o desarrollador de contenido gastronómico y te interesa colaborar?",
+        ab_collab_call: "Estoy abierto a colaboraciones!"
 
     }
 
