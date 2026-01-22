@@ -117,18 +117,20 @@
         </div>
 
         <button id="toggle-comments-btn" class="btn_secondary">
-            Show comments
+            <p data-i18n="com_text">Show comments</p>
+            <i class="bi bi-chevron-down comment-arrow"></i>
         </button>
 
         <!-- Contenedor de comentarios -->
         <div id="comments-section" class="comments hidden">
-            <div id="comments-list"></div>
+            <div id="comments-list">
+            </div>
         </div>
 
         <!-- Entrada de comentarios -->
         <div class="add-comment">
-            <textarea id="comment-input" placeholder="Write a comment..." maxlength="300"></textarea>
-            <button id="send-comment-btn" class="btn_primary">
+            <textarea data-i18n-placeholder="comment_textarea" id="comment-input" placeholder="Write a comment..." maxlength="300"></textarea>
+            <button data-i18n="add_comment" id="send-comment-btn" class="btn_primary">
                 Add comment
             </button>
         </div>

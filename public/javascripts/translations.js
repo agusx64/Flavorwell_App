@@ -160,6 +160,9 @@ const translations = {
         rv_items: "Items:",
         rv_ingr: "Ingredients",
         rv_ins: "Instructions",
+        com_text: "Show comments",
+        comment_textarea: "Write a comment",
+        add_comment: "Add comment",
 
         // Profile viewer
         pv_income: "Income date",
@@ -342,6 +345,9 @@ const translations = {
         rv_items: "Items:",
         rv_ingr: "Ingredientes",
         rv_ins: "Instrucciones",
+        com_text: "Mostrar comentarios",
+        comment_textarea: "Escribe un comentario",
+        add_comment: "Agregar comentario",
 
         // Profile viewer
         pv_income: "Fecha de ingreso",

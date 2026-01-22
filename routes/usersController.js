@@ -1635,7 +1635,8 @@ router.post('/get_comments_by_id', authenticateToken, async (req, res) => {
                 c.id,
                 c.content,
                 c.created_at,
-                u.username
+                u.username,
+                u.img_profile_path
             FROM comments c
             LEFT JOIN users u ON c.user_id = u.id
             WHERE c.recipe_id = ?

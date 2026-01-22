@@ -308,13 +308,22 @@ document.addEventListener('DOMContentLoaded',async () => {
         switch (lang) {
 
             case 'en':
-                toggleBtn.textContent = commentVisible ? "Hide comments" : "Show comments";
+                toggleBtn.innerHTML = commentVisible ?
+                `   <p>Hide comments</p>
+                    <i class="bi bi-chevron-up comment-arrow"></i>` : 
+                `   <p>Show comments</p>
+                    <i class="bi bi-chevron-down comment-arrow"></i>
+                ` ;
                 break;
 
             case 'es':
-                toggleBtn.textContent = commentVisible ? "Ocultar comentarios" : "Mostrar comentarios";
+                toggleBtn.innerHTML = commentVisible ?
+                `   <p>Ocultar comentarios</p>
+                    <i class="bi bi-chevron-up comment-arrow"></i>` : 
+                `   <p>Mostrar comentarios</p>
+                    <i class="bi bi-chevron-down comment-arrow"></i>
+                ` ;
                 break;
-
         }
 
     });
@@ -403,24 +412,33 @@ document.addEventListener('DOMContentLoaded',async () => {
 
         if (comments.length === 0) {
 
-            container.innerHTML = "<p>No comments yet.</p>";
-            return;
+            switch(lang) {
+                case 'es':
+                    container.innerHTML = `<p>Aun no hay comentarios.</p>`;
+                    break;
+
+                case 'en':
+                    container.innerHTML = `<p>No comments yet.</p>`;
+                    break;
+            }
 
         }
 
         comments.forEach(comment => {
 
             const div = document.createElement("div");
-            div.classList.add("comment");
+            div.classList.add("comment-container");
 
             div.innerHTML = `
-            <div class="comment-user">
-                ${comment.username ?? "Anonymous"}
-            </div>
-            <div class="comment-date">
-                ${new Date(comment.created_at).toISOString().split('T')[0]}
-            </div>
-            <p>${comment.content}</p>`
+            <img class="comment-img-user" src="${comment.img_profile_path}">
+            <div class="user-comment-container">
+                <h5 class="comment-username">${comment.username ?? "Anonymous"}</h5>
+                <div class="comment-date">
+                    <i class="bi bi-calendar-week"></i>
+                    <p class="comment-margin">${new Date(comment.created_at).toISOString().split('T')[0]}</p>
+                </div>
+                <p class="comment-text">${comment.content}</p>
+            </div>`
             ;
 
             container.appendChild(div);
