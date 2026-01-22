@@ -25,6 +25,14 @@ document.addEventListener('DOMContentLoaded',async () => {
     const id = urlParams.get('id');
     const table = urlParams.get('table');
     let copy;
+    let commentVisible = false;
+    let commentsLoaded = false;
+
+    const toggleBtn = document.getElementById('toggle-comments-btn');
+    const commentsSection = document.getElementById('comments-section');
+    const commentInput = document.getElementById("comment-input");
+    const sendCommentBtn = document.getElementById("send-comment-btn");
+
 
     function truncateString(text, maxLength) {
 
@@ -285,11 +293,147 @@ document.addEventListener('DOMContentLoaded',async () => {
 
     });
 
-});
+    toggleBtn.addEventListener('click', () => {
+
+        commentVisible = !commentVisible;
+
+        commentsSection.classList.toggle('hidden');
+
+        if (commentVisible && !commentsLoaded) {
+
+            loadComments();
+
+        }
+
+        switch (lang) {
+
+            case 'en':
+                toggleBtn.textContent = commentVisible ? "Hide comments" : "Show comments";
+                break;
+
+            case 'es':
+                toggleBtn.textContent = commentVisible ? "Ocultar comentarios" : "Mostrar comentarios";
+                break;
+
+        }
+
+    });
+
+    sendCommentBtn.addEventListener("click", async () => {
+
+        const content = commentInput.value.trim();
+
+        if (!content) return;
+
+        try {
+
+            const res = await fetch(CONFIG.API_BASE_URL + `/users/api/send/comment?lang=${lang}`,
+
+                {
+
+                    method: "POST",
+                    headers: {
+
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+
+                    },
+                    body: JSON.stringify({ recipeId: id ,content: content })
+
+                }
+
+            );
+
+            const data = await res.json();
+
+            if (!data.success) return;
+
+            commentInput.value = "";
+
+            commentsLoaded = false;
+            loadComments();
+
+        } catch (err) {
+
+            console.error("Error sending comment", err);
+
+        }
+
+    });
+
+
+    async function loadComments() {
+
+        try {
+
+
+            const res = await fetch(CONFIG.API_BASE_URL + `/users/get_comments_by_id?lang=${lang}`, {
+
+                method: 'POST',
+                headers: {
+
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+
+                },
+                body: JSON.stringify({ recipeId: id })
+
+            });
+
+            const data = await res.json();
+            if (!data.success) return;
+            console.log(data);
+
+            renderComments(data.comments);
+            commentsLoaded = true;
+
+        } catch (err) {
+
+            console.error("Error loading comments", err);
+
+        }
+
+    };
+
+    function renderComments(comments) {
+
+        const container = document.getElementById("comments-list");
+        container.innerHTML = "";
+
+
+        if (comments.length === 0) {
+
+            container.innerHTML = "<p>No comments yet.</p>";
+            return;
+
+        }
+
+        comments.forEach(comment => {
+
+            const div = document.createElement("div");
+            div.classList.add("comment");
+
+            div.innerHTML = `
+            <div class="comment-user">
+                ${comment.username ?? "Anonymous"}
+            </div>
+            <div class="comment-date">
+                ${new Date(comment.created_at).toISOString().split('T')[0]}
+            </div>
+            <p>${comment.content}</p>`
+            ;
+
+            container.appendChild(div);
+
+        });
+
+    }
+
+})
 
 function formatText(str) {
     return str
         .replace(/_/g, ' ')                             // Reemplaza _ por espacio
         .toLowerCase()                                  // Convierte todo a minúsculas
         .replace(/\b\w/g, char => char.toUpperCase());  // Capitaliza la primera letra de cada palabra
-}
+};

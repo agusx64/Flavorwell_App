@@ -4,7 +4,6 @@ import mysql from 'mysql2/promise.js';
 import dotenv from 'dotenv';
 import cron from 'node-cron';
 import bcrypt from 'bcrypt';
-import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
@@ -1617,6 +1616,96 @@ router.post('/get_user_by_id', authenticateToken, async (req, res) => {
 
         console.error('Error fetching recipe:', error);
         res.status(500).json({ success: false, message: 'Server error' });
+
+    }
+
+});
+
+router.post('/get_comments_by_id', authenticateToken, async (req, res) => {
+
+    const { recipeId } = req.body;
+    console.log(recipeId);
+
+    try {
+
+        const [comments] = await connection.query(
+
+            `
+            SELECT 
+                c.id,
+                c.content,
+                c.created_at,
+                u.username
+            FROM comments c
+            LEFT JOIN users u ON c.user_id = u.id
+            WHERE c.recipe_id = ?
+            ORDER BY c.created_at DESC
+
+            `,
+            [recipeId]
+
+        );
+
+        res.json({ success: true, comments});
+
+    } catch (error) {
+
+        console.error(error);
+        res.status(500).json({
+
+            success: false,
+            message: 'Error loading comments'
+
+        });
+
+    }
+
+});
+
+router.post('/api/send/comment', authenticateToken, async (req, res) => {
+
+    const { recipeId, content } = req.body;
+    const userId = req.user.userId || null;
+
+    if (!content || content.trim() === "") {
+
+        return res.status(400).json({
+
+            success: false,
+            message: "Comment content is required"
+
+        });
+
+    }
+
+    try {
+
+        await connection.query(
+
+            `
+            INSERT INTO comments (recipe_id, user_id, content)
+            VALUES (?, ?, ?)
+            `,
+            [recipeId, userId, content]
+
+        );
+
+        res.json({
+
+            success: true,
+            message: "Comment added"
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+        res.status(500).json({
+
+            success: false,
+            message: "Error adding comment"
+
+        });
 
     }
 

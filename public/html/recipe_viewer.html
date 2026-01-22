@@ -116,6 +116,24 @@
             </ul>
         </div>
 
+        <button id="toggle-comments-btn" class="btn_secondary">
+            Show comments
+        </button>
+
+        <!-- Contenedor de comentarios -->
+        <div id="comments-section" class="comments hidden">
+            <div id="comments-list"></div>
+        </div>
+
+        <!-- Entrada de comentarios -->
+        <div class="add-comment">
+            <textarea id="comment-input" placeholder="Write a comment..." maxlength="300"></textarea>
+            <button id="send-comment-btn" class="btn_primary">
+                Add comment
+            </button>
+        </div>
+
+
         <!-- Componente de derechos de autor sobre la receta -->
         <div class="recipe-viewer-copyright-container">
             <p class="recipe-viewer-copyright-text" id="recipe-viewer-copyright-text"></p>

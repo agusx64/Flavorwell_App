@@ -1,7 +1,7 @@
 import express from 'express';
 import mysql from 'mysql2/promise.js';
 import dotenv from 'dotenv';
-var router = express.Router()
+let router = express.Router()
 
 // Inicailizacion de variables de entorno
 dotenv.config();
