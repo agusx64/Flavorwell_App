@@ -1,5 +1,6 @@
 const recipeContainer = document.querySelector('.recipe-container');
 let lang = localStorage.getItem('preferred_lang');
+import CONFIG from "../config.js";
 let author = "";
 
 switch (lang) {
@@ -14,12 +15,9 @@ switch (lang) {
 
 }
 
-// Host backend
-const restHost = 'http://localhost:3000';
-
 async function getVeganList() {
 
-    await fetch(restHost + '/lists/category/vegan/list')
+    await fetch(CONFIG.API_BASE_URL + '/lists/category/vegan/list')
     .then(response => response.json())
     .then(data => {
 
