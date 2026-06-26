@@ -2109,6 +2109,7 @@ router.post('/api/recipes/ai-generate', authenticateToken, async (req, res) => {
 
     // Datos requeridos para en endpoint (Nombre de receta y categoria de la receta)
     const { name, category } = req.body;
+    console.log(req.body);
 
     try {
 

@@ -421,7 +421,7 @@ document.addEventListener("DOMContentLoaded", function () {
         sendPromptRecipeButton.disabled = true;
 
         const name = document.getElementById('name-recipe-text').value.trim();
-        const category = text_category;
+        const category = categoryLabel;
 
         try {
 
