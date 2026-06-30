@@ -1686,6 +1686,7 @@ router.post('/api/send/comment', authenticateToken, async (req, res) => {
             `
             INSERT INTO comments (recipe_id, user_id, content)
             VALUES (?, ?, ?)
+            
             `,
             [recipeId, userId, content]
 
@@ -2109,12 +2110,35 @@ router.post('/api/recipes/ai-generate', authenticateToken, async (req, res) => {
 
     // Datos requeridos para en endpoint (Nombre de receta y categoria de la receta)
     const { name, category } = req.body;
-    console.log(req.body);
+    const lang = req.query.lang || 'en';
+    let promptLang;
+    let nameColumn;
 
     try {
 
+        switch (lang) {
+
+            case 'es':
+                promptLang = 'spanish';
+                nameColumn = 'name_es';
+                break;
+
+            case 'en':
+                promptLang = 'english';
+                nameColumn = 'name';
+                break;
+
+            default:
+                promptLang = 'english';
+                nameColumn = 'name';
+
+        };
+
+        // Consulta SQL para selección de nombre de acuerdo al idioma
+        const query = `SELECT id, ${nameColumn} as name, src_reference FROM ingredients_list`;
+
         // Obtención de ingredientes disponibles en la base de datos
-        const [rows] = await connection.query('SELECT name FROM ingredients_list;');
+        const [rows] = await connection.query(query);
 
         // Creación de string con los nombres de los ingredientes para insertarlo en el propmt para la inteligenia artificial
         const ingredientList = rows.map(row => row.name).join(', ');
@@ -2122,9 +2146,9 @@ router.post('/api/recipes/ai-generate', authenticateToken, async (req, res) => {
         // Prompt para la generación de receta con AI (Chat GPT 4)
         const prompt = `
 
-            To create a recipe for "${name}" based on the "${category}" category, you must provide:
+            To create a recipe for "${name}" based on the "${category}" category and the language "${promptLang}", you must provide:
             1. A brief description of the recipe (maximum 200 characters).
-            2. Create a list of the necessary ingredients, choosing only from the following available ones: ${ingredientList}.
+            2. Create a list of the necessary ingredients, choosing only from the following available ones and using the name ingredient only: ${ingredientList}.
             3. Step-by-step cooking instructions.
             Return the result in JSON format with the structure:
             {
@@ -2134,6 +2158,9 @@ router.post('/api/recipes/ai-generate', authenticateToken, async (req, res) => {
             }
 
         `;
+
+        console.log(prompt);
+        console.log(ingredientList);
 
         // Creación de variable de instancia para uso del modelo de inteligenia artificial
         const completion = await openai.chat.completions.create({
@@ -2169,7 +2196,7 @@ router.post('/api/recipes/ai-generate', authenticateToken, async (req, res) => {
         console.log(parsed);
         return res.json({ success: true, data: parsed, message: 'Recipe generated' });
 
-        // Intercepción de errores
+    // Intercepción de errores
     } catch (error) {
 
         console.error("Internal server error", error);

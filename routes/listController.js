@@ -125,7 +125,7 @@ router.get('/api/ingredients/search', async (req, res) => {
     const q = req.query.q;
 
     // Obtención del lenguaje preferido por el usuario
-    const lang = req.query.lang || 'en';
+    const lang = req.query.lang || 'en'; 
 
     // Verificación de entrada vacia u objeto JSON vacio
     if (!q || q.trim() === '') {
@@ -154,7 +154,7 @@ router.get('/api/ingredients/search', async (req, res) => {
 
         }
 
-        // Selección y renombramiento de como name para enviar al frontend
+        // Selección y renombramiento de columna name para enviar al frontend
         const query = `SELECT id, ${nameColumn} as name, src_reference FROM ingredients_list WHERE ${nameColumn} LIKE ? LIMIT 10`;
 
         // Conexón SQL
